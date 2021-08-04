@@ -7,7 +7,7 @@
 <style>
 html {
   font-family:
-    'Source Sans Pro',
+    'Mulish',
     -apple-system,
     BlinkMacSystemFont,
     'Segoe UI',
@@ -16,6 +16,7 @@ html {
     Arial,
     sans-serif;
   font-size: 16px;
+  font-weight: 300;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
@@ -29,6 +30,19 @@ html {
 *::after {
   box-sizing: border-box;
   margin: 0;
+}
+
+h1, h2, h3, h4 {
+font-family:
+    'Poppins',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  font-weight: 600;
 }
 
 .button--green {
