@@ -1,0 +1,39 @@
+create-category:
+  handler: categories/create.create
+  events:
+    - http:
+        path: categories
+        method: post
+        cors: true
+
+get-categories:
+  handler: categories/list.list
+  events:
+    - http:
+        path: categories
+        method: get
+        cors: true
+
+get-category:
+  handler: categories/get.get
+  events:
+    - http:
+        path: categories/{id}
+        method: get
+        cors: true
+
+update-category:
+  handler: categories/update.update
+  events:
+    - http:
+        path: categories/{id}
+        method: put
+        cors: true
+
+delete-category:
+  handler: categories/delete.delete
+  events:
+    - http:
+        path: categories/{id}
+        method: delete
+        cors: true
