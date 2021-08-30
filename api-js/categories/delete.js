@@ -16,6 +16,7 @@ module.exports.delete = (event) => {
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Categories`,
     Key: {
+      userId: 'kavish',
       id: event.pathParameters.id,
     },
   };

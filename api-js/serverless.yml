@@ -20,11 +20,15 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
+        - dynamodb:BatchGetItem
       Resource:
         - "Fn::GetAtt": [CategoriesTable, Arn]
+        - "Fn::GetAtt": [PrioritisedCategoriesTable, Arn]
 
 functions:
   - ${file(categories/functions.yml)}
+  - ${file(categories/priorities/functions.yml)}
 
 resources:
   - ${file(categories/database.yml)}
+  - ${file(categories/priorities/database.yml)}

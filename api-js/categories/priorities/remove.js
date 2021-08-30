@@ -12,29 +12,28 @@ const getHeaders = (contentType) => (contentType ? {
   'Access-Control-Allow-Credentials': true,
 });
 
-module.exports.list = async (event) => {
+module.exports.remove = async (event) => {
   const params = {
-    TableName: `${process.env.DYNAMODB_TABLE}-Categories`,
-    KeyConditionExpression: "userId = :userId",
-    ExpressionAttributeValues: {
-      ":userId": 'kavish',
+    TableName: `${process.env.DYNAMODB_TABLE}-PrioritisedCategories`,
+    Key: {
+      userId: 'kavish',
+      categoryId: event.pathParameters.id,
     },
   };
 
   try {
-    const result = await dynamoDb.query(params).promise();
+    await dynamoDb.delete(params).promise();
 
     return {
-      statusCode: 200,
+      statusCode: 204,
       headers: getHeaders(),
-      body: JSON.stringify(result.Items),
     }
   } catch (error) {
     console.error(error);
     return {
       statusCode: error.statusCode || 500,
       headers: getHeaders('text/plain'),
-      body: 'Couldn\'t get the Categories. ' + error.message,
+      body: 'Couldn\'t delete the priority. ' + error.message,
     };
   }
 }
