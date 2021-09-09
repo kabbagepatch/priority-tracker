@@ -18,7 +18,7 @@ get-category:
   handler: categories/get.get
   events:
     - http:
-        path: categories/{id}
+        path: categories/{categoryId}
         method: get
         cors: true
 
@@ -26,7 +26,7 @@ update-category:
   handler: categories/update.update
   events:
     - http:
-        path: categories/{id}
+        path: categories/{categoryId}
         method: put
         cors: true
 
@@ -34,6 +34,6 @@ delete-category:
   handler: categories/delete.delete
   events:
     - http:
-        path: categories/{id}
+        path: categories/{categoryId}
         method: delete
         cors: true

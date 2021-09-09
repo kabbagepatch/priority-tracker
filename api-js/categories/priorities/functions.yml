@@ -2,7 +2,7 @@ add-priority:
   handler: categories/priorities/add.add
   events:
     - http:
-        path: categories/{id}/prioritise
+        path: categories/{categoryId}/prioritise
         method: post
         cors: true
 
@@ -10,7 +10,7 @@ remove-priority:
   handler: categories/priorities/remove.remove
   events:
     - http:
-        path: categories/{id}/deprioritise
+        path: categories/{categoryId}/deprioritise
         method: post
         cors: true
 

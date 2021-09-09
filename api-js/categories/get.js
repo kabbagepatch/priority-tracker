@@ -17,7 +17,7 @@ module.exports.get = async (event) => {
     TableName: `${process.env.DYNAMODB_TABLE}-Categories`,
     Key: {
       userId: 'kavish',
-      id: event.pathParameters.id,
+      id: event.pathParameters.categoryId,
     },
   };
 

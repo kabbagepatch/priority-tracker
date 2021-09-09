@@ -16,19 +16,22 @@ module.exports.update = async (event) => {
   const timestamp  = new Date().getTime();
   const data = JSON.parse(event.body);
 
-  if (!data || data.name === '' || (data.name && data.name.trim() === '')) {
-    return {
-      statusCode: 400,
-      headers: getHeaders('text/plain'),
-      body: 'Couldn\'t update the category. Invalid fields passed in',
-    };
-  }
+  const requiredFields = ['name', 'category'];
+  requiredFields.forEach(field => {
+    if (!data || data[field] === '' || (data[field] && data[field].trim() === '')) {
+      return {
+        statusCode: 400,
+        headers: getHeaders('text/plain'),
+        body: 'Couldn\'t update the project. Invalid fields passed in',
+      };
+    }
+  })
 
   const params = {
-    TableName: `${process.env.DYNAMODB_TABLE}-Categories`,
+    TableName: `${process.env.DYNAMODB_TABLE}-Projects`,
     Key: {
       userId: 'kavish',
-      id: event.pathParameters.categoryId,
+      id: event.pathParameters.projectId,
     },
     UpdateExpression: "SET ",
     ExpressionAttributeNames: {},
@@ -36,7 +39,7 @@ module.exports.update = async (event) => {
     ReturnValues: 'ALL_NEW',
   };
 
-  const allowedFields = ['name', 'description'];
+  const allowedFields = ['name', 'description', 'category', 'complete'];
   allowedFields.forEach((field) => {
     if (data[field]) {
       params.UpdateExpression += `#${field} = :${field},`;
@@ -67,7 +70,7 @@ module.exports.update = async (event) => {
     return {
       statusCode: error.statusCode || 500,
       headers: getHeaders('text/plain'),
-      body: 'Couldn\'t update the Category. ' + error.message,
+      body: 'Couldn\'t update the Project. ' + error.message,
     };
   };
 }

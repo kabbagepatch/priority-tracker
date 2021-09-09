@@ -24,11 +24,22 @@ provider:
       Resource:
         - "Fn::GetAtt": [CategoriesTable, Arn]
         - "Fn::GetAtt": [PrioritisedCategoriesTable, Arn]
+        - "Fn::GetAtt": [ProjectsTable, Arn]
+        - "Fn::GetAtt": [TasksTable, Arn]
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+      Resource: "arn:aws:dynamodb:*:*:table/*/index/*"
 
 functions:
   - ${file(categories/functions.yml)}
   - ${file(categories/priorities/functions.yml)}
+  - ${file(projects/functions.yml)}
+  - ${file(tasks/functions.yml)}
 
 resources:
   - ${file(categories/database.yml)}
   - ${file(categories/priorities/database.yml)}
+  - ${file(projects/database.yml)}
+  - ${file(tasks/database.yml)}

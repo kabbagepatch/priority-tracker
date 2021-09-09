@@ -1,0 +1,47 @@
+create-project:
+  handler: projects/create.create
+  events:
+    - http:
+        path: projects
+        method: post
+        cors: true
+
+get-projects:
+  handler: projects/list.list
+  events:
+    - http:
+        path: projects
+        method: get
+        cors: true
+
+get-category-projects:
+  handler: projects/list.listCategory
+  events:
+    - http:
+        path: categories/{categoryId}/projects
+        method: get
+        cors: true
+
+get-project:
+  handler: projects/get.get
+  events:
+    - http:
+        path: projects/{projectId}
+        method: get
+        cors: true
+
+update-project:
+  handler: projects/update.update
+  events:
+    - http:
+        path: projects/{projectId}
+        method: put
+        cors: true
+
+delete-project:
+  handler: projects/delete.delete
+  events:
+    - http:
+        path: projects/{projectId}
+        method: delete
+        cors: true

@@ -1,0 +1,36 @@
+Resources:
+  ProjectsTable:
+    Type: 'AWS::DynamoDB::Table'
+    DeletionPolicy: Retain
+    Properties:
+      AttributeDefinitions:
+        -
+          AttributeName: userId
+          AttributeType: S
+        -
+          AttributeName: id
+          AttributeType: S
+        -
+          AttributeName: category
+          AttributeType: S
+      KeySchema:
+        -
+          AttributeName: userId
+          KeyType: HASH
+        -
+          AttributeName: id
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      GlobalSecondaryIndexes:
+        - IndexName: CategoryProjectIndex
+          KeySchema:
+            - AttributeName: category
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+      TableName: ${self:provider.environment.DYNAMODB_TABLE}-Projects

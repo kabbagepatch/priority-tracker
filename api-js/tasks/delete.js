@@ -12,12 +12,12 @@ const getHeaders = (contentType) => (contentType ? {
   'Access-Control-Allow-Credentials': true,
 });
 
-module.exports.delete = (event) => {
+module.exports.delete = async (event) => {
   const params = {
-    TableName: `${process.env.DYNAMODB_TABLE}-Categories`,
+    TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
     Key: {
       userId: 'kavish',
-      id: event.pathParameters.categoryId,
+      id: event.pathParameters.id,
     },
   };
 
@@ -33,7 +33,7 @@ module.exports.delete = (event) => {
     return {
       statusCode: error.statusCode || 500,
       headers: getHeaders('text/plain'),
-      body: 'Couldn\'t delete the Category. ' + error.message,
+      body: 'Couldn\'t delete the Task. ' + error.message,
     };
   }
 }

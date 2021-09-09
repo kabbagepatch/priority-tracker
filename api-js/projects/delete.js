@@ -14,10 +14,10 @@ const getHeaders = (contentType) => (contentType ? {
 
 module.exports.delete = (event) => {
   const params = {
-    TableName: `${process.env.DYNAMODB_TABLE}-Categories`,
+    TableName: `${process.env.DYNAMODB_TABLE}-Projects`,
     Key: {
       userId: 'kavish',
-      id: event.pathParameters.categoryId,
+      id: event.pathParameters.projectId,
     },
   };
 
@@ -33,7 +33,7 @@ module.exports.delete = (event) => {
     return {
       statusCode: error.statusCode || 500,
       headers: getHeaders('text/plain'),
-      body: 'Couldn\'t delete the Category. ' + error.message,
+      body: 'Couldn\'t delete the Project. ' + error.message,
     };
   }
 }

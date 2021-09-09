@@ -12,28 +12,29 @@ const getHeaders = (contentType) => (contentType ? {
   'Access-Control-Allow-Credentials': true,
 });
 
-module.exports.delete = (event) => {
+module.exports.get = async (event) => {
   const params = {
-    TableName: `${process.env.DYNAMODB_TABLE}-Categories`,
+    TableName: `${process.env.DYNAMODB_TABLE}-Projects`,
     Key: {
       userId: 'kavish',
-      id: event.pathParameters.categoryId,
+      id: event.pathParameters.projectId,
     },
   };
 
   try {
-    await dynamoDb.delete(params).promise();
+    const result = await dynamoDb.get(params).promise();
 
     return {
-      statusCode: 204,
+      statusCode: 200,
       headers: getHeaders(),
+      body: JSON.stringify(result.Item),
     }
   } catch (error) {
     console.error(error);
     return {
       statusCode: error.statusCode || 500,
       headers: getHeaders('text/plain'),
-      body: 'Couldn\'t delete the Category. ' + error.message,
+      body: 'Couldn\'t get the Project. ' + error.message,
     };
   }
 }

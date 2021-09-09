@@ -1,5 +1,6 @@
 'use strict';
 
+const uuid = require('uuid');
 const AWS = require('aws-sdk');
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
@@ -12,42 +13,34 @@ const getHeaders = (contentType) => (contentType ? {
   'Access-Control-Allow-Credentials': true,
 });
 
-module.exports.add = async (event) => {
+module.exports.create = async (event) => {
   const timestamp  = new Date().getTime();
+  const data = JSON.parse(event.body);
 
-  const getCategoryParams = {
-    TableName: `${process.env.DYNAMODB_TABLE}-Categories`,
-    Key: {
-      userId: 'kavish',
-      id: event.pathParameters.categoryId,
-    },
-  };
-
-  try {
-    const result = await dynamoDb.get(getCategoryParams).promise();
-
-    if (!result.Item) {
+  const requiredFields = ['name', 'category'];
+  for (const field of requiredFields) {
+    if (!data || !data[field] || !data[field].trim()) {
       return {
-        statusCode: 401,
+        statusCode: 400,
         headers: getHeaders('text/plain'),
-        body: 'No category found for given id.',
+        body: `Couldn\'t create the task without valid ${field}.`,
       };
     }
-  } catch (error) {
-    console.error(error);
-    return {
-      statusCode: error.statusCode || 500,
-      headers: getHeaders('text/plain'),
-      body: 'Couldn\'t get the Category. ' + error.message,
-    };
-  }
+  };
 
   const params = {
-    TableName: `${process.env.DYNAMODB_TABLE}-PrioritisedCategories`,
+    TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
     Item: {
       userId: 'kavish',
-      categoryId: event.pathParameters.categoryId,
+      id: uuid.v1(),
+      name: data.name,
+      nameLC: data.name.toLowerCase(),
+      description: data.description,
+      complete: false,
+      category: data.category,
+      project: data.project,
       createdAt: timestamp,
+      updatedAt: timestamp,
     },
   };
 
@@ -55,7 +48,7 @@ module.exports.add = async (event) => {
     await dynamoDb.put(params).promise();
 
     return {
-      statusCode: 200,
+      statusCode: 201,
       headers: getHeaders(),
       body: JSON.stringify(params.Item),
     }
@@ -64,7 +57,7 @@ module.exports.add = async (event) => {
     return {
       statusCode: error.statusCode || 500,
       headers: getHeaders('text/plain'),
-      body: 'Couldn\'t create the Priority. ' + error.message,
+      body: 'Couldn\'t create the Task. ' + error.message,
     };
   };
 }

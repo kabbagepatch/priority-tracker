@@ -17,7 +17,7 @@ module.exports.remove = async (event) => {
     TableName: `${process.env.DYNAMODB_TABLE}-PrioritisedCategories`,
     Key: {
       userId: 'kavish',
-      categoryId: event.pathParameters.id,
+      categoryId: event.pathParameters.categoryId,
     },
   };
 
