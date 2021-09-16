@@ -14,7 +14,7 @@ const getHeaders = (contentType) => (contentType ? {
 
 module.exports.list = async (event) => {
   const params = {
-    TableName: `${process.env.DYNAMODB_TABLE}-PrioritisedCategories`,
+    TableName: `${process.env.DYNAMODB_TABLE}-PrioritisedProjects`,
     KeyConditionExpression: "userId = :userId",
     ExpressionAttributeValues: {
       ":userId": 'kavish',
@@ -30,30 +30,30 @@ module.exports.list = async (event) => {
         body: JSON.stringify([]),
       }
     }
-    const categoryIds = result.Items.map(item => item.categoryId);
-    console.log(categoryIds);
+    const projectIds = result.Items.map(item => item.projectId);
+    console.log(projectIds);
 
-    const categoryParams = {
+    const projectParams = {
       RequestItems: {
-        [`${process.env.DYNAMODB_TABLE}-Categories`]: {
-          Keys: categoryIds.map(id => ({ userId: 'kavish', id })),
+        [`${process.env.DYNAMODB_TABLE}-Projects`]: {
+          Keys: projectIds.map(id => ({ userId: 'kavish', id })),
         },
       },
     };
 
-    const categoriesResult = await dynamoDb.batchGet(categoryParams).promise();
+    const categoriesResult = await dynamoDb.batchGet(projectParams).promise();
 
     return {
       statusCode: 200,
       headers: getHeaders(),
-      body: JSON.stringify(categoriesResult['Responses'][`${process.env.DYNAMODB_TABLE}-Categories`]),
+      body: JSON.stringify(categoriesResult['Responses'][`${process.env.DYNAMODB_TABLE}-Projects`]),
     }
   } catch (error) {
     console.error(error);
     return {
       statusCode: error.statusCode || 500,
       headers: getHeaders('text/plain'),
-      body: 'Couldn\'t get the Categories. ' + error.message,
+      body: 'Couldn\'t get the Projects. ' + error.message,
     };
   }
 }

@@ -39,6 +39,36 @@ module.exports.list = async (event) => {
   }
 }
 
+module.exports.listActive = async (event) => {
+  const params = {
+    TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
+    KeyConditionExpression: "userId = :userId",
+    FilterExpression: "active = :active and complete = :complete",
+    ExpressionAttributeValues: {
+      ":userId": 'kavish',
+      ":active": true,
+      ":complete": false,
+    },
+  };
+
+  try {
+    const result = await dynamoDb.query(params).promise();
+
+    return {
+      statusCode: 200,
+      headers: getHeaders(),
+      body: JSON.stringify(result.Items),
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      statusCode: error.statusCode || 500,
+      headers: getHeaders('text/plain'),
+      body: 'Couldn\'t get the Tasks. ' + error.message,
+    };
+  }
+}
+
 module.exports.listCategory = async (event) => {
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
@@ -71,7 +101,10 @@ module.exports.listProject = async (event) => {
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
     IndexName: 'ProjectTaskIndex',
-    KeyConditionExpression: "project = :project",
+    KeyConditionExpression: "#project = :project",
+    ExpressionAttributeNames: {
+      '#project': 'project'
+    },
     ExpressionAttributeValues: {
       ":project": event.pathParameters.projectId,
     },

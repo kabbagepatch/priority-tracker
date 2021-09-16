@@ -15,22 +15,22 @@ const getHeaders = (contentType) => (contentType ? {
 module.exports.add = async (event) => {
   const timestamp  = new Date().getTime();
 
-  const getCategoryParams = {
-    TableName: `${process.env.DYNAMODB_TABLE}-Categories`,
+  const getProjectParams = {
+    TableName: `${process.env.DYNAMODB_TABLE}-Projects`,
     Key: {
       userId: 'kavish',
-      id: event.pathParameters.categoryId,
+      id: event.pathParameters.projectId,
     },
   };
 
   try {
-    const result = await dynamoDb.get(getCategoryParams).promise();
+    const result = await dynamoDb.get(getProjectParams).promise();
 
     if (!result.Item) {
       return {
         statusCode: 401,
         headers: getHeaders('text/plain'),
-        body: 'No category found for given id.',
+        body: 'No project found for given id.',
       };
     }
   } catch (error) {
@@ -38,15 +38,15 @@ module.exports.add = async (event) => {
     return {
       statusCode: error.statusCode || 500,
       headers: getHeaders('text/plain'),
-      body: 'Couldn\'t get the Category. ' + error.message,
+      body: 'Couldn\'t get the Project. ' + error.message,
     };
   }
 
   const params = {
-    TableName: `${process.env.DYNAMODB_TABLE}-PrioritisedCategories`,
+    TableName: `${process.env.DYNAMODB_TABLE}-PrioritisedProjects`,
     Item: {
       userId: 'kavish',
-      categoryId: event.pathParameters.categoryId,
+      projectId: event.pathParameters.projectId,
       createdAt: timestamp,
     },
   };

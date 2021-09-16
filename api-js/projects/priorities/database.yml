@@ -1,5 +1,5 @@
 Resources:
-  PrioritisedCategoriesTable:
+  PrioritisedProjectsTable:
     Type: 'AWS::DynamoDB::Table'
     DeletionPolicy: Retain
     Properties:
@@ -8,16 +8,16 @@ Resources:
           AttributeName: userId
           AttributeType: S
         -
-          AttributeName: categoryId
+          AttributeName: projectId
           AttributeType: S
       KeySchema:
         -
           AttributeName: userId
           KeyType: HASH
         -
-          AttributeName: categoryId
+          AttributeName: projectId
           KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
-      TableName: ${self:provider.environment.DYNAMODB_TABLE}-PrioritisedCategories
+      TableName: ${self:provider.environment.DYNAMODB_TABLE}-PrioritisedProjects

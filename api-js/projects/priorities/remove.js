@@ -14,10 +14,10 @@ const getHeaders = (contentType) => (contentType ? {
 
 module.exports.remove = async (event) => {
   const params = {
-    TableName: `${process.env.DYNAMODB_TABLE}-PrioritisedCategories`,
+    TableName: `${process.env.DYNAMODB_TABLE}-PrioritisedProjects`,
     Key: {
       userId: 'kavish',
-      categoryId: event.pathParameters.categoryId,
+      projectId: event.pathParameters.projectId,
     },
   };
 

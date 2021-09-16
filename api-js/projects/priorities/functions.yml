@@ -1,21 +1,21 @@
 add-priority:
-  handler: categories/priorities/add.add
+  handler: projects/priorities/add.add
   events:
     - http:
-        path: categories/{categoryId}/prioritise
+        path: projects/{projectId}/prioritise
         method: post
         cors: true
 
 remove-priority:
-  handler: categories/priorities/remove.remove
+  handler: projects/priorities/remove.remove
   events:
     - http:
-        path: categories/{categoryId}/deprioritise
+        path: projects/{projectId}/deprioritise
         method: post
         cors: true
 
 get-priorities:
-  handler: categories/priorities/list.list
+  handler: projects/priorities/list.list
   events:
     - http:
         path: priorities

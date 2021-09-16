@@ -23,7 +23,7 @@ provider:
         - dynamodb:BatchGetItem
       Resource:
         - "Fn::GetAtt": [CategoriesTable, Arn]
-        - "Fn::GetAtt": [PrioritisedCategoriesTable, Arn]
+        - "Fn::GetAtt": [PrioritisedProjectsTable, Arn]
         - "Fn::GetAtt": [ProjectsTable, Arn]
         - "Fn::GetAtt": [TasksTable, Arn]
     - Effect: Allow
@@ -34,12 +34,12 @@ provider:
 
 functions:
   - ${file(categories/functions.yml)}
-  - ${file(categories/priorities/functions.yml)}
+  - ${file(projects/priorities/functions.yml)}
   - ${file(projects/functions.yml)}
   - ${file(tasks/functions.yml)}
 
 resources:
   - ${file(categories/database.yml)}
-  - ${file(categories/priorities/database.yml)}
+  - ${file(projects/priorities/database.yml)}
   - ${file(projects/database.yml)}
   - ${file(tasks/database.yml)}

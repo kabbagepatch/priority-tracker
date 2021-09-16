@@ -1,38 +1,48 @@
 <template>
   <div class="container">
-    <p>Let's start by adding categories for your tasks</p>
-    <p>Add as many or as few as you want in any order. We will prioritise these next</p>
-    <br />
-    <form @submit.prevent="addCategory">
-      <label>Add a new Category</label>
-      <input v-model="newCategory.name"></input>
-    </form>
-    <ul>
-      <li v-for="category in categories" :key="category.id">
-        <div class="category-name">{{ category.name }}</div>
-        <button @click="categories.splice(categories.findIndex(c => c.id === category.id), 1)">Remove</button>
-      </li>
-    </ul>
+    <div class="category-list">
+      <p>Let's start by quick-adding categories for your projects and tasks</p>
+      <p>Add as many or as few as you want and hit continue when done</p>
+      <br>
+      <form @submit.prevent="addCategory">
+        <label>Add a new Category</label>
+        <input v-model="newCategory.name" />
+      </form>
+      <ul>
+        <li v-for="category in categoryData" :key="category.id">
+          <div class="category-name">
+            {{ category.name }}
+          </div>
+          <button @click="categoryData.splice(categoryData.findIndex(c => c.id === category.id), 1)">
+            Remove
+          </button>
+        </li>
+      </ul>
+    </div>
+    <nuxt-link to="/projects"><button class="continue">Continue</button></nuxt-link>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'CategorySelection',
   data () {
     return {
-      categories: [
-        { id: 1, name: 'Cat 1' },
-        { id: 2, name: 'Cat 2' }
-      ],
       newCategory: {
         name: ''
       }
     }
   },
+
+  computed: {
+    ...mapState(['categoryData'])
+  },
+
   methods: {
     addCategory () {
-      this.categories.push({ id: 4, name: this.newCategory.name })
+      this.$store.dispatch('addCategory', { name: this.newCategory.name })
     }
   }
 }
@@ -40,12 +50,12 @@ export default {
 
 <style scoped>
   .container {
-    min-height: 500px;
-    min-width: 400px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: space-between;
     border: 1px solid #33333333;
+    min-height: 500px;
+    min-width: 400px;
     padding: 30px 50px;
   }
   ul {

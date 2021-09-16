@@ -39,9 +39,9 @@ module.exports.update = async (event) => {
     ReturnValues: 'ALL_NEW',
   };
 
-  const allowedFields = ['name', 'description', 'category', 'project', 'complete'];
+  const allowedFields = ['name', 'description', 'category', 'project', 'complete', 'active'];
   allowedFields.forEach((field) => {
-    if (data[field]) {
+    if (data[field] !== undefined && data[field] !== null) {
       params.UpdateExpression += `#${field} = :${field},`;
       params.ExpressionAttributeNames[`#${field}`] = field;
       params.ExpressionAttributeValues[`:${field}`] = data[field];

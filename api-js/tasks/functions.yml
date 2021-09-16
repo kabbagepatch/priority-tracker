@@ -14,6 +14,14 @@ get-tasks:
         method: get
         cors: true
 
+get-active-tasks:
+  handler: tasks/list.listActive
+  events:
+    - http:
+        path: tasks/active
+        method: get
+        cors: true
+        
 get-category-tasks:
   handler: tasks/list.listCategory
   events:

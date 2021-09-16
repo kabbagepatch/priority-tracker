@@ -8,11 +8,12 @@ module.exports = {
     parser: 'babel-eslint'
   },
   extends: [
-    '@nuxtjs',
     'plugin:nuxt/recommended'
   ],
   plugins: [
   ],
   // add your custom rules here
-  rules: {}
+  rules: {
+    "no-extra-semi": "off"
+  }
 }

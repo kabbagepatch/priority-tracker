@@ -12,7 +12,7 @@ const getHeaders = (contentType) => (contentType ? {
   'Access-Control-Allow-Credentials': true,
 });
 
-module.exports.delete = (event) => {
+module.exports.delete = async (event) => {
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Projects`,
     Key: {
