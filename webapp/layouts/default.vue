@@ -1,6 +1,19 @@
 <template>
   <div>
-    <Nuxt />
+    <div class="header">
+      <nuxt-link to="/">
+        <h3 class="nav-title">priority-tracker</h3>
+      </nuxt-link>
+      <div class="nav-links">
+        <nuxt-link to="/categories">Categories</nuxt-link>
+        <nuxt-link to="/projects">Projects</nuxt-link>
+        <nuxt-link to="/priorities">Priorities</nuxt-link>
+      </div>
+    </div>
+    <hr />
+    <div class="content">
+      <Nuxt />
+    </div>
   </div>
 </template>
 
@@ -30,6 +43,36 @@ html {
 *::after {
   box-sizing: border-box;
   margin: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.nav-title {
+  padding: 0 20px;
+}
+
+.content {
+  margin-top: 15px;
+  padding: 0 20px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.nav-links {
+  margin-right: 10px;
+}
+
+.nav-links a {
+  color: rgb(134, 101, 255);
+  margin: 0 7px;
 }
 
 </style>
