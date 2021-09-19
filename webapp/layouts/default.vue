@@ -14,6 +14,7 @@
     <div class="content">
       <Nuxt />
     </div>
+    <br />
   </div>
 </template>
 
@@ -58,7 +59,7 @@ html {
 }
 
 .content {
-  margin-top: 15px;
+  margin: 15px 0;
   padding: 0 20px;
 }
 
@@ -71,8 +72,12 @@ a {
 }
 
 .nav-links a {
-  color: rgb(134, 101, 255);
+  color: #098191;
   margin: 0 7px;
+}
+
+.nav-links a:hover {
+  color: #63b6b8;
 }
 
 </style>

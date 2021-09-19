@@ -5,7 +5,7 @@
       <p>Congratulations! You've made it this far! These are the projects you've selected as high priority:</p>
       <p>It is now time to add tasks to projects so we can actually start doing the work</p>
       <p>You know the drill. Select one of the below and add as many tasks as you think it'll take to complete the project. Treat this like a brainstorming session. And as always, you can always add more or remove some later</p>
-      <p>Hit <nuxt-link to="/backlog"><button class="continue">Continue</button></nuxt-link> when you're done with adding tasks or just wanna continue to the backlog</p>
+      <p>Hit <nuxt-link to="/"><button class="continue">Continue</button></nuxt-link> when you're done with adding tasks or just wanna continue to the backlog</p>
       <div v-for="project in prioritiesData" :key="project.id">
         <div>
           <h3 class="project-name" @click="selectProject(project)" >

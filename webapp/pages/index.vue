@@ -1,7 +1,7 @@
 <template>
   <main>
     <div class="heading">
-      <h1>Backlog</h1>
+      <h1>Tasks</h1>
       <button @click="showAddTask = !showAddTask">Add Task</button>
     </div>
     <div v-if="showAddTask">
@@ -42,19 +42,19 @@
         </div>
         <div class="buttons">
           <button
-            class="remove-button"
+            class="task-button"
             @click="toggleTaskActive(task, false)"
           >
             Move to Backlog
           </button>
           <button
-            class="remove-button"
+            class="task-button complete-button"
             @click="toggleTaskComplete(task, !task.complete)"
           >
             {{ task.complete ? 'Uncomplete' : 'Complete' }}
           </button>
           <button
-            class="remove-button"
+            class="task-button remove-button"
             @click="removeTask(task.id, project.id)"
           >
             Remove
@@ -87,19 +87,19 @@
               </div>
               <div class="buttons">
                 <button
-                  class="remove-button"
+                  class="task-button"
                   @click="toggleTaskActive(task, true)"
                 >
                   Move to Active
                 </button>
                 <button
-                  class="remove-button"
+                  class="task-button complete-button"
                   @click="toggleTaskComplete(task, !task.complete)"
                 >
                   {{ task.complete ? 'Uncomplete' : 'Complete' }}
                 </button>
                 <button
-                  class="remove-button"
+                  class="task-button remove-button"
                   @click="removeTask(task.id, project.id)"
                 >
                   Remove
@@ -211,7 +211,6 @@ export default {
   display: flex;
   flex-direction: column;
   margin: 20px 0;
-  width: 500px;
   padding: 20px;
   padding-top: 10px;
   border: 0.5px solid hsla(200, 80%, 10%, 0.2);
@@ -238,8 +237,14 @@ export default {
 .complete-task {
   text-decoration: line-through;
 }
-.remove-button {
+.task-button {
   padding: 0.4em 0.75em
+}
+.complete-button {
+  background: rgb(14, 156, 50);
+}
+.remove-button {
+  background: rgb(145, 15, 15);
 }
 .subTitle {
   font-size: 0.8em;

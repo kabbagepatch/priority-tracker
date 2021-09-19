@@ -78,28 +78,32 @@ export const mutations = {
   },
   updateTask: (state, updatedTask) => {
     const projectTasks = state.projectTasksData[updatedTask.project];
-    const taskIndex = projectTasks.findIndex(t => t.id === updatedTask.id)
-    if (taskIndex !== -1) {
-      projectTasks.splice(taskIndex, 1, updatedTask);
-      state.projectTasksData = {
-        ...state.projectTasksData,
-        [updatedTask.projectId]: projectTasks
+    if (projectTasks) {
+      const taskIndex = projectTasks.findIndex(t => t.id === updatedTask.id)
+      if (taskIndex !== -1) {
+        projectTasks.splice(taskIndex, 1, updatedTask);
+        state.projectTasksData = {
+          ...state.projectTasksData,
+          [updatedTask.projectId]: projectTasks
+        }
       }
     }
 
     const activeTasks = state.activeTasks;
-    const activeTaskIndex = activeTasks.findIndex(t => t.id === updatedTask.id)
-    if (updatedTask.active) {
-      if (activeTaskIndex === -1) {
-        state.activeTasks = activeTasks.concat([updatedTask]);
-      } else {
-        activeTasks.splice(activeTaskIndex, 1, updatedTask)
-        state.activeTasks = activeTasks;
+    if (activeTasks) {
+      const activeTaskIndex = activeTasks.findIndex(t => t.id === updatedTask.id)
+      if (updatedTask.active) {
+        if (activeTaskIndex === -1) {
+          state.activeTasks = activeTasks.concat([updatedTask]);
+        } else {
+          activeTasks.splice(activeTaskIndex, 1, updatedTask)
+          state.activeTasks = activeTasks;
+        }
       }
-    }
-    if (!updatedTask.active && activeTaskIndex !== -1) {
-      activeTasks.splice(activeTaskIndex, 1);
-      state.activeTasks = activeTasks
+      if (!updatedTask.active && activeTaskIndex !== -1) {
+        activeTasks.splice(activeTaskIndex, 1);
+        state.activeTasks = activeTasks
+      }
     }
   },
   setActiveTasks: (state, data) => {
