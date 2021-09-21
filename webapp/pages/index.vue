@@ -43,15 +43,64 @@
         <div class="buttons">
           <button
             class="task-button"
-            @click="toggleTaskActive(task, false)"
+            @click="toggleTaskActive(task.id, false)"
           >
-            Move to Backlog
+            Backlog
+          </button>
+          <button
+            class="task-button"
+            @click="toggleTaskQueued(task.id, true)"
+          >
+            Queue
           </button>
           <button
             class="task-button complete-button"
-            @click="toggleTaskComplete(task, !task.complete)"
+            @click="toggleTaskComplete(task.id, true)"
           >
-            {{ task.complete ? 'Uncomplete' : 'Complete' }}
+            Complete
+          </button>
+          <button
+            class="task-button remove-button"
+            @click="removeTask(task.id, project.id)"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+    <br />
+    <hr />
+    <br />
+    <h2>Queued Tasks</h2>
+    <div class="task-list">
+      <div class="task" v-for="task in queuedTasks" :key="task.id">
+        <div>
+          <h4 :class="task.complete ? 'complete-task' : ''">{{ task.name }}</h4>
+          <div v-if="prioritiesData.filter(p => p.id === task.project).length" class="subTitle">
+            {{ prioritiesData.filter(p => p.id === task.project)[0].name }}
+          </div>
+          <div v-else class="subTitle">
+            {{ categoryData.filter(c => c.id === task.category)[0].name }}
+          </div>
+        </div>
+        <div class="buttons">
+          <button
+            class="task-button"
+            @click="toggleTaskActive(task.id, true)"
+          >
+            Active
+          </button>
+          <button
+            class="task-button"
+            @click="toggleTaskQueued(task.id, false)"
+          >
+            Backlog
+          </button>
+          <button
+            class="task-button complete-button"
+            @click="toggleTaskComplete(task.id, true)"
+          >
+            Complete
           </button>
           <button
             class="task-button remove-button"
@@ -88,15 +137,21 @@
               <div class="buttons">
                 <button
                   class="task-button"
-                  @click="toggleTaskActive(task, true)"
+                  @click="toggleTaskActive(task.id, true)"
                 >
-                  Move to Active
+                  Active
+                </button>
+                <button
+                  class="task-button"
+                  @click="toggleTaskQueued(task.id, true)"
+                >
+                  Queue
                 </button>
                 <button
                   class="task-button complete-button"
-                  @click="toggleTaskComplete(task, !task.complete)"
+                  @click="toggleTaskComplete(task.id, true)"
                 >
-                  {{ task.complete ? 'Uncomplete' : 'Complete' }}
+                  Complete
                 </button>
                 <button
                   class="task-button remove-button"
@@ -135,6 +190,7 @@ export default {
       'projectTasksData',
       'categoryData',
       'activeTasks',
+      'queuedTasks',
     ]),
     ...mapGetters([
       'backlogTasks',
@@ -146,6 +202,7 @@ export default {
   mounted () {
     this.$store.dispatch('getPrioritiesData')
     this.$store.dispatch('getActiveTasks')
+    this.$store.dispatch('getQueuedTasks')
   },
   methods: {
     selectTaskProject (e) {
@@ -176,17 +233,14 @@ export default {
     removeTask (id, projectId) {
       this.$store.dispatch('removeTask', { id, projectId })
     },
-    toggleTaskComplete (task, complete) {
-      this.$store.dispatch('updateTask', {
-        ...task,
-        complete,
-      })
+    toggleTaskComplete (id, value) {
+      this.$store.dispatch('updateTaskStatus', { id, status: 'complete', value });
     },
-    toggleTaskActive (task, active) {
-      this.$store.dispatch('updateTask', {
-        ...task,
-        active,
-      })
+    toggleTaskActive (id, value) {
+      this.$store.dispatch('updateTaskStatus', { id, status: 'active', value });
+    },
+    toggleTaskQueued (id, value) {
+      this.$store.dispatch('updateTaskStatus', { id, status: 'queued', value });
     },
   },
 }

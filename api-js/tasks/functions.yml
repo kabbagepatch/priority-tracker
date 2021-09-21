@@ -21,7 +21,15 @@ get-active-tasks:
         path: tasks/active
         method: get
         cors: true
-        
+
+get-queued-tasks:
+  handler: tasks/list.listQueued
+  events:
+    - http:
+        path: tasks/queued
+        method: get
+        cors: true
+
 get-category-tasks:
   handler: tasks/list.listCategory
   events:
@@ -51,6 +59,30 @@ update-task:
   events:
     - http:
         path: tasks/{id}
+        method: put
+        cors: true
+
+update-task-status-active:
+  handler: tasks/update-status.active
+  events:
+    - http:
+        path: tasks/{id}/active
+        method: put
+        cors: true
+
+update-task-status-queued:
+  handler: tasks/update-status.queued
+  events:
+    - http:
+        path: tasks/{id}/queued
+        method: put
+        cors: true
+
+update-task-status-complete:
+  handler: tasks/update-status.complete
+  events:
+    - http:
+        path: tasks/{id}/complete
         method: put
         cors: true
 

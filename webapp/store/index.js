@@ -5,6 +5,7 @@ export const state = () => ({
   projectTasksData: {},
   independentTasks: [],
   activeTasks: [],
+  queuedTasks: [],
 })
 
 export const getters = {
@@ -105,9 +106,29 @@ export const mutations = {
         state.activeTasks = activeTasks
       }
     }
+
+    const queuedTasks = state.queuedTasks;
+    if (queuedTasks) {
+      const queuedTaskIndex = queuedTasks.findIndex(t => t.id === updatedTask.id)
+      if (updatedTask.queued) {
+        if (queuedTaskIndex === -1) {
+          state.queuedTasks = queuedTasks.concat([updatedTask]);
+        } else {
+          queuedTasks.splice(queuedTaskIndex, 1, updatedTask)
+          state.queuedTasks = queuedTasks;
+        }
+      }
+      if (!updatedTask.queued && queuedTaskIndex !== -1) {
+        queuedTasks.splice(queuedTaskIndex, 1);
+        state.queuedTasks = queuedTasks
+      }
+    }
   },
   setActiveTasks: (state, data) => {
     state.activeTasks = data.sort((a, b) => a.updatedAt - b.updatedAt);
+  },
+  setQueuedTasks: (state, data) => {
+    state.queuedTasks = data.sort((a, b) => a.updatedAt - b.updatedAt);
   }
 }
 
@@ -226,6 +247,18 @@ export const actions = {
       console.log(error)
     }
   },
+  async getQueuedTasks ({ commit }) {
+    try {
+      await this.$axios.get(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/tasks/queued`,
+        {
+          headers: { 'Content-Type': 'application/json' }
+        }).then((res) => {
+        commit('setQueuedTasks', res.data)
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  },
   async getProjectTasks ({ commit }, projectId) {
     try {
       await this.$axios.get(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/projects/${projectId}/tasks`,
@@ -273,5 +306,17 @@ export const actions = {
     } catch (error) {
       console.log(error)
     }
-  }
+  },
+  async updateTaskStatus ({ commit }, { id, status, value }) {
+    try {
+      const res = await this.$axios.put(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/tasks/${id}/${status}`,
+        { status: value },
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      console.log('updateTask', res.data)
+      commit('updateTask', res.data)
+    } catch (error) {
+      console.log(error)
+    }
+  },
 }

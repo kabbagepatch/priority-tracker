@@ -12,15 +12,7 @@ const getHeaders = (contentType) => (contentType ? {
   'Access-Control-Allow-Credentials': true,
 });
 
-module.exports.list = async (event) => {
-  const params = {
-    TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
-    KeyConditionExpression: "userId = :userId",
-    ExpressionAttributeValues: {
-      ":userId": 'kavish',
-    },
-  };
-
+const queryTasks = async (params) => {
   try {
     const result = await dynamoDb.query(params).promise();
 
@@ -39,34 +31,44 @@ module.exports.list = async (event) => {
   }
 }
 
+module.exports.list = async (event) => {
+  const params = {
+    TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
+    KeyConditionExpression: "userId = :userId",
+    ExpressionAttributeValues: {
+      ":userId": 'kavish',
+    },
+  };
+
+  return await queryTasks(params);
+}
+
 module.exports.listActive = async (event) => {
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
     KeyConditionExpression: "userId = :userId",
-    FilterExpression: "active = :active and complete = :complete",
+    FilterExpression: "active = :active",
     ExpressionAttributeValues: {
       ":userId": 'kavish',
       ":active": true,
-      ":complete": false,
     },
   };
 
-  try {
-    const result = await dynamoDb.query(params).promise();
+  return await queryTasks(params);
+}
 
-    return {
-      statusCode: 200,
-      headers: getHeaders(),
-      body: JSON.stringify(result.Items),
-    }
-  } catch (error) {
-    console.error(error);
-    return {
-      statusCode: error.statusCode || 500,
-      headers: getHeaders('text/plain'),
-      body: 'Couldn\'t get the Tasks. ' + error.message,
-    };
-  }
+module.exports.listQueued = async (event) => {
+  const params = {
+    TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
+    KeyConditionExpression: "userId = :userId",
+    FilterExpression: "queued = :queued",
+    ExpressionAttributeValues: {
+      ":userId": 'kavish',
+      ":queued": true,
+    },
+  };
+
+  return await queryTasks(params);
 }
 
 module.exports.listCategory = async (event) => {
@@ -79,22 +81,7 @@ module.exports.listCategory = async (event) => {
     },
   };
 
-  try {
-    const result = await dynamoDb.query(params).promise();
-
-    return {
-      statusCode: 200,
-      headers: getHeaders(),
-      body: JSON.stringify(result.Items),
-    }
-  } catch (error) {
-    console.error(error);
-    return {
-      statusCode: error.statusCode || 500,
-      headers: getHeaders('text/plain'),
-      body: 'Couldn\'t get the Tasks. ' + error.message,
-    };
-  }
+  return await queryTasks(params);
 }
 
 module.exports.listProject = async (event) => {
@@ -110,20 +97,5 @@ module.exports.listProject = async (event) => {
     },
   };
 
-  try {
-    const result = await dynamoDb.query(params).promise();
-
-    return {
-      statusCode: 200,
-      headers: getHeaders(),
-      body: JSON.stringify(result.Items),
-    }
-  } catch (error) {
-    console.error(error);
-    return {
-      statusCode: error.statusCode || 500,
-      headers: getHeaders('text/plain'),
-      body: 'Couldn\'t get the Tasks. ' + error.message,
-    };
-  }
+  return await queryTasks(params);
 }

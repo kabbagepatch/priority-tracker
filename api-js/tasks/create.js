@@ -37,6 +37,8 @@ module.exports.create = async (event) => {
       nameLC: data.name.toLowerCase(),
       description: data.description,
       complete: false,
+      active: false,
+      queued: false,
       category: data.category,
       project: data.project || 'none',
       createdAt: timestamp,
