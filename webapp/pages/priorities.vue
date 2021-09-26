@@ -11,7 +11,7 @@
           <h3 class="project-name">
             {{ project.name }}
           </h3>
-          <div class="project-category">
+          <div v-if="categoryData.length > 0" class="project-category">
             {{ categoryData.filter(c => c.id === project.category)[0].name }}
           </div>
         </div>
@@ -29,7 +29,7 @@
           <h3 class="project-name">
             {{ project.name }}
           </h3>
-          <div class="project-category">
+          <div v-if="categoryData.length > 0" class="project-category">
             {{ categoryData.filter(c => c.id === project.category)[0].name }}
           </div>
         </div>

@@ -12,7 +12,7 @@
             <span v-if="selectedProject.id === project.id">></span>
             {{ project.name }}
           </h3>
-          <div class="category">
+          <div v-if="categoryData.length > 0" class="category">
             {{ categoryData.filter(c => c.id === project.category)[0].name }}
           </div>
         </div>
@@ -65,7 +65,7 @@
             <li class="task" v-for="task in independentTasks" :key="task.id">
               <div>
                 <div>{{ task.name }}</div>
-                <div class="category">
+                <div v-if="categoryData.length > 0" class="category">
                   {{ categoryData.filter(c => c.id === task.category)[0].name }}
                 </div>
               </div>

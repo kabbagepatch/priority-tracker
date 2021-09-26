@@ -36,7 +36,7 @@
           <div v-if="prioritiesData.filter(p => p.id === task.project).length" class="subTitle">
             {{ prioritiesData.filter(p => p.id === task.project)[0].name }}
           </div>
-          <div v-else class="subTitle">
+          <div v-else-if="categoryData.length > 0" class="subTitle">
             {{ categoryData.filter(c => c.id === task.category)[0].name }}
           </div>
         </div>
@@ -79,7 +79,7 @@
           <div v-if="prioritiesData.filter(p => p.id === task.project).length" class="subTitle">
             {{ prioritiesData.filter(p => p.id === task.project)[0].name }}
           </div>
-          <div v-else class="subTitle">
+          <div v-else-if="categoryData.length > 0" class="subTitle">
             {{ categoryData.filter(c => c.id === task.category)[0].name }}
           </div>
         </div>
@@ -130,7 +130,7 @@
             <li class="task" v-for="task in backlogTasks[project.id]" :key="task.id">
               <div>
                 <div :class="task.complete ? 'complete-task' : ''">{{ task.name }}</div>
-                <div v-if="!task.project || task.project === 'none'" class="subTitle">
+                <div v-if="(!task.project || task.project === 'none') && categoryData.length > 0" class="subTitle">
                   {{ categoryData.filter(c => c.id === task.category)[0].name }}
                 </div>
               </div>
