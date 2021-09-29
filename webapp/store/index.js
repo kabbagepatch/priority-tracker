@@ -15,7 +15,7 @@ export const getters = {
   backlogTasks: state => {
     const backlogTasks = {};
     Object.keys(state.projectTasksData).forEach(project => {
-      backlogTasks[project] = state.projectTasksData[project].filter(task => !task.active);
+      backlogTasks[project] = state.projectTasksData[project].filter(task => !task.active && !task.queued);
     });
     console.log({backlogTasks});
 
@@ -63,10 +63,12 @@ export const mutations = {
     }
   },
   addTaskToProject: (state, data) => {
-    const projectTasks = state.projectTasksData[data.project].concat(data.data);
-    state.projectTasksData = {
-      ...state.projectTasksData,
-      [data.projectId]: projectTasks
+    if (!data.project || state.projectTasksData[data.project]) {
+      const projectTasks = state.projectTasksData[data.project || 'none'].concat(data.data);
+      state.projectTasksData = {
+        ...state.projectTasksData,
+        [data.projectId]: projectTasks
+      }
     }
   },
   removeTask: (state, data) => {
