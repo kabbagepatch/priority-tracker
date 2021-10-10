@@ -5,21 +5,21 @@
       <button @click="showAddTask = !showAddTask">Add Task</button>
     </div>
     <div v-if="showAddTask">
-      <form class="task-form" @submit.prevent="addTask(true)">
+      <form class="task-form" @submit.prevent="addTask()">
         <label class="label" for="input">Title*</label>
         <input type="text" v-model="curTask.name" />
         <label class="label" for="select">Project</label>
         <select v-model="curTask.project" name="project" id="project" @change="selectTaskProject">
           <option value>Please select a project</option>
-          <option v-for="option in prioritiesData" :key="option.id" :value="option.id">
-            {{ option.name }}
+          <option v-for="id in Object.keys(prioritiesData)" :key="id" :value="id">
+            {{ prioritiesData[id].name }}
           </option>
         </select>
         <label class="label" for="select">Cagetory*</label>
         <select :disabled="curTask.project.length !== 0" v-model="curTask.category" name="category" id="category">
           <option value>Please select a category</option>
-          <option v-for="option in categoryData" :key="option.id" :value="option.id">
-            {{ option.name }}
+          <option v-for="categoryId in Object.keys(categoriesData)" :key="categoryId" :value="categoryId">
+            {{ categoriesData[categoryId].name }}
           </option>
         </select>
         <div class="add-task">
@@ -33,11 +33,11 @@
       <div class="task" v-for="task in activeTasks" :key="task.id">
         <div>
           <h4 :class="task.complete ? 'complete-task' : ''">{{ task.name }}</h4>
-          <div v-if="prioritiesData.filter(p => p.id === task.project).length" class="subTitle">
-            {{ prioritiesData.filter(p => p.id === task.project)[0].name }}
+          <div v-if="prioritiesData[task.project]" class="subTitle">
+            {{ prioritiesData[task.project].name }}
           </div>
-          <div v-else-if="categoryData.length > 0" class="subTitle">
-            {{ categoryData.filter(c => c.id === task.category)[0].name }}
+          <div v-else-if="categoriesData[task.category]" class="subTitle">
+            {{ categoriesData[task.category].name }}
           </div>
         </div>
         <div class="buttons">
@@ -76,11 +76,11 @@
       <div class="task" v-for="task in queuedTasks" :key="task.id">
         <div>
           <h4 :class="task.complete ? 'complete-task' : ''">{{ task.name }}</h4>
-          <div v-if="prioritiesData.filter(p => p.id === task.project).length" class="subTitle">
-            {{ prioritiesData.filter(p => p.id === task.project)[0].name }}
+          <div v-if="prioritiesData[task.project]" class="subTitle">
+            {{ prioritiesData[task.project].name }}
           </div>
-          <div v-else-if="categoryData.length > 0" class="subTitle">
-            {{ categoryData.filter(c => c.id === task.category)[0].name }}
+          <div v-else-if="categoriesData[task.category]" class="subTitle">
+            {{ categoriesData[task.category].name }}
           </div>
         </div>
         <div class="buttons">
@@ -115,23 +115,23 @@
     <hr />
     <br />
     <h2>Backlog Tasks</h2>
-    <div v-for="project in prioritiesData.concat({ name: 'Other', id: 'none' })" :key="project.id">
+    <div v-for="projectId in Object.keys(backlogProjects)" :key="projectId">
       <div>
-        <h3 class="project-name" @click="selectProject(project)" >
-          {{ project.name }}
+        <h3 class="project-name" @click="selectProject(backlogProjects[projectId])" >
+          {{ backlogProjects[projectId].name }}
         </h3>
-        <div v-if="project.category" class="subTitle">
-          {{ categoryData.filter(c => c.id === project.category)[0].name }}
+        <div v-if="categoriesData[backlogProjects[projectId].category]" class="subTitle">
+          {{ categoriesData[backlogProjects[projectId].category].name }}
         </div>
       </div>
-      <div v-if="selectedProject.id === project.id">
-        <div v-if="backlogTasks[project.id] !== undefined">
+      <div v-if="selectedProject.id === projectId">
+        <div v-if="backlogTasks[projectId] !== undefined">
           <ul class="task-list">
-            <li class="task" v-for="task in backlogTasks[project.id]" :key="task.id">
+            <li class="task" v-for="task in backlogTasks[projectId]" :key="task.id">
               <div>
                 <div :class="task.complete ? 'complete-task' : ''">{{ task.name }}</div>
-                <div v-if="(!task.project || task.project === 'none') && categoryData.length > 0" class="subTitle">
-                  {{ categoryData.filter(c => c.id === task.category)[0].name }}
+                <div v-if="(!task.project || task.project === 'none') && categoriesData[task.category]" class="subTitle">
+                  {{ categoriesData[task.category].name }}
                 </div>
               </div>
               <div class="buttons">
@@ -155,7 +155,7 @@
                 </button>
                 <button
                   class="task-button remove-button"
-                  @click="removeTask(task.id, project.id)"
+                  @click="removeTask(task.id, projectId)"
                 >
                   Remove
                 </button>
@@ -185,28 +185,29 @@ export default {
     }
   },
   computed: {
-    ...mapState([
-      'prioritiesData',
-      'projectTasksData',
-      'categoryData',
-      'activeTasks',
-      'queuedTasks',
-    ]),
-    ...mapGetters([
-      'backlogTasks',
-    ]),
+    ...mapState({
+      categoriesData: state => state.categories.categoriesData,
+      prioritiesData: state => state.projects.prioritiesData,
+      projectTasksData: state => state.tasks.projectTasksData,
+      activeTasks: state => state.tasks.activeTasks,
+      queuedTasks: state => state.tasks.queuedTasks,
+    }),
+    ...mapGetters('tasks', ['backlogTasks']),
     independentTasks() {
       return this.projectTasksData.none;
     },
+    backlogProjects() {
+      return Object.assign({}, this.prioritiesData, { none: { name: 'Other', id: 'none' } });
+    },
   },
   mounted () {
-    this.$store.dispatch('getPrioritiesData')
-    this.$store.dispatch('getActiveTasks')
-    this.$store.dispatch('getQueuedTasks')
+    this.$store.dispatch('projects/getPrioritiesData')
+    this.$store.dispatch('tasks/getActiveTasks')
+    this.$store.dispatch('tasks/getQueuedTasks')
   },
   methods: {
     selectTaskProject (e) {
-      const selectedProject = this.prioritiesData.find(p => p.id === e.target.value);
+      const selectedProject = this.prioritiesData[e.target.value];
       if (selectedProject) {
         this.curTask.category = selectedProject.category;
       } else {
@@ -218,11 +219,11 @@ export default {
         this.selectedProject = {}
       } else {
         this.selectedProject = project
-        this.$store.dispatch('getProjectTasks', project.id)
+        this.$store.dispatch('tasks/getProjectTasks', project.id)
       }
     },
     addTask () {
-      this.$store.dispatch('addTask', this.curTask);
+      this.$store.dispatch('tasks/addTask', this.curTask);
       this.curTask = {
         name: '',
         description: '',
@@ -231,16 +232,16 @@ export default {
       };
     },
     removeTask (id, projectId) {
-      this.$store.dispatch('removeTask', { id, projectId })
+      this.$store.dispatch('tasks/removeTask', { id, projectId })
     },
     toggleTaskComplete (id, value) {
-      this.$store.dispatch('updateTaskStatus', { id, status: 'complete', value });
+      this.$store.dispatch('tasks/updateTaskStatus', { id, status: 'complete', value });
     },
     toggleTaskActive (id, value) {
-      this.$store.dispatch('updateTaskStatus', { id, status: 'active', value });
+      this.$store.dispatch('tasks/updateTaskStatus', { id, status: 'active', value });
     },
     toggleTaskQueued (id, value) {
-      this.$store.dispatch('updateTaskStatus', { id, status: 'queued', value });
+      this.$store.dispatch('tasks/updateTaskStatus', { id, status: 'queued', value });
     },
   },
 }

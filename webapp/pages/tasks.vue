@@ -6,17 +6,17 @@
       <p>It is now time to add tasks to projects so we can actually start doing the work</p>
       <p>You know the drill. Select one of the below and add as many tasks as you think it'll take to complete the project. Treat this like a brainstorming session. And as always, you can always add more or remove some later</p>
       <p>Hit <nuxt-link to="/"><button class="continue">Continue</button></nuxt-link> when you're done with adding tasks or just wanna continue to the backlog</p>
-      <div v-for="project in prioritiesData" :key="project.id">
+      <div v-for="projectId in Object.keys(prioritiesData)" :key="projectId">
         <div>
-          <h3 class="project-name" @click="selectProject(project)" >
-            <span v-if="selectedProject.id === project.id">></span>
-            {{ project.name }}
+          <h3 class="project-name" @click="selectProject(prioritiesData[projectId])" >
+            <span v-if="selectedProject.id === projectId">></span>
+            {{ prioritiesData[projectId].name }}
           </h3>
-          <div v-if="categoryData.length > 0" class="category">
-            {{ categoryData.filter(c => c.id === project.category)[0].name }}
+          <div v-if="categoriesData[prioritiesData[projectId].category]" class="category">
+            {{ categoriesData[prioritiesData[projectId].category].name }}
           </div>
         </div>
-        <div v-if="selectedProject.id === project.id">
+        <div v-if="selectedProject.id === projectId">
           <div >
             <form class="task-form" @submit.prevent="addTask()">
               <label class="label" for="input">
@@ -24,14 +24,14 @@
               </label>
               <input type="text" v-model="curTask.name" />
             </form>
-            <div v-if="projectTasksData[project.id] !== undefined">
+            <div v-if="projectTasksData[projectId] !== undefined">
               <h3 class="task-list-title">Current Tasks</h3>
               <ul class="task-list">
-                <li class="task" v-for="task in projectTasksData[project.id]" :key="task.id">
+                <li class="task" v-for="task in projectTasksData[projectId]" :key="task.id">
                   <div>{{ task.name }}</div>
                   <button
                     class="remove-button"
-                    @click="removeTask(task.id, project.id)"
+                    @click="removeTask(task.id, projectId)"
                   >
                     Remove
                   </button>
@@ -52,8 +52,8 @@
           <label class="label" for="select">Cagetory</label>
           <select v-model="curIndependentTask.category" name="category" id="category">
             <option value>Please select a category</option>
-            <option v-for="option in categoryData" :key="option.id" :value="option.id">
-              {{ option.name }}
+            <option v-for="id in Object.keys(categoriesData)" :key="id" :value="id">
+              {{ categoriesData[id].name }}
             </option>
           </select>
           <div class="add-task">
@@ -65,8 +65,8 @@
             <li class="task" v-for="task in independentTasks" :key="task.id">
               <div>
                 <div>{{ task.name }}</div>
-                <div v-if="categoryData.length > 0" class="category">
-                  {{ categoryData.filter(c => c.id === task.category)[0].name }}
+                <div v-if="categoriesData[task.category]" class="category">
+                  {{ categoriesData[task.category].name }}
                 </div>
               </div>
               <div>
@@ -104,18 +104,18 @@ export default {
     }
   },
   computed: {
-    ...mapState([
-      'prioritiesData',
-      'projectTasksData',
-      'categoryData',
-    ]),
+    ...mapState({
+      categoriesData: state => state.categories.categoriesData,
+      prioritiesData: state => state.projects.prioritiesData,
+      projectTasksData: state => state.tasks.projectTasksData,
+    }),
     independentTasks() {
       return this.projectTasksData.none;
     },
   },
   mounted () {
-    this.$store.dispatch('getPrioritiesData')
-    this.$store.dispatch('getIndependentTasks')
+    this.$store.dispatch('projects/getPrioritiesData')
+    this.$store.dispatch('tasks/getIndependentTasks')
   },
   methods: {
     selectProject (project) {
@@ -123,12 +123,12 @@ export default {
         this.selectedProject = {}
       } else {
         this.selectedProject = project
-        this.$store.dispatch('getProjectTasks', project.id)
+        this.$store.dispatch('tasks/getProjectTasks', project.id)
       }
     },
     addTask (isIndependent) {
       if (isIndependent) {
-        this.$store.dispatch('addTask', this.curIndependentTask);
+        this.$store.dispatch('tasks/addTask', this.curIndependentTask);
         this.curIndependentTask = {
           name: '',
           description: '',
@@ -136,7 +136,7 @@ export default {
           project: 'none',
         }
       } else {
-        this.$store.dispatch('addTask', {
+        this.$store.dispatch('tasks/addTask', {
           ...this.curTask,
           project: this.selectedProject.id,
           category: this.selectedProject.category,
@@ -149,7 +149,7 @@ export default {
       }
     },
     removeTask (id, projectId) {
-      this.$store.dispatch('removeTask', { id, projectId })
+      this.$store.dispatch('tasks/removeTask', { id, projectId })
     }
   }
 };

@@ -1,3 +1,3 @@
 export default async ({ store }) => {
-  await store.dispatch('getCategoryData')
+  await store.dispatch('categories/getCategoryData')
 }

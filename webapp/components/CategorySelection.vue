@@ -9,11 +9,11 @@
         <input v-model="newCategory.name" />
       </form>
       <ul>
-        <li v-for="category in categoryData" :key="category.id">
+        <li v-for="categoryId in Object.keys(categoriesData)" :key="categoryId">
           <div class="category-name">
-            {{ category.name }}
+            {{ categoriesData[categoryId].name }}
           </div>
-          <button @click="categoryData.splice(categoryData.findIndex(c => c.id === category.id), 1)">
+          <button @click="removeCategory(categoryId)">
             Remove
           </button>
         </li>
@@ -37,13 +37,16 @@ export default {
   },
 
   computed: {
-    ...mapState(['categoryData'])
+    ...mapState({ categoriesData: state => state.categories.categoriesData })
   },
 
   methods: {
     addCategory () {
-      this.$store.dispatch('addCategory', { name: this.newCategory.name })
-    }
+      this.$store.dispatch('categories/addCategory', { name: this.newCategory.name })
+    },
+    removeCategory (categoryId) {
+      this.$store.dispatch('categories/removeCategory', categoryId)
+    },
   }
 }
 </script>
