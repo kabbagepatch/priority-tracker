@@ -5,117 +5,33 @@
       <button @click="showAddTask = !showAddTask">Add Task</button>
     </div>
     <div v-if="showAddTask">
-      <form class="task-form" @submit.prevent="addTask()">
-        <label class="label" for="input">Title*</label>
-        <input type="text" v-model="curTask.name" />
-        <label class="label" for="select">Project</label>
-        <select v-model="curTask.project" name="project" id="project" @change="selectTaskProject">
-          <option value>Please select a project</option>
-          <option v-for="id in Object.keys(prioritiesData)" :key="id" :value="id">
-            {{ prioritiesData[id].name }}
-          </option>
-        </select>
-        <label class="label" for="select">Cagetory*</label>
-        <select :disabled="curTask.project.length !== 0" v-model="curTask.category" name="category" id="category">
-          <option value>Please select a category</option>
-          <option v-for="categoryId in Object.keys(categoriesData)" :key="categoryId" :value="categoryId">
-            {{ categoriesData[categoryId].name }}
-          </option>
-        </select>
-        <div class="add-task">
-          <button type="submit">Add</button>
-        </div>
-      </form>
+      <task-form />
     </div>
     <div v-else><br /></div>
-    <h2>Active Tasks</h2>
-    <div class="task-list">
-      <div class="task" v-for="task in activeTasks" :key="task.id">
-        <div>
-          <h4 :class="task.complete ? 'complete-task' : ''">{{ task.name }}</h4>
-          <div v-if="prioritiesData[task.project]" class="subTitle">
-            {{ prioritiesData[task.project].name }}
-          </div>
-          <div v-else-if="categoriesData[task.category]" class="subTitle">
-            {{ categoriesData[task.category].name }}
-          </div>
-        </div>
-        <div class="buttons">
-          <button
-            class="task-button"
-            @click="toggleTaskActive(task.id, false)"
-          >
-            Backlog
-          </button>
-          <button
-            class="task-button"
-            @click="toggleTaskQueued(task.id, true)"
-          >
-            Queue
-          </button>
-          <button
-            class="task-button complete-button"
-            @click="toggleTaskComplete(task.id, true)"
-          >
-            Complete
-          </button>
-          <button
-            class="task-button remove-button"
-            @click="removeTask(task.id, project.id)"
-          >
-            Remove
-          </button>
-        </div>
-      </div>
-    </div>
+    <task-list
+      title="Active Tasks"
+      :tasks="activeTasks"
+      primaryButtonText="Queue"
+      secodaryButtonText="Backlog"
+      :onPrimaryButtonClick="id => toggleTaskQueued(id, true)"
+      :onSecondaryButtonClick="id => toggleTaskActive(id, false)"
+    />
     <br />
     <hr />
     <br />
-    <h2>Queued Tasks</h2>
-    <div class="task-list">
-      <div class="task" v-for="task in queuedTasks" :key="task.id">
-        <div>
-          <h4 :class="task.complete ? 'complete-task' : ''">{{ task.name }}</h4>
-          <div v-if="prioritiesData[task.project]" class="subTitle">
-            {{ prioritiesData[task.project].name }}
-          </div>
-          <div v-else-if="categoriesData[task.category]" class="subTitle">
-            {{ categoriesData[task.category].name }}
-          </div>
-        </div>
-        <div class="buttons">
-          <button
-            class="task-button"
-            @click="toggleTaskActive(task.id, true)"
-          >
-            Active
-          </button>
-          <button
-            class="task-button"
-            @click="toggleTaskQueued(task.id, false)"
-          >
-            Backlog
-          </button>
-          <button
-            class="task-button complete-button"
-            @click="toggleTaskComplete(task.id, true)"
-          >
-            Complete
-          </button>
-          <button
-            class="task-button remove-button"
-            @click="removeTask(task.id, project.id)"
-          >
-            Remove
-          </button>
-        </div>
-      </div>
-    </div>
+    <task-list
+      title="Queued Tasks"
+      :tasks="queuedTasks"
+      primaryButtonText="Active"
+      secodaryButtonText="Backlog"
+      :onPrimaryButtonClick="id => toggleTaskActive(id, true)"
+      :onSecondaryButtonClick="id => toggleTaskQueued(id, false)"
+    />
     <br />
     <hr />
     <br />
     <h2>Backlog Tasks</h2>
-    <div v-for="projectId in Object.keys(backlogProjects)" :key="projectId">
+    <div v-for="projectId in Object.keys(backlogProjects).sort((a, b) => backlogProjects[a].createdAt - backlogProjects[b].createdAt)" :key="projectId">
       <div>
         <h3 class="project-name" @click="selectProject(backlogProjects[projectId])" >
           {{ backlogProjects[projectId].name }}
@@ -126,42 +42,13 @@
       </div>
       <div v-if="selectedProject.id === projectId">
         <div v-if="backlogTasks[projectId] !== undefined">
-          <ul class="task-list">
-            <li class="task" v-for="task in backlogTasks[projectId]" :key="task.id">
-              <div>
-                <div :class="task.complete ? 'complete-task' : ''">{{ task.name }}</div>
-                <div v-if="(!task.project || task.project === 'none') && categoriesData[task.category]" class="subTitle">
-                  {{ categoriesData[task.category].name }}
-                </div>
-              </div>
-              <div class="buttons">
-                <button
-                  class="task-button"
-                  @click="toggleTaskActive(task.id, true)"
-                >
-                  Active
-                </button>
-                <button
-                  class="task-button"
-                  @click="toggleTaskQueued(task.id, true)"
-                >
-                  Queue
-                </button>
-                <button
-                  class="task-button complete-button"
-                  @click="toggleTaskComplete(task.id, true)"
-                >
-                  Complete
-                </button>
-                <button
-                  class="task-button remove-button"
-                  @click="removeTask(task.id, projectId)"
-                >
-                  Remove
-                </button>
-              </div>
-            </li>
-          </ul>
+          <task-list
+            :tasks="backlogTasks[projectId]"
+            primaryButtonText="Active"
+            secodaryButtonText="Queue"
+            :onPrimaryButtonClick="id => toggleTaskActive(id, true)"
+            :onSecondaryButtonClick="id => toggleTaskQueued(id, true)"
+          />
         </div>
       </div>
     </div>
@@ -170,17 +57,17 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import TaskList from '@/components/TaskList.vue';
+import TaskForm from '@/components/TaskForm.vue';
 
 export default {
+  components: {
+    TaskList,
+    TaskForm,
+  },
   data() {
     return {
       selectedProject: {},
-      curTask: {
-        name: '',
-        description: '',
-        category: '',
-        project: '',
-      },
       showAddTask: false,
     }
   },
@@ -206,14 +93,6 @@ export default {
     this.$store.dispatch('tasks/getQueuedTasks')
   },
   methods: {
-    selectTaskProject (e) {
-      const selectedProject = this.prioritiesData[e.target.value];
-      if (selectedProject) {
-        this.curTask.category = selectedProject.category;
-      } else {
-        this.curTask.category = '';
-      }
-    },
     selectProject (project) {
       if (this.selectedProject.id === project.id) {
         this.selectedProject = {}
@@ -221,21 +100,6 @@ export default {
         this.selectedProject = project
         this.$store.dispatch('tasks/getProjectTasks', project.id)
       }
-    },
-    addTask () {
-      this.$store.dispatch('tasks/addTask', this.curTask);
-      this.curTask = {
-        name: '',
-        description: '',
-        category: '',
-        project: '',
-      };
-    },
-    removeTask (id, projectId) {
-      this.$store.dispatch('tasks/removeTask', { id, projectId })
-    },
-    toggleTaskComplete (id, value) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id, status: 'complete', value });
     },
     toggleTaskActive (id, value) {
       this.$store.dispatch('tasks/updateTaskStatus', { id, status: 'active', value });
@@ -261,17 +125,6 @@ export default {
 }
 .project-name:hover {
   color: rgb(116, 167, 233);
-}
-.task-form {
-  display: flex;
-  flex-direction: column;
-  margin: 20px 0;
-  padding: 20px;
-  padding-top: 10px;
-  border: 0.5px solid hsla(200, 80%, 10%, 0.2);
-}
-.add-task {
-  margin-top: 20px;
 }
 .task-list {
   margin: 20px 0;

@@ -23,20 +23,50 @@ export const mutations = {
     }
   },
   addTaskToProject: (state, data) => {
-    if (!data.project || state.projectTasksData[data.projectId]) {
+    if (state.projectTasksData[data.projectId]) {
       const projectTasks = state.projectTasksData[data.projectId || 'none'].concat(data.task);
       state.projectTasksData = {
         ...state.projectTasksData,
         [data.projectId]: projectTasks
       }
     }
+
+    if (state.activeTasks && data.task.active) {
+      const activeTasks = state.activeTasks.concat(data.task);
+      state.activeTasks = activeTasks;
+    }
+
+    if (state.queuedTasks && data.task.queued) {
+      const queuedTasks = state.queuedTasks.concat(data.task);
+      state.queuedTasks = queuedTasks;
+    }
   },
   removeTask: (state, data) => {
     const projectTasks = state.projectTasksData[data.projectId];
-    projectTasks.splice(projectTasks.findIndex(t => t.id === data.id), 1);
-    state.projectTasksData = {
-      ...state.projectTasksData,
-      [data.projectId]: projectTasks
+    if (projectTasks) {
+      projectTasks.splice(projectTasks.findIndex(t => t.id === data.id), 1);
+      state.projectTasksData = {
+        ...state.projectTasksData,
+        [data.projectId]: projectTasks
+      }
+    }
+
+    const activeTasks = state.activeTasks;
+    if (activeTasks) {
+      const activeTaskIndex = activeTasks.findIndex(t => t.id === data.id)
+      if (activeTaskIndex !== -1) {
+        activeTasks.splice(activeTaskIndex, 1)
+        state.activeTasks = activeTasks;
+      }
+    }
+
+    const queuedTasks = state.queuedTasks;
+    if (queuedTasks) {
+      const queuedTaskIndex = queuedTasks.findIndex(t => t.id === data.id)
+      if (queuedTaskIndex !== -1) {
+        queuedTasks.splice(queuedTaskIndex, 1)
+        state.queuedTasks = queuedTasks;
+      }
     }
   },
   updateTask: (state, updatedTask) => {
@@ -147,7 +177,7 @@ export const actions = {
   async addTask ({ commit }, data) {
     try {
       await this.$axios.post('https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/tasks',
-        data,
+        { ...data, [data.status]: true },
         {
           headers: { 'Content-Type': 'application/json' }
         }).then((res) => {

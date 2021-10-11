@@ -24,7 +24,7 @@ p {
 }
 
 button {
-  background: #098191;
+  background: #1a7581;
   transition: background ease 0.25s;
   border-radius: 5px;
   display: inline-block;
@@ -49,7 +49,7 @@ button.continue {
 }
 
 button:hover {
-  background: #63b6b8;
+  background: #258081;
 }
 
 button:focus {

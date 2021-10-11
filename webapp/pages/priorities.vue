@@ -4,7 +4,7 @@
     <div>Now it is time to prioritise projects</div>
     <div>Select up to five projects to mark as actively being worked on. You will only be adding tasks for these projects</div>
     <br />
-    <p>Hit <nuxt-link to="/tasks"><button class="continue">Continue</button></nuxt-link> when you're done with prioritising projects</p>
+    <p>Hit <nuxt-link to="/"><button class="continue">Continue</button></nuxt-link> when you're done with prioritising projects</p>
     <div v-for="projectId in Object.keys(prioritiesData)" :key="projectId">
       <div class="project-row">
         <div>
