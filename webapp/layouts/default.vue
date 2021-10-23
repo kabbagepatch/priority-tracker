@@ -76,6 +76,13 @@ a {
   margin: 0 7px;
 }
 
+@media only screen and (max-width: 600px) {
+  .nav-links a {
+    font-size: 0.8em;
+    margin: 0 2px;
+  }
+}
+
 .nav-links a:hover {
   color: #63b6b8;
 }

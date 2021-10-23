@@ -22,30 +22,35 @@
             class="task-button"
             @click="onPrimaryButtonClick(task.id)"
           >
+            <v-icon :name="primaryIcon"/>
             {{ primaryButtonText }}
           </button>
           <button
             class="task-button"
             @click="onSecondaryButtonClick(task.id)"
           >
+            <v-icon :name="secondaryIcon"/>
             {{ secodaryButtonText }}
           </button>
           <button
             class="task-button update-button"
             @click="updateTask(task)"
           >
+            <v-icon name="edit"/>
             Update
           </button>
           <button
             class="task-button complete-button"
             @click="completeTask(task.id)"
           >
+            <v-icon name="check"/>
             Complete
           </button>
           <button
             class="task-button remove-button"
             @click="removeTask(task.id, task.project)"
           >
+            <v-icon name="trash"/>
             Remove
           </button>
         </div>
@@ -73,10 +78,12 @@ export default {
       type: Array,
       default: () => [],
     },
+    primaryIcon: String,
     primaryButtonText: {
       type: String,
       default: () => "",
     },
+    secondaryIcon: String,
     secodaryButtonText: {
       type: String,
       default: () => "",
@@ -119,12 +126,20 @@ export default {
 }
 .task-info {
   min-width: 200px;
+  overflow: auto;
+  margin-right: 20px;
 }
 .complete-task {
   text-decoration: line-through;
 }
 .buttons {
   text-align: right;
+  min-width: 100px;
+}
+@media only screen and (max-width: 600px) {
+  .buttons button {
+    width: 100%;
+  }
 }
 .task-button {
   padding: 0.4em 0.75em;

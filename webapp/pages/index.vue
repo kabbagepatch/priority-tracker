@@ -7,14 +7,16 @@
     <div v-if="showTaskForm">
       <task-form
         :selectedTask="selectedTask"
-        :onCancelClick="() => { showTaskForm = false }"
+        :onCancelClick="() => { showTaskForm = false, selectedTask = undefined }"
       />
     </div>
     <div v-else><br /></div>
     <task-list
       title="Active Tasks"
       :tasks="activeTasks"
+      primaryIcon="angle-down"
       primaryButtonText="Queue"
+      secondaryIcon="angle-double-down"
       secodaryButtonText="Backlog"
       :onPrimaryButtonClick="id => toggleTaskQueued(id, true)"
       :onSecondaryButtonClick="id => toggleTaskActive(id, false)"
@@ -26,7 +28,9 @@
     <task-list
       title="Queued Tasks"
       :tasks="queuedTasks"
+      primaryIcon="angle-up"
       primaryButtonText="Active"
+      secondaryIcon="angle-down"
       secodaryButtonText="Backlog"
       :onPrimaryButtonClick="id => toggleTaskActive(id, true)"
       :onSecondaryButtonClick="id => toggleTaskQueued(id, false)"
@@ -49,7 +53,9 @@
         <div v-if="backlogTasks[projectId] !== undefined">
           <task-list
             :tasks="backlogTasks[projectId]"
+            primaryIcon="angle-double-up"
             primaryButtonText="Active"
+            secondaryIcon="angle-up"
             secodaryButtonText="Queue"
             :onPrimaryButtonClick="id => toggleTaskActive(id, true)"
             :onSecondaryButtonClick="id => toggleTaskQueued(id, true)"

@@ -8678,6 +8678,11 @@
   "resolved" "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz"
   "version" "1.1.2"
 
+"vue-awesome@^4.3.1":
+  "integrity" "sha512-8FRCtO12pNDp2o2XKVIc7HApMFrws42rR9+AiDYjW6lsHbhMy0ygvhaByNEGlQSbp2gb3ZZkeV0UJxKdur5c1Q=="
+  "resolved" "https://registry.npmjs.org/vue-awesome/-/vue-awesome-4.3.1.tgz"
+  "version" "4.3.1"
+
 "vue-client-only@^2.0.0":
   "integrity" "sha512-arhk1wtWAfLsJyxGMoEYhoBowM87/i6HLSG2LH/03Yog6i2d9JEN1peMP0Ceis+/n9DxdenGYZZTxbPPJyHciA=="
   "resolved" "https://registry.yarnpkg.com/vue-client-only/-/vue-client-only-2.0.0.tgz"
@@ -8763,7 +8768,7 @@
   "resolved" "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz"
   "version" "1.9.1"
 
-"vue@^2.0.0", "vue@^2.6.12":
+"vue@^2.0.0", "vue@^2.4.0", "vue@^2.6.12":
   "integrity" "sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg=="
   "resolved" "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz"
   "version" "2.6.12"
