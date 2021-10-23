@@ -2,10 +2,13 @@
   <main>
     <div class="heading">
       <h1>Tasks</h1>
-      <button @click="showAddTask = !showAddTask">Add Task</button>
+      <button @click="showTaskForm = !showTaskForm">{{ selectedTask ? 'Update' : 'Add' }} Task</button>
     </div>
-    <div v-if="showAddTask">
-      <task-form />
+    <div v-if="showTaskForm">
+      <task-form
+        :selectedTask="selectedTask"
+        :onCancelClick="() => { showTaskForm = false }"
+      />
     </div>
     <div v-else><br /></div>
     <task-list
@@ -15,6 +18,7 @@
       secodaryButtonText="Backlog"
       :onPrimaryButtonClick="id => toggleTaskQueued(id, true)"
       :onSecondaryButtonClick="id => toggleTaskActive(id, false)"
+      :onUpdateClick="task => { showTaskForm = true; selectedTask = { ...task } }"
     />
     <br />
     <hr />
@@ -26,6 +30,7 @@
       secodaryButtonText="Backlog"
       :onPrimaryButtonClick="id => toggleTaskActive(id, true)"
       :onSecondaryButtonClick="id => toggleTaskQueued(id, false)"
+      :onUpdateClick="task => { showTaskForm = true; selectedTask = { ...task } }"
     />
     <br />
     <hr />
@@ -33,14 +38,14 @@
     <h2>Backlog Tasks</h2>
     <div v-for="projectId in Object.keys(backlogProjects).sort((a, b) => backlogProjects[a].createdAt - backlogProjects[b].createdAt)" :key="projectId">
       <div>
-        <h3 class="project-name" @click="selectProject(backlogProjects[projectId])" >
+        <h3 class="project-name" @click="selectProject(projectId)" >
           {{ backlogProjects[projectId].name }}
         </h3>
         <div v-if="categoriesData[backlogProjects[projectId].category]" class="subTitle">
           {{ categoriesData[backlogProjects[projectId].category].name }}
         </div>
       </div>
-      <div v-if="selectedProject.id === projectId">
+      <div v-if="selectedProjects[projectId] === true">
         <div v-if="backlogTasks[projectId] !== undefined">
           <task-list
             :tasks="backlogTasks[projectId]"
@@ -48,6 +53,7 @@
             secodaryButtonText="Queue"
             :onPrimaryButtonClick="id => toggleTaskActive(id, true)"
             :onSecondaryButtonClick="id => toggleTaskQueued(id, true)"
+            :onUpdateClick="task => { showTaskForm = true; selectedTask = { ...task } }"
           />
         </div>
       </div>
@@ -67,8 +73,9 @@ export default {
   },
   data() {
     return {
-      selectedProject: {},
-      showAddTask: false,
+      selectedProjects: {},
+      selectedTask: undefined,
+      showTaskForm: false,
     }
   },
   computed: {
@@ -93,12 +100,13 @@ export default {
     this.$store.dispatch('tasks/getQueuedTasks')
   },
   methods: {
-    selectProject (project) {
-      if (this.selectedProject.id === project.id) {
-        this.selectedProject = {}
+    selectProject (id) {
+      console.log(this.selectedProjects[id]);
+      if (this.selectedProjects[id]) {
+        this.selectedProjects = { ...this.selectedProjects, [id]: false }
       } else {
-        this.selectedProject = project
-        this.$store.dispatch('tasks/getProjectTasks', project.id)
+        this.selectedProjects = { ...this.selectedProjects, [id]: true }
+        this.$store.dispatch('tasks/getProjectTasks', id)
       }
     },
     toggleTaskActive (id, value) {

@@ -1,7 +1,9 @@
 <template>
-  <form class="task-form" @submit.prevent="addTask()">
+  <form class="task-form" @submit.prevent="selectedTask ? updateTask() : addTask()">
     <label class="label" for="input">Title*</label>
     <input type="text" v-model="curTask.name" />
+    <label class="label" for="input">Link</label>
+    <input type="text" v-model="curTask.link" />
     <label class="label" for="select">Project</label>
     <select v-model="curTask.project" name="project" id="project" @change="selectTaskProject">
       <option value>Please select a project</option>
@@ -16,7 +18,7 @@
         {{ categoriesData[categoryId].name }}
       </option>
     </select>
-    <fieldset class="status">
+    <fieldset v-if="!selectedTask" class="status">
       <legend>Status</legend>
       <div v-for="option in ['active', 'queue', 'backlog']" :key="option">
         <input
@@ -31,7 +33,8 @@
       </div>
     </fieldset>
     <div class="add-task">
-      <button type="submit">Add</button>
+      <button type="submit">{{ selectedTask ? 'Update' : 'Add' }}</button>
+      <button type="button" @click="onCancel">Cancel</button>
     </div>
   </form>
 </template>
@@ -40,16 +43,31 @@
 import { mapState } from 'vuex';
 
 export default {
+  props: {
+    selectedTask: Object,
+    onCancelClick: Function,
+  },
   data() {
+    console.log(this.selectedTask)
+    if (this.selectedTask && this.selectedTask.name) {
+      return { curTask: this.selectedTask };
+    }
     return {
       curTask: {
         name: '',
-        description: '',
+        link: '',
         category: '',
         project: '',
         status: 'backlog',
       },
     }
+  },
+  watch: {
+    selectedTask: function (newVal) {
+      if (newVal && newVal.name) {
+        this.curTask = newVal
+      }
+    },
   },
   computed: {
     ...mapState({
@@ -58,6 +76,9 @@ export default {
     }),
   },
   methods: {
+    onCancel () {
+      this.onCancelClick();
+    },
     selectTaskProject (e) {
       const selectedProject = this.prioritiesData[e.target.value];
       if (selectedProject) {
@@ -70,7 +91,18 @@ export default {
       this.$store.dispatch('tasks/addTask', this.curTask);
       this.curTask = {
         name: '',
-        description: '',
+        link: '',
+        category: '',
+        project: '',
+        status: 'backlog',
+      };
+    },
+    updateTask () {
+      this.$store.dispatch('tasks/updateTask', this.curTask);
+      this.onCancelClick();
+      this.curTask = {
+        name: '',
+        link: '',
         category: '',
         project: '',
         status: 'backlog',

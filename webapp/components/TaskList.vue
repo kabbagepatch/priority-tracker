@@ -4,7 +4,12 @@
     <div class="task-list">
       <div class="task" v-for="task in tasks" :key="task.id">
         <div class="task-info">
-          <h4 :class="task.complete ? 'complete-task' : ''">{{ task.name }}</h4>
+          <h4 :class="task.complete ? 'complete-task' : ''">
+            <a class="task-name task-name-link" v-if="task.link" :href="task.link" target="_blank">
+              {{ task.name }}
+            </a>
+            <span class="task-name" v-else>{{ task.name }}</span>
+          </h4>
           <div v-if="prioritiesData[task.project]" class="subTitle">
             {{ prioritiesData[task.project].name }}
           </div>
@@ -24,6 +29,12 @@
             @click="onSecondaryButtonClick(task.id)"
           >
             {{ secodaryButtonText }}
+          </button>
+          <button
+            class="task-button update-button"
+            @click="updateTask(task)"
+          >
+            Update
           </button>
           <button
             class="task-button complete-button"
@@ -72,8 +83,13 @@ export default {
     },
     onPrimaryButtonClick: Function,
     onSecondaryButtonClick: Function,
+    onUpdateClick: Function,
   },
   methods: {
+    updateTask (task) {
+      window.scrollTo(0, 0);
+      this.onUpdateClick(task);
+    },
     removeTask (id, projectId) {
       this.$store.dispatch('tasks/removeTask', { id, projectId })
     },
@@ -107,9 +123,18 @@ export default {
 .complete-task {
   text-decoration: line-through;
 }
+.buttons {
+  text-align: right;
+}
 .task-button {
   padding: 0.4em 0.75em;
   margin-bottom: 2px;
+}
+.update-button {
+  background: rgb(201, 180, 64);
+}
+.update-button:hover {
+  background: rgb(241, 217, 81);
 }
 .complete-button {
   background: rgb(19, 139, 49);
@@ -125,10 +150,20 @@ export default {
 }
 .subTitle {
   font-size: 0.8em;
-  font-weight: bold;
+  font-weight: 500;
   text-transform: uppercase;
 }
 .task-list .subTitle {
   font-size: 0.7em;
+}
+.task-name {
+  font-weight: 400;
+}
+.task-name-link {
+  color: rgb(64, 144, 197);
+  text-decoration: underline solid rgba(64, 144, 197, 0.4);
+}
+.task-name-link:hover {
+  color: rgb(111, 186, 236);
 }
 </style>
