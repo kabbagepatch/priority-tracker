@@ -12,7 +12,7 @@
       </option>
     </select>
     <label class="label" for="select">Cagetory*</label>
-    <select :disabled="curTask.project.length !== 0" v-model="curTask.category" name="category" id="category">
+    <select :disabled="curTask.project.length !== 0 && curTask.project !== 'none'" v-model="curTask.category" name="category" id="category">
       <option value>Please select a category</option>
       <option v-for="categoryId in Object.keys(categoriesData)" :key="categoryId" :value="categoryId">
         {{ categoriesData[categoryId].name }}
