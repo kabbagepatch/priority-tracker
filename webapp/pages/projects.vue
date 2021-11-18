@@ -76,6 +76,7 @@ export default {
     })
   },
   mounted () {
+    this.$store.dispatch('categories/getCategoryData');
     this.$store.dispatch('projects/getProjectData')
   },
   methods: {

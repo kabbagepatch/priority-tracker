@@ -59,6 +59,7 @@ export default {
     ...mapGetters('projects', ['unprioritisedProjects'])
   },
   mounted () {
+    this.$store.dispatch('categories/getCategoryData');
     this.$store.dispatch('projects/getProjectData')
     this.$store.dispatch('projects/getPrioritiesData')
   },

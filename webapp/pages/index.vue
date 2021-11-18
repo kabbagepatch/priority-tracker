@@ -100,10 +100,11 @@ export default {
       return Object.assign({}, this.prioritiesData, { none: { name: 'Other', id: 'none' } });
     },
   },
-  mounted () {
-    this.$store.dispatch('projects/getPrioritiesData')
-    this.$store.dispatch('tasks/getActiveTasks')
-    this.$store.dispatch('tasks/getQueuedTasks')
+  created () {
+    this.$store.dispatch('categories/getCategoryData');
+    this.$store.dispatch('projects/getPrioritiesData');
+    this.$store.dispatch('tasks/getActiveTasks');
+    this.$store.dispatch('tasks/getQueuedTasks');
   },
   methods: {
     selectProject (id) {

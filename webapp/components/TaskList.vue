@@ -1,62 +1,64 @@
 <template>
-  <div>
-    <h2 v-if="title">{{ title }}</h2>
-    <div class="task-list">
-      <div class="task" v-for="task in tasks" :key="task.id">
-        <div class="task-info">
-          <h4 :class="task.complete ? 'complete-task' : ''">
-            <a class="task-name task-name-link" v-if="task.link" :href="task.link" target="_blank">
-              {{ task.name }}
-            </a>
-            <span class="task-name" v-else>{{ task.name }}</span>
-          </h4>
-          <div v-if="prioritiesData[task.project]" class="subTitle">
-            {{ prioritiesData[task.project].name }}
+  <client-only>
+    <div>
+      <h2 v-if="title">{{ title }}</h2>
+      <div class="task-list">
+        <div class="task" v-for="task in tasks" :key="task.id">
+          <div class="task-info">
+            <h4 :class="task.complete ? 'complete-task' : ''">
+              <a class="task-name task-name-link" v-if="task.link" :href="task.link" target="_blank">
+                {{ task.name }}
+              </a>
+              <span class="task-name" v-else>{{ task.name }}</span>
+            </h4>
+            <div v-if="prioritiesData[task.project]" class="subTitle">
+              {{ prioritiesData[task.project].name }}
+            </div>
+            <div v-else-if="categoriesData[task.category]" class="subTitle">
+              {{ categoriesData[task.category].name }}
+            </div>
           </div>
-          <div v-else-if="categoriesData[task.category]" class="subTitle">
-            {{ categoriesData[task.category].name }}
+          <div class="buttons">
+            <button
+              class="task-button"
+              @click="onPrimaryButtonClick(task.id)"
+            >
+              <v-icon :name="primaryIcon"/>
+              {{ primaryButtonText }}
+            </button>
+            <button
+              class="task-button"
+              @click="onSecondaryButtonClick(task.id)"
+            >
+              <v-icon :name="secondaryIcon"/>
+              {{ secodaryButtonText }}
+            </button>
+            <button
+              class="task-button update-button"
+              @click="updateTask(task)"
+            >
+              <v-icon name="edit"/>
+              Update
+            </button>
+            <button
+              class="task-button complete-button"
+              @click="completeTask(task.id)"
+            >
+              <v-icon name="check"/>
+              Complete
+            </button>
+            <button
+              class="task-button remove-button"
+              @click="removeTask(task.id, task.project)"
+            >
+              <v-icon name="trash"/>
+              Remove
+            </button>
           </div>
-        </div>
-        <div class="buttons">
-          <button
-            class="task-button"
-            @click="onPrimaryButtonClick(task.id)"
-          >
-            <v-icon :name="primaryIcon"/>
-            {{ primaryButtonText }}
-          </button>
-          <button
-            class="task-button"
-            @click="onSecondaryButtonClick(task.id)"
-          >
-            <v-icon :name="secondaryIcon"/>
-            {{ secodaryButtonText }}
-          </button>
-          <button
-            class="task-button update-button"
-            @click="updateTask(task)"
-          >
-            <v-icon name="edit"/>
-            Update
-          </button>
-          <button
-            class="task-button complete-button"
-            @click="completeTask(task.id)"
-          >
-            <v-icon name="check"/>
-            Complete
-          </button>
-          <button
-            class="task-button remove-button"
-            @click="removeTask(task.id, task.project)"
-          >
-            <v-icon name="trash"/>
-            Remove
-          </button>
         </div>
       </div>
     </div>
-  </div>
+  </client-only>
 </template>
 
 <script>

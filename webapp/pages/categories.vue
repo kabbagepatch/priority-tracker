@@ -14,7 +14,11 @@
 </template>
 
 <script>
-export default {}
+export default {
+  created () {
+    this.$store.dispatch('categories/getCategoryData');
+  },
+}
 </script>
 
 <style scoped>
