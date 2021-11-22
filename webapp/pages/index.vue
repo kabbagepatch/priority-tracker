@@ -84,6 +84,11 @@ export default {
       showTaskForm: false,
     }
   },
+  head() {
+    return {
+      script: [{ src: 'https://identity.netlify.com/v1/netlify-identity-widget.js' }],
+    };
+  },
   computed: {
     ...mapState({
       categoriesData: state => state.categories.categoriesData,

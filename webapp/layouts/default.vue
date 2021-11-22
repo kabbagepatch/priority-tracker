@@ -4,19 +4,49 @@
       <nuxt-link to="/">
         <h3 class="nav-title">priority-tracker</h3>
       </nuxt-link>
-      <div class="nav-links">
+      <div class="nav-links" v-if="user">
         <nuxt-link to="/categories">Categories</nuxt-link>
         <nuxt-link to="/projects">Projects</nuxt-link>
         <nuxt-link to="/priorities">Priorities</nuxt-link>
+        <a href="#" @click.prevent="onLogout"><button>Logout</button></a>
+      </div>
+      <div class="nav-links" v-else>
+        <a href="#" @click.prevent="login"><button>Login</button></a>
+        <a href="#" @click.prevent="signup"><button>Sign Up</button></a>
       </div>
     </div>
     <hr />
-    <div class="content">
+    <div v-if="user" class="content">
       <Nuxt />
     </div>
     <br />
   </div>
 </template>
+
+<script>
+import { mapGetters, mapActions } from 'vuex'
+
+export default {
+  computed: {
+    ...mapGetters({
+      user: 'auth/user',
+    })
+  },
+  methods: {
+    onLogout() {
+      this.logout()
+      if (this.$route.path !== '/') {
+        this.$router.push('/')
+      }
+    },
+    ...mapActions({
+      login: 'auth/login',
+      signup: 'auth/signup',
+      logout: 'auth/logout'
+    })
+  }
+}
+</script>
 
 <style>
 html {
