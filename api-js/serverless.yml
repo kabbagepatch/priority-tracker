@@ -21,11 +21,14 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
         - dynamodb:BatchGetItem
+        - dynamodb:BatchWriteItem
       Resource:
         - "Fn::GetAtt": [CategoriesTable, Arn]
         - "Fn::GetAtt": [PrioritisedProjectsTable, Arn]
         - "Fn::GetAtt": [ProjectsTable, Arn]
         - "Fn::GetAtt": [TasksTable, Arn]
+        - "Fn::GetAtt": [HabitsTable, Arn]
+        - "Fn::GetAtt": [HabitMarksTable, Arn]
     - Effect: Allow
       Action:
         - dynamodb:Query
@@ -37,9 +40,11 @@ functions:
   - ${file(projects/priorities/functions.yml)}
   - ${file(projects/functions.yml)}
   - ${file(tasks/functions.yml)}
+  - ${file(habits/functions.yml)}
 
 resources:
   - ${file(categories/database.yml)}
   - ${file(projects/priorities/database.yml)}
   - ${file(projects/database.yml)}
   - ${file(tasks/database.yml)}
+  - ${file(habits/database.yml)}

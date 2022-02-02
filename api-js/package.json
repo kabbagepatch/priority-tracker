@@ -4,6 +4,7 @@
   "author": "Kavish",
   "license": "MIT",
   "dependencies": {
+    "date-fns": "^2.28.0",
     "uuid": "^2.0.3"
   }
 }
