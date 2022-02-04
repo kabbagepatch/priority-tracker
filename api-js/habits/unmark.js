@@ -24,7 +24,7 @@ module.exports.unmark = async (event) => {
     };
   }
 
-  const parsedDate = parse(data.markDate, 'P', new Date());
+  const parsedDate = new Date(data.markDate);
   const isValidDate = isValid(parsedDate);
   if (!isValidDate) {
     return {

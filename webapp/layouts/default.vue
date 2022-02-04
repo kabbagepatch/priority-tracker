@@ -8,6 +8,7 @@
         <nuxt-link to="/categories">Categories</nuxt-link>
         <nuxt-link to="/projects">Projects</nuxt-link>
         <nuxt-link to="/priorities">Priorities</nuxt-link>
+        <nuxt-link to="/habits">Habits</nuxt-link>
         <a href="#" @click.prevent="onLogout"><button>Logout</button></a>
       </div>
       <div class="nav-links" v-else>

@@ -20,11 +20,11 @@ module.exports.mark = async (event) => {
     return {
       statusCode: 400,
       headers: getHeaders('text/plain'),
-      body: 'Couldn\'t mark a habit without valid date.',
+      body: 'Couldn\'t mark a habit without a date.',
     };
   }
 
-  const parsedDate = parse(data.markDate, 'P', new Date());
+  const parsedDate = new Date(data.markDate);
   const isValidDate = isValid(parsedDate);
   if (!isValidDate) {
     return {
