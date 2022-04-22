@@ -5,10 +5,6 @@
         <h3 class="nav-title">priority-tracker</h3>
       </nuxt-link>
       <div class="nav-links" v-if="user">
-        <nuxt-link to="/categories">Categories</nuxt-link>
-        <nuxt-link to="/projects">Projects</nuxt-link>
-        <nuxt-link to="/priorities">Priorities</nuxt-link>
-        <nuxt-link to="/habits">Habits</nuxt-link>
         <a href="#" @click.prevent="onLogout"><button>Logout</button></a>
       </div>
       <div class="nav-links" v-else>
@@ -17,17 +13,21 @@
       </div>
     </div>
     <hr />
-    <div v-if="user" class="content">
-      <Nuxt />
+    <div v-if="user" class="container">
+      <sidebar />
+      <div class="content"><Nuxt /></div>
     </div>
-    <br />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Sidebar from '@/components/Sidebar.vue';
 
 export default {
+  components: {
+    Sidebar,
+  },
   computed: {
     ...mapGetters({
       user: 'auth/user',
@@ -89,9 +89,16 @@ html {
   padding: 0 20px;
 }
 
+.container {
+  display: flex;
+  width: 100%;
+  min-height: calc(100vh - 55px);
+}
+
 .content {
-  margin: 15px 0;
-  padding: 0 20px;
+  padding: 40px 50px;
+  width: 100%;
+  background-color: hsl(202, 100%, 98%);
 }
 
 a {
@@ -103,7 +110,7 @@ a {
 }
 
 .nav-links a {
-  color: #098191;
+  color: hsl(187, 88%, 30%);
   margin: 0 7px;
 }
 
@@ -115,7 +122,7 @@ a {
 }
 
 .nav-links a:hover {
-  color: #63b6b8;
+  color: hsl(181, 37%, 55%);
 }
 
 </style>

@@ -1,5 +1,6 @@
 <template>
   <form class="task-form" @submit.prevent="selectedTask ? updateTask() : addTask()">
+    <h2 v-if="!selectedTask">Add Task</h2>
     <label class="label" for="input">Title*</label>
     <input type="text" v-model="curTask.name" />
     <label class="label" for="input">Link</label>
@@ -116,10 +117,15 @@ export default {
 .task-form {
   display: flex;
   flex-direction: column;
-  margin: 20px 0;
   padding: 20px;
   padding-top: 10px;
-  border: 0.5px solid hsla(200, 80%, 10%, 0.2);
+  background: white;
+  box-shadow: hsla(0, 0%, 0%, 0.15) 1.95px 1.95px 2.6px;
+  border-radius: 10px;
+}
+.task-form input, .task-form select {
+  padding: 10px;
+  font-size: 18px;
 }
 .status {
   margin-top: 20px;

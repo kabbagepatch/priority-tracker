@@ -1,17 +1,14 @@
 <template>
   <main>
-    <div class="heading">
-      <h1>Tasks</h1>
-      <button @click="showTaskForm = !showTaskForm">{{ selectedTask ? 'Update' : 'Add' }} Task</button>
-    </div>
+    <button class="add-task-button" @click="showTaskForm = !showTaskForm">{{ selectedTask ? 'Update' : 'Add' }} Task</button>
     <div v-if="showTaskForm">
       <task-form
         :selectedTask="selectedTask"
         :onCancelClick="() => { showTaskForm = false, selectedTask = undefined }"
       />
     </div>
-    <div v-else><br /></div>
     <task-list
+      v-if="!$nuxt.$route.hash || $nuxt.$route.hash.includes('active')"
       title="Active Tasks"
       :tasks="activeTasks"
       primaryIcon="angle-down"
@@ -23,9 +20,8 @@
       :onUpdateClick="task => { showTaskForm = true; selectedTask = { ...task } }"
     />
     <br />
-    <hr />
-    <br />
     <task-list
+      v-if="!$nuxt.$route.hash || $nuxt.$route.hash.includes('queue')"
       title="Queued Tasks"
       :tasks="queuedTasks"
       primaryIcon="angle-up"
@@ -37,30 +33,32 @@
       :onUpdateClick="task => { showTaskForm = true; selectedTask = { ...task } }"
     />
     <br />
-    <hr />
-    <br />
-    <h2>Backlog Tasks</h2>
-    <div v-for="projectId in Object.keys(backlogProjects).sort((a, b) => backlogProjects[a].createdAt - backlogProjects[b].createdAt)" :key="projectId">
-      <div>
-        <h3 class="project-name" @click="selectProject(projectId)" >
-          {{ backlogProjects[projectId].name }}
-        </h3>
-        <div v-if="categoriesData[backlogProjects[projectId].category]" class="subTitle">
-          {{ categoriesData[backlogProjects[projectId].category].name }}
+    <div
+      v-if="!$nuxt.$route.hash || $nuxt.$route.hash.includes('backlog')"
+    >
+      <h2>Backlog Tasks</h2>
+      <div v-for="projectId in Object.keys(backlogProjects).sort((a, b) => backlogProjects[a].createdAt - backlogProjects[b].createdAt)" :key="projectId">
+        <div class="project-section">
+          <h3 class="project-name" @click="selectProject(projectId)" >
+            {{ backlogProjects[projectId].name }}
+          </h3>
+          <div v-if="categoriesData[backlogProjects[projectId].category]" class="subTitle">
+            {{ categoriesData[backlogProjects[projectId].category].name }}
+          </div>
         </div>
-      </div>
-      <div v-if="selectedProjects[projectId] === true">
-        <div v-if="backlogTasks[projectId] !== undefined">
-          <task-list
-            :tasks="backlogTasks[projectId]"
-            primaryIcon="angle-double-up"
-            primaryButtonText="Active"
-            secondaryIcon="angle-up"
-            secodaryButtonText="Queue"
-            :onPrimaryButtonClick="id => toggleTaskActive(id, true)"
-            :onSecondaryButtonClick="id => toggleTaskQueued(id, true)"
-            :onUpdateClick="task => { showTaskForm = true; selectedTask = { ...task } }"
-          />
+        <div v-if="selectedProjects[projectId] === true">
+          <div v-if="backlogTasks[projectId] !== undefined">
+            <task-list
+              :tasks="backlogTasks[projectId]"
+              primaryIcon="angle-double-up"
+              primaryButtonText="Active"
+              secondaryIcon="angle-up"
+              secodaryButtonText="Queue"
+              :onPrimaryButtonClick="id => toggleTaskActive(id, true)"
+              :onSecondaryButtonClick="id => toggleTaskQueued(id, true)"
+              :onUpdateClick="task => { showTaskForm = true; selectedTask = { ...task } }"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -82,6 +80,9 @@ export default {
       selectedProjects: {},
       selectedTask: undefined,
       showTaskForm: false,
+      showQueue: true,
+      showBacklog: true,
+      showProject: {},
     }
   },
   head() {
@@ -111,6 +112,7 @@ export default {
     this.$store.dispatch('tasks/getActiveTasks');
     this.$store.dispatch('tasks/getQueuedTasks');
   },
+
   methods: {
     selectProject (id) {
       console.log(this.selectedProjects[id]);
@@ -132,54 +134,30 @@ export default {
 </script>
 
 <style scoped>
-.heading {
-  display: flex;
+.add-task-button {
   width: 100%;
-  justify-content: space-between;
+  border: 1px solid hsl(187, 66%, 30%);
+  color: hsl(187, 66%, 30%);
+  background: white;
+  box-shadow: hsla(0, 0%, 0%, 0.15) 1.95px 1.95px 2.6px;
+  font-size: 18px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+.add-task-button:hover {
+  background: hsl(0, 0%, 95%);
+}
+.project-section {
+  margin: 20px 0;
 }
 .project-name {
-  color: rgb(21, 102, 207);
-  font-weight: bold;
+  transition: color 0.25s ease-in-out;
+  color: hsl(214, 76%, 45%);
+  font-weight: bold !important;
   cursor: pointer;
   margin-top: 10px;
 }
 .project-name:hover {
-  color: rgb(116, 167, 233);
-}
-.task-list {
-  margin: 20px 0;
-  padding-left: 0;
-}
-.task {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0;
-  padding: 10px;
-  border: 0.5px solid hsla(200, 80%, 10%, 0.2);
-  border-top: none;
-}
-.task:first-child {
-  border: 0.5px solid hsla(200, 80%, 10%, 0.2);
-}
-.complete-task {
-  text-decoration: line-through;
-}
-.task-button {
-  padding: 0.4em 0.75em
-}
-.complete-button {
-  background: rgb(14, 156, 50);
-}
-.remove-button {
-  background: rgb(145, 15, 15);
-}
-.subTitle {
-  font-size: 0.8em;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-.task-list .subTitle {
-  font-size: 0.7em;
+  color: hsl(214, 56%, 54%);
 }
 </style>

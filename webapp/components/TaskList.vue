@@ -1,6 +1,6 @@
 <template>
   <client-only>
-    <div>
+    <div class="task-list-container">
       <h2 v-if="title">{{ title }}</h2>
       <div class="task-list">
         <div class="task" v-for="task in tasks" :key="task.id">
@@ -19,7 +19,8 @@
             </div>
           </div>
           <div class="buttons">
-            <button
+            <button><v-icon name="angle-down"/></button>
+            <!-- <button
               class="task-button"
               @click="onPrimaryButtonClick(task.id)"
             >
@@ -53,7 +54,7 @@
             >
               <v-icon name="trash"/>
               Remove
-            </button>
+            </button> -->
           </div>
         </div>
       </div>
@@ -119,12 +120,11 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin: 0;
-  padding: 10px;
-  border: 0.5px solid hsla(200, 80%, 10%, 0.2);
-  border-top: none;
-}
-.task:first-child {
-  border: 0.5px solid hsla(200, 80%, 10%, 0.2);
+  margin-bottom: 10px;
+  background: white;
+  padding: 15px 20px;
+  box-shadow: hsla(0, 0%, 0%, 0.15) 1.95px 1.95px 2.6px;
+  border-radius: 10px;
 }
 .task-info {
   min-width: 200px;
@@ -148,22 +148,22 @@ export default {
   margin-bottom: 2px;
 }
 .update-button {
-  background: rgb(201, 180, 64);
+  background: hsl(51, 53%, 65%);
 }
 .update-button:hover {
-  background: rgb(241, 217, 81);
+  background: hsl(51, 85%, 63%);
 }
 .complete-button {
-  background: rgb(19, 139, 49);
+  background: hsl(135, 76%, 31%);
 }
 .complete-button:hover {
-  background: rgb(25, 179, 64);
+  background: hsl(135, 75%, 40%);
 }
 .remove-button {
-  background: rgb(187, 47, 47);
+  background: hsl(0, 60%, 46%);
 }
 .remove-button:hover {
-  background: rgb(221, 55, 55);
+  background: hsl(0, 71%, 54%);
 }
 .subTitle {
   font-size: 0.8em;
@@ -177,10 +177,10 @@ export default {
   font-weight: 400;
 }
 .task-name-link {
-  color: rgb(64, 144, 197);
-  text-decoration: underline solid rgba(64, 144, 197, 0.4);
+  color: hsl(204, 53%, 51%);
+  text-decoration: underline solid hsla(204, 53%, 51%, 0.4);
 }
 .task-name-link:hover {
-  color: rgb(111, 186, 236);
+  color: hsl(204, 77%, 68%);
 }
 </style>

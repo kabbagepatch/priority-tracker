@@ -1,5 +1,5 @@
 body {
-  color: #313942;
+  color: hsl(212, 15%, 23%);
 }
 
 h1, h2, h3, h4 {
@@ -15,7 +15,7 @@ h1, h2, h3, h4 {
     sans-serif;
   display: block;
   font-weight: 300 !important;
-  color: #35495e;
+  color: hsl(211, 28%, 29%);
   letter-spacing: 1px;
 }
 
@@ -24,7 +24,7 @@ p {
 }
 
 button {
-  background: #1a7581;
+  background: hsl(187, 66%, 30%);
   transition: background ease 0.25s;
   border-radius: 5px;
   display: inline-block;
@@ -32,7 +32,7 @@ button {
   padding: 0.5rem 1rem;
   margin: 0;
   text-decoration: none;
-  color: #ffffff;
+  color: hsl(0, 0%, 100%);
   cursor: pointer;
   text-align: center;
   -webkit-appearance: none;
@@ -40,7 +40,7 @@ button {
 }
 
 button:disabled {
-  background: #63b6b8;
+  background: hsl(181, 37%, 55%);
   cursor: auto;
 }
 
@@ -49,11 +49,11 @@ button.continue {
 }
 
 button:hover {
-  background: #258081;
+  background: hsl(181, 55%, 33%);
 }
 
 button:focus {
-  outline: 1px solid #fff;
+  outline: 1px solid hsl(0, 0%, 100%);
   outline-offset: -4px;
 }
 
@@ -66,7 +66,7 @@ button:focus {
   font-size: 14px;
   padding: 8px 12px;
   border-radius: 1000px;
-  background: #d50813;
+  background: hsl(357, 93%, 43%);
   color: white;
   font-weight: bold;
 }
