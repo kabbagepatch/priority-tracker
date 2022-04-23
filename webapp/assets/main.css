@@ -52,9 +52,26 @@ button:hover {
   background: hsl(181, 55%, 33%);
 }
 
-button:focus {
-  outline: 1px solid hsl(0, 0%, 100%);
-  outline-offset: -4px;
+button.outlined {
+  color: hsl(187, 66%, 30%);
+  background: hsl(0, 0%, 100%);
+  transition: background ease 0.5s;
+}
+
+button.outlined:hover {
+  color: hsl(181, 55%, 33%);
+  background: hsl(0, 0%, 95%);
+}
+
+button.outlined:disabled {
+  color: hsl(181, 37%, 55%);
+  background: hsl(0, 0%, 95%);
+}
+
+button.icon-only {
+  padding: 0.75rem;
+  padding-bottom: 0.4rem;
+  border-radius: 50%;
 }
 
 .label {

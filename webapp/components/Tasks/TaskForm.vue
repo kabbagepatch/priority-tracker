@@ -1,6 +1,5 @@
 <template>
   <form class="task-form" @submit.prevent="selectedTask ? updateTask() : addTask()">
-    <h2 v-if="!selectedTask">Add Task</h2>
     <label class="label" for="input">Title*</label>
     <input type="text" v-model="curTask.name" />
     <label class="label" for="input">Link</label>
@@ -19,9 +18,9 @@
         {{ categoriesData[categoryId].name }}
       </option>
     </select>
-    <fieldset v-if="!selectedTask" class="status">
+    <fieldset class="status">
       <legend>Status</legend>
-      <div v-for="option in ['active', 'queue', 'backlog']" :key="option">
+      <div v-for="option in ['active', 'queued', 'backlog']" :key="option">
         <input
           :id="option"
           type="radio"
@@ -30,12 +29,13 @@
           :value="option"
           @change="curTask.status = $event.target.value"
         />
-        <label class="label" :for="option">{{ option }}</label><br>
+        <label class="label" :for="option">{{ option === 'queued' ? 'Up Next' : option[0].toUpperCase() + option.substr(1) }}</label><br>
       </div>
     </fieldset>
     <div class="add-task">
       <button type="submit">{{ selectedTask ? 'Update' : 'Add' }}</button>
       <button type="button" @click="onCancel">Cancel</button>
+      <button v-if="selectedTask" class="delete" type="button" @click="removeTask">Delete</button>
     </div>
   </form>
 </template>
@@ -49,9 +49,13 @@ export default {
     onCancelClick: Function,
   },
   data() {
-    console.log(this.selectedTask)
     if (this.selectedTask && this.selectedTask.name) {
-      return { curTask: this.selectedTask };
+      return {
+        curTask: {
+          ...this.selectedTask,
+          status: this.selectedTask.active ? 'active' : (this.selectedTask.queued ? 'queued' : 'backlog'),
+        }
+      };
     }
     return {
       curTask: {
@@ -59,16 +63,9 @@ export default {
         link: '',
         category: '',
         project: '',
-        status: 'backlog',
+        status: this.$nuxt.$route.hash === '#next' ? 'queued' : (this.$nuxt.$route.hash ? this.$nuxt.$route.hash.substr(1) : 'backlog'),
       },
     }
-  },
-  watch: {
-    selectedTask: function (newVal) {
-      if (newVal && newVal.name) {
-        this.curTask = newVal
-      }
-    },
   },
   computed: {
     ...mapState({
@@ -100,14 +97,18 @@ export default {
     },
     updateTask () {
       this.$store.dispatch('tasks/updateTask', this.curTask);
-      this.onCancelClick();
-      this.curTask = {
-        name: '',
-        link: '',
-        category: '',
-        project: '',
-        status: 'backlog',
-      };
+      const prevStatus = this.selectedTask.active ? 'active' : (this.selectedTask.queued ? 'queued' : 'backlog');
+      if (prevStatus !== this.curTask.status) {
+        if (this.curTask.status === 'backlog') {
+          this.$store.dispatch('tasks/updateTaskStatus', { id: this.curTask.id, status: prevStatus, value: false });
+        } else {
+          this.$store.dispatch('tasks/updateTaskStatus', { id: this.curTask.id, status: this.curTask.status, value: true });
+        }
+      }
+    },
+    removeTask () {
+      if (confirm('Are you sure you want to delete this task?'))
+        this.$store.dispatch('tasks/removeTask', this.curTask)
     },
   }
 }
@@ -122,10 +123,20 @@ export default {
   background: white;
   box-shadow: hsla(0, 0%, 0%, 0.15) 1.95px 1.95px 2.6px;
   border-radius: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
-.task-form input, .task-form select {
-  padding: 10px;
-  font-size: 18px;
+.task-form label {
+  margin: 10px 0 5px 0;
+  font-size: 15px;
+}
+.task-form input, .task-form select, .task-form textarea {
+  padding: 5px 10px;
+}
+.task-form input, .task-form select, .task-form textarea, .task-form fieldset {
+  font-size: 14px;
+  border-radius: 10px;
+  border: 0.5px solid hsl(0, 0%, 20%, 0.4)
 }
 .status {
   margin-top: 20px;
@@ -136,5 +147,12 @@ export default {
 }
 .add-task {
   margin-top: 20px;
+}
+button.delete {
+  background: hsl(0, 76%, 50%);
+  margin-right: 5px;
+}
+button.delete:hover {
+  background: hsl(0, 75%, 60%);
 }
 </style>

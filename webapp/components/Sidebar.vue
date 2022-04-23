@@ -2,8 +2,8 @@
   <div class="sidebar">
     <nuxt-link class="sidebar-item" to="/">Tasks</nuxt-link>
     <nuxt-link class="sidebar-subitem" to="/#active">Active</nuxt-link>
-    <nuxt-link class="sidebar-subitem" to="/#queue">Up Next</nuxt-link>
-    <nuxt-link class="sidebar-subitem" to="/#backlog">Projects Backlog</nuxt-link>
+    <nuxt-link class="sidebar-subitem" to="/#next">Up Next</nuxt-link>
+    <nuxt-link class="sidebar-subitem" to="/#backlog">Backlog</nuxt-link>
     <hr class="sidebar-separator" />
     <nuxt-link class="sidebar-item" to="/categories">Categories</nuxt-link>
     <nuxt-link class="sidebar-item" to="/projects">Projects</nuxt-link>
@@ -33,6 +33,7 @@
   display: block;
   padding: 8px 0 8px 16px;
   margin: 3px 0;
+  margin-right: 20px;
   border-radius: 10px;
   transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
