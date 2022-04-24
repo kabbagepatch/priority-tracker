@@ -115,6 +115,10 @@ a {
 }
 
 @media only screen and (max-width: 600px) {
+  .content {
+    padding: 40px 20px;
+  }
+
   .nav-links a {
     font-size: 0.8em;
     margin: 0 2px;

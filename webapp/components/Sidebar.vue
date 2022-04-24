@@ -28,6 +28,19 @@
   padding: 40px 15px;
 }
 
+@media only screen and (max-width: 900px) {
+  .sidebar {
+    width: 160px;
+    padding: 40px 5px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .sidebar {
+    display: none;
+  }
+}
+
 .sidebar-item, .sidebar-subitem {
   color: hsl(187, 88%, 30%);
   display: block;
