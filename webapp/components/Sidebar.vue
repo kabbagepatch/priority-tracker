@@ -1,5 +1,6 @@
 <template>
-  <div class="sidebar">
+  <div :class="`sidebar ${showSidebar ? 'sidebar-open' : ''}`">
+    <h3 class="title">priority-tracker</h3>
     <nuxt-link class="sidebar-item" to="/">Tasks</nuxt-link>
     <nuxt-link class="sidebar-subitem" to="/#active">Active</nuxt-link>
     <nuxt-link class="sidebar-subitem" to="/#next">Up Next</nuxt-link>
@@ -14,9 +15,15 @@
 
 <script>
   export default {
-    created() {
-      console.log(this?.$nuxt.$route);
-    }    
+    props: {
+      showSidebar: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    mounted() {
+      console.log(this.showSidebar);
+    }
   }
 </script>
 
@@ -25,19 +32,35 @@
 .sidebar {
   border-right: 1px solid hsla(0, 0%, 0%, 0.401);
   width: 260px;
-  padding: 40px 15px;
+  padding: 40px 0;
+  background: white;
 }
 
-@media only screen and (max-width: 900px) {
-  .sidebar {
-    width: 160px;
-    padding: 40px 5px;
-  }
+.title {
+  margin: 20px;
+  display: none;
 }
 
 @media only screen and (max-width: 600px) {
   .sidebar {
-    display: none;
+    overflow-x: hidden;
+    max-width: 0;
+    transition: max-width 0.5s ease-in-out;
+    overflow-x: auto;
+    position: fixed;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    padding: 0;
+  }
+
+  .sidebar-open {
+    max-width: 200px;
+  }
+
+  .title {
+    display: block;
   }
 }
 
@@ -45,7 +68,7 @@
   color: hsl(187, 88%, 30%);
   display: block;
   padding: 8px 0 8px 16px;
-  margin: 3px 0;
+  margin: 3px 15px;
   margin-right: 20px;
   border-radius: 10px;
   transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;

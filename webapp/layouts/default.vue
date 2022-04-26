@@ -1,9 +1,13 @@
 <template>
-  <div>
+  <div class="sidebar-visible">
+    <div class="overlay" :aria-hidden="showSidebar" v-if="showSidebar" @click="toggleSidebar" />
     <div class="header">
-      <nuxt-link to="/">
-        <h3 class="nav-title">priority-tracker</h3>
-      </nuxt-link>
+      <div class="nav-title-container">
+        <client-only><button @click="toggleSidebar" class="outlined sidebar-toggle"><v-icon name="bars" /></button></client-only>
+        <nuxt-link to="/">
+          <h3 class="nav-title">priority-tracker</h3>
+        </nuxt-link>
+      </div>
       <div class="nav-links" v-if="user">
         <a href="#" @click.prevent="onLogout"><button>Logout</button></a>
       </div>
@@ -14,7 +18,7 @@
     </div>
     <hr />
     <div v-if="user" class="container">
-      <sidebar />
+      <sidebar :showSidebar="showSidebar" />
       <div class="content"><Nuxt /></div>
     </div>
   </div>
@@ -28,12 +32,20 @@ export default {
   components: {
     Sidebar,
   },
+  data () {
+    return {
+      showSidebar: false,
+    }
+  },
   computed: {
     ...mapGetters({
       user: 'auth/user',
     })
   },
   methods: {
+    toggleSidebar() {
+      this.showSidebar = !this.showSidebar;
+    },
     onLogout() {
       this.logout()
       if (this.$route.path !== '/') {
@@ -77,6 +89,27 @@ html {
   margin: 0;
 }
 
+.overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 600px) {
+  .sidebar-visible {
+    height: 100vh;
+    overflow: hidden;
+  }
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -85,8 +118,12 @@ html {
   margin: 10px 0;
 }
 
+.nav-title-container {
+  display: flex;
+}
+
 .nav-title {
-  padding: 0 30px;
+  padding: 0 20px;
 }
 
 .container {
@@ -114,9 +151,21 @@ a {
   margin: 0 7px;
 }
 
+.sidebar-toggle {
+  display: none;
+}
+
 @media only screen and (max-width: 600px) {
   .content {
     padding: 40px 20px;
+  }
+
+  .sidebar-toggle, .overlay {
+    display: block;
+  }
+
+  .nav-title {
+    padding: 0;
   }
 
   .nav-links a {
