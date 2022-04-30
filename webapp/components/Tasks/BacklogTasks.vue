@@ -83,6 +83,18 @@ export default {
   justify-content: space-between;
   transition: background-color 0.3s ease-in-out;
 }
+@media only screen and (max-width: 600px) {
+  .project-section {
+    flex-direction: column;
+  }
+
+  .subTitle {
+    margin-top: 2px;
+    font-size: 0.8em;
+    font-weight: 600 !important;
+    text-transform: uppercase;
+  }
+}
 .project-name {
   transition: color 0.25s ease-in-out;
   color: hsl(204, 53%, 51%);

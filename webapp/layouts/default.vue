@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar-visible">
+  <div :class="showSidebar ? 'sidebar-visible' : ''">
     <div class="overlay" :aria-hidden="showSidebar" v-if="showSidebar" @click="toggleSidebar" />
     <div class="header">
       <div class="nav-title-container">
@@ -120,6 +120,7 @@ html {
 
 .nav-title-container {
   display: flex;
+  align-items: center;
 }
 
 .nav-title {
@@ -157,7 +158,7 @@ a {
 
 @media only screen and (max-width: 600px) {
   .content {
-    padding: 40px 20px;
+    padding: 15px 20px;
   }
 
   .sidebar-toggle, .overlay {

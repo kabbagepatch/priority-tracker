@@ -37,6 +37,8 @@
 }
 
 .title {
+  width: 260px;
+  overflow-x: hidden;
   margin: 20px;
   display: none;
 }

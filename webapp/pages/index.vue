@@ -3,9 +3,11 @@
     <active-tasks
       v-if="!$nuxt.$route.hash || $nuxt.$route.hash.includes('active')"
     />
+    <br v-if="!$nuxt.$route.hash" />
     <queued-tasks
       v-if="!$nuxt.$route.hash || $nuxt.$route.hash.includes('next')"
     />
+    <br v-if="!$nuxt.$route.hash" />
     <div
       v-if="!$nuxt.$route.hash || $nuxt.$route.hash.includes('backlog')"
     >
