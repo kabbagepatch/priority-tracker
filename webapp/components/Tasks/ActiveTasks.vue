@@ -2,6 +2,7 @@
   <task-list
     title="Active"
     :tasks="activeTasks"
+    :maxTasks="2"
     primaryIcon="angle-down"
     primaryButtonText="Queue"
     secondaryIcon="angle-double-down"

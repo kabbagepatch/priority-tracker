@@ -9,7 +9,6 @@
     <nuxt-link class="sidebar-item" to="/categories">Categories</nuxt-link>
     <nuxt-link class="sidebar-item" to="/projects">Projects</nuxt-link>
     <nuxt-link class="sidebar-item" to="/priorities">Priorities</nuxt-link>
-    <nuxt-link class="sidebar-item" to="/habits">Habits</nuxt-link>
   </div>
 </template>
 
@@ -32,7 +31,7 @@
 .sidebar {
   border-right: 1px solid hsla(0, 0%, 0%, 0.401);
   width: 260px;
-  padding: 40px 0;
+  padding: 30px 0;
   background: white;
 }
 

@@ -2,6 +2,7 @@
   <task-list
     title="Up Next"
     :tasks="queuedTasks"
+    :maxTasks="5"
     primaryIcon="angle-up"
     primaryButtonText="Active"
     secondaryIcon="angle-down"
