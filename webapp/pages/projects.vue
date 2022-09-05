@@ -16,7 +16,7 @@
             </option>
           </select>
           <div class="add-project">
-            <button type="submit">{{ formState }}</button>
+            <button :disabled="!curProject.name || !curProject.category" type="submit">{{ formState }}</button>
             <button type="reset" @click="() => { formState = 'Add' }">Clear</button>
           </div>
         </form>
@@ -36,11 +36,26 @@
             </div>
           </div>
           <div class="buttons">
-            <button @click="updateProject(projectId)">
-              Edit
+            <button
+              class="outlined icon-only complete"
+              aria-label="Mark Project as Complete"
+              @click="completeProject(projectId)"
+            >
+              <v-icon name="check"/>
             </button>
-            <button @click="removeProject(projectId)">
-              Remove
+            <button
+              class="outlined icon-only"
+              aria-label="Update Project"
+              @click="updateProject(projectId)"
+            >
+              <v-icon name="edit"/>
+            </button>
+            <button
+              class="outlined icon-only delete"
+              aria-label="Delete Project"
+              @click="removeProject(projectId)"
+            >
+              <v-icon name="trash"/>
             </button>
           </div>
         </div>
@@ -81,7 +96,16 @@ export default {
   },
   methods: {
     submitProject () {
-      this.$store.dispatch('projects/submitProject', this.curProject)
+      this.$store.dispatch('projects/submitProject', this.curProject);
+      this.formState = 'Add'
+      this.curProject = {
+        name: '',
+        description: '',
+        category: ''
+      }
+    },
+    completeProject (id) {
+      this.$store.dispatch('projects/submitProject', { id, complete: true });
       this.formState = 'Add'
       this.curProject = {
         name: '',

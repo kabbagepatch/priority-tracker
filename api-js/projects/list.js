@@ -16,8 +16,10 @@ module.exports.list = async (event) => {
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Projects`,
     KeyConditionExpression: "userId = :userId",
+    FilterExpression: "complete = :complete",
     ExpressionAttributeValues: {
       ":userId": 'kavish',
+      ":complete": false,
     },
   };
 

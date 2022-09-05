@@ -10,7 +10,7 @@
           {{ categoriesData[backlogProjects[projectId].category].name }}
         </div>
       </div>
-      <collapsible :collapse="!selectedProjects[projectId] || backlogTasks[projectId] === undefined">
+      <collapsible :collapse="!selectedProjects[projectId] || backlogTasks[projectId] === undefined || backlogTasks[projectId].length === 0">
         <div class="task-list">
           <task-list
             :tasks="backlogTasks[projectId]"
@@ -23,6 +23,16 @@
           />
         </div>
       </collapsible>
+      <div class="complete-notice" v-if="selectedProjects[projectId] && backlogTasks[projectId] && backlogTasks[projectId].length === 0">
+        <p>This Project has no more tasks. Would you like to mark it as complete?</p>
+        <button
+          class="outlined icon-only complete"
+          aria-label="Mark Project as Complete"
+          @click="completeProject(projectId)"
+        >
+          <v-icon name="check"/>
+        </button>
+      </div>
     </div>
     <br />
   </div>
@@ -62,13 +72,16 @@ export default {
 
   methods: {
     selectProject (id) {
-      console.log(this.selectedProjects[id]);
       if (this.selectedProjects[id]) {
         this.selectedProjects = { ...this.selectedProjects, [id]: false }
       } else {
         this.selectedProjects = { ...this.selectedProjects, [id]: true }
         this.$store.dispatch('tasks/getProjectTasks', id)
       }
+    },
+    completeProject (id) {
+      this.$store.dispatch('projects/submitProject', { id, complete: true });
+      this.selectedProjects = { ...this.selectedProjects, [id]: false }
     },
   },
 }
@@ -86,6 +99,7 @@ export default {
   justify-content: space-between;
   transition: background-color 0.3s ease-in-out;
 }
+
 @media only screen and (max-width: 600px) {
   .project-section {
     flex-direction: column;
@@ -98,18 +112,30 @@ export default {
     text-transform: uppercase;
   }
 }
+
 .project-name {
   transition: color 0.25s ease-in-out;
   color: hsl(204, 53%, 51%);
   font-weight: bold !important;
 }
+
 .project-section:hover {
   background: hsl(0, 0%, 96%);
 }
+
 .project-section:hover .project-name {
   color: hsl(204, 77%, 38%);
 }
+
 .task-list {
   margin-left: 20px;
+}
+
+.complete-notice {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-left: 20px;
 }
 </style>

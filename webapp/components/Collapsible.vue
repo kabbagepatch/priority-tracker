@@ -20,6 +20,6 @@ export default {
 }
 
 .collapsible-expanded {
-  max-height: 100vh;
+  max-height: 1000vh;
 }
 </style>

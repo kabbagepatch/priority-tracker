@@ -144,15 +144,6 @@ export default {
   min-width: 100px;
 }
 
-button.complete {
-  color: hsl(135, 76%, 31%);
-  margin-right: 5px;
-}
-
-button.complete:hover {
-  color: hsl(135, 75%, 40%);
-}
-
 .subTitle {
   margin-top: 2px;
   font-size: 0.8em;

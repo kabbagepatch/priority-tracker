@@ -48,14 +48,14 @@ button.continue {
   padding: 0.2rem 0.5rem;
 }
 
-button:hover {
+button:hover:enabled {
   background: hsl(181, 55%, 33%);
 }
 
 button.outlined {
   color: hsl(187, 66%, 30%);
   background: hsl(0, 0%, 100%);
-  transition: background ease 0.5s;
+  transition: background ease 0.5s, color ease 0.5s;
 }
 
 button.outlined:hover {
@@ -72,6 +72,24 @@ button.icon-only {
   padding: 0.75rem;
   padding-bottom: 0.4rem;
   border-radius: 50%;
+}
+
+button.complete {
+  color: hsl(135, 76%, 31%);
+  margin-right: 5px;
+}
+
+button.complete:hover {
+  color: hsl(135, 75%, 40%);
+}
+
+button.delete {
+  color: hsl(0, 75%, 49%);
+  margin-right: 5px;
+}
+
+button.delete:hover {
+  color: hsl(0, 75%, 60%);
 }
 
 .label {

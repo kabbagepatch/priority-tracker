@@ -18,13 +18,22 @@ export const getters = {
 export const mutations = {
   setProjectData: (state, data) => {
     const projectData = {};
-    data.forEach(project => {
+    data.filter(project => !project.complete).forEach(project => {
       projectData[project.id] = project;
     });
     state.projectData = projectData;
   },
   updateProjectData: (state, data) => {
-    state.projectData = Object.assign({}, state.projectData, { [data.id]: data });
+    const newProjectData = Object.assign({}, state.projectData, { [data.id]: data });
+    if (data.complete) {
+      delete newProjectData[data.id];
+      if (state.prioritiesData[data.id]) {
+        const prioritiesData = Object.assign({}, state.prioritiesData);
+        delete prioritiesData[data.id];
+        state.prioritiesData = prioritiesData;
+      }
+    }
+    state.projectData = newProjectData;
   },
   removeProject: (state, projectId) => {
     if (state.projectData[projectId]) {
@@ -35,13 +44,17 @@ export const mutations = {
   },
   setPrioritiesData: (state, data) => {
     const prioritiesData = {};
-    data.forEach(project => {
+    data.filter(project => !project.complete).forEach(project => {
       prioritiesData[project.id] = project;
     });
     state.prioritiesData = prioritiesData;
   },
   updatePrioritiesData: (state, projectId) => {
-    state.prioritiesData = Object.assign({}, state.prioritiesData, { [projectId]: state.projectData[projectId] });
+    const newPrioritiesData = Object.assign({}, state.prioritiesData, { [projectId]: state.projectData[projectId] });
+    if (state.projectData[projectId].complete) {
+      delete newPrioritiesData[projectId];
+    }
+    state.prioritiesData = newPrioritiesData;
   },
   removePriority: (state, projectId) => {
     if (state.prioritiesData[projectId]) {

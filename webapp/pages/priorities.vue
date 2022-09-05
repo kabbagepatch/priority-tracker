@@ -4,7 +4,7 @@
     <p>Select up to five projects to mark as actively being worked on. You will only be adding tasks for these projects</p>
     <p>Go to <nuxt-link to="/"><button class="continue">Tasks</button></nuxt-link> when you're done with prioritising projects</p>
     <br />
-    <div class="project" v-for="projectId in Object.keys(prioritiesData)" :key="projectId">
+    <div class="project" v-for="projectId in Object.keys(prioritiesData).sort((a, b) => prioritiesData[b].updatedAt - prioritiesData[a].updatedAt)" :key="projectId">
       <card class="project-row">
         <div>
           <h3 class="project-name">
@@ -22,7 +22,7 @@
       </card>
     </div>
     <hr class="hr" v-if="prioritiesData && Object.keys(prioritiesData).length > 0" />
-    <div v-for="projectId in Object.keys(unprioritisedProjects)" :key="projectId">
+    <div v-for="projectId in Object.keys(unprioritisedProjects).sort((a, b) => unprioritisedProjects[b].updatedAt - unprioritisedProjects[a].updatedAt)" :key="projectId">
       <card class="project-row">
         <div>
           <h3 class="project-name">
