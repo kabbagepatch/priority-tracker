@@ -26,7 +26,7 @@
           aria-label="Mark Task as Complete"
           title="Mark Task as Complete"
           class="outlined icon-only complete"
-          @click="completeTask(task.id)"
+          @click="completeTask"
         >
           <v-icon name="check"/>
         </button>
@@ -90,8 +90,9 @@ export default {
         this.delayedShowTaskForm = true;
       }
     },
-    completeTask (id) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id, status: 'complete', value: true });
+    completeTask (e) {
+      e.stopPropagation();
+      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'complete', value: true });
     },
   },
 }
