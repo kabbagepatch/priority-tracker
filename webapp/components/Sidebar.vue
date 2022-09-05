@@ -32,10 +32,9 @@
 }
 
 .sidebar {
-  border-right: 1px solid hsla(0, 0%, 0%, 0.401);
   width: 260px;
   padding: 0;
-  background: white;
+  background: var(--white);
   overflow-x: hidden;
   max-width: 0;
   transition: max-width 0.5s ease-in-out;
@@ -52,7 +51,7 @@
 }
 
 .sidebar-item, .sidebar-subitem {
-  color: hsl(187, 88%, 30%);
+  color: var(--primary-color);
   overflow: hidden;
   width: 260px;
   display: block;
@@ -68,8 +67,8 @@
 }
 
 .sidebar-item:hover, .sidebar-subitem:hover, .nuxt-link-exact-active {
-  background-color: hsl(202, 100%, 98%);
-  box-shadow: hsla(0, 0%, 0%, 0.15) 1.95px 1.95px 2.6px;
+  background-color: var(--secondary-color);
+  box-shadow: var(--black-transparent) 1.95px 1.95px 2.6px;
 }
 
 .nuxt-link-exact-active {

@@ -3,7 +3,7 @@
     <div class="overlay" :aria-hidden="showSidebar" v-if="showSidebar" @click="toggleSidebar" />
     <div class="header">
       <div class="nav-title-container">
-        <button @click="toggleSidebar" class="outlined sidebar-toggle"><client-only><v-icon name="bars" /></client-only></button>
+        <button @click="toggleSidebar" class="secondary sidebar-toggle"><client-only><v-icon name="bars" /></client-only></button>
         <nuxt-link to="/">
           <h3 class="nav-title">priority-tracker</h3>
         </nuxt-link>
@@ -97,7 +97,7 @@ html {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: hsla(0, 0%, 0%, 0.5);
   z-index: 2;
   cursor: pointer;
 }
@@ -134,7 +134,7 @@ html {
 .content {
   padding: 30px;
   width: 100%;
-  background-color: hsl(202, 100%, 98%);
+  background-color: var(--secondary-color);
 }
 
 a {
@@ -146,8 +146,12 @@ a {
 }
 
 .nav-links a {
-  color: hsl(187, 88%, 30%);
+  color: var(--primary-color-light);
   margin: 0 7px;
+}
+
+.nav-links a:hover {
+  color: var(--primary-color);
 }
 
 @media only screen and (max-width: 600px) {
@@ -159,10 +163,6 @@ a {
     font-size: 0.8em;
     margin: 0 2px;
   }
-}
-
-.nav-links a:hover {
-  color: hsl(181, 37%, 55%);
 }
 
 </style>

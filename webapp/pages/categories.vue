@@ -37,6 +37,6 @@ export default {
 .title {
   padding: 0 20px;
   font-size: 50px;
-  color: hsl(211, 28%, 29%);
+  color: var(---dark-blue)
 }
 </style>

@@ -16,7 +16,7 @@ export default {
 .collapsible {
   max-height: 0px;
   overflow: hidden;
-  transition: max-height .25s ease-in-out;
+  transition: max-height .5s ease-in-out;
 }
 
 .collapsible-expanded {

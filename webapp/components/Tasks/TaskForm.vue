@@ -34,7 +34,7 @@
     </fieldset>
     <div class="add-task">
       <button type="submit">{{ selectedTask ? 'Update' : 'Add' }}</button>
-      <button type="button" @click="onCancel">Cancel</button>
+      <button class="outlined secondary" type="button" @click="onCancel">Cancel</button>
       <button v-if="selectedTask" class="delete" type="button" @click="removeTask">Delete</button>
     </div>
   </form>
@@ -120,8 +120,8 @@ export default {
   flex-direction: column;
   padding: 20px;
   padding-top: 10px;
-  background: white;
-  border: 1px solid hsla(0, 0%, 0%, 0.1);
+  background: var(--white);
+  border: 1px solid var(--black-transparent);
   border-radius: 10px;
   border-top: none;
   border-top-left-radius: 0;
@@ -142,11 +142,6 @@ export default {
 }
 
 button.delete {
-  background: hsl(0, 76%, 50%);
   margin-right: 5px;
-}
-
-button.delete:hover {
-  background: hsl(0, 75%, 60%);
 }
 </style>

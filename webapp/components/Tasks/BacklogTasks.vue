@@ -23,10 +23,13 @@
           />
         </div>
       </collapsible>
+      <div class="complete-notice" v-if="selectedProjects[projectId] && !backlogTasks[projectId]">
+        <p>Loading...</p>
+      </div>
       <div class="complete-notice" v-if="selectedProjects[projectId] && backlogTasks[projectId] && backlogTasks[projectId].length === 0">
         <p>This Project has no more tasks. Would you like to mark it as complete?</p>
         <button
-          class="outlined icon-only complete"
+          class="secondary icon-only complete"
           aria-label="Mark Project as Complete"
           @click="completeProject(projectId)"
         >
@@ -90,10 +93,10 @@ export default {
 <style scoped>
 .project-section {
   cursor: pointer;
-  background: white;
+  background: var(--white);
   margin-top: 20px;
   padding: 10px 15px;
-  box-shadow: hsla(0, 0%, 0%, 0.52) 0px 1px 3px, hsla(0, 0%, 0%, 0.64) 0px 1px 2px;
+  box-shadow: var(--dark-blue-transparenter) 0px 1px 3px, var(--dark-blue-transparent) 0px 1px 2px;
   border-radius: 10px;
   display: flex;
   justify-content: space-between;
@@ -115,16 +118,16 @@ export default {
 
 .project-name {
   transition: color 0.25s ease-in-out;
-  color: hsl(204, 53%, 51%);
+  color: var(--primary-color);
   font-weight: bold !important;
 }
 
 .project-section:hover {
-  background: hsl(0, 0%, 96%);
+  background: var(--light-grey);
 }
 
 .project-section:hover .project-name {
-  color: hsl(204, 77%, 38%);
+  color: var(--primary-color-light);
 }
 
 .task-list {

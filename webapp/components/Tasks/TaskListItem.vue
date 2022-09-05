@@ -9,7 +9,7 @@
     >
       <div class="task-info">
         <h4 :class="task.complete ? 'complete-task' : ''">
-          <a class="task-name task-name-link" v-if="task.link" :href="task.link" target="_blank">
+          <a class="task-name task-name-link" v-if="task.link" :href="task.link" target="_blank" @click="(e) => e.stopPropagation()">
             {{ task.name }}
           </a>
           <span class="task-name" v-else>{{ task.name }}</span>
@@ -25,7 +25,7 @@
         <button
           aria-label="Mark Task as Complete"
           title="Mark Task as Complete"
-          class="outlined icon-only complete"
+          class="secondary icon-only complete"
           @click="completeTask"
         >
           <v-icon name="check"/>
@@ -33,7 +33,7 @@
         <button
           aria-label="Expand task"
           title="Expand task"
-          class="outlined icon-only"
+          class="secondary icon-only"
           @click="toggleTaskForm"
         >
           <v-icon name="chevron-down"/>
@@ -105,9 +105,9 @@ export default {
   align-items: center;
   margin: 0;
   margin-top: 15px;
-  background: white;
+  background: var(--white);
   padding: 15px 20px;
-  box-shadow: hsla(0, 0%, 0%, 0.15) 1.95px 1.95px 2.6px;
+  box-shadow: var(--black-transparent) 1.95px 1.95px 2.6px, var(--dark-blue-transparenter) 0px 0px 0px 2px;
   border-radius: 10px;
   cursor: pointer;
   transition: background ease 0.25s, box-shadow ease 0.5s;
@@ -115,8 +115,8 @@ export default {
 
 .task:hover, .task:focus {
   transition: background ease 0.25s, box-shadow ease 0.25s;
-  background: hsl(0, 9%, 99%);
-  box-shadow: hsla(218, 86%, 12%, 0.25) 0px 4px 8px -2px, hsla(218, 86%, 12%, 0.08) 0px 0px 0px 1px;
+  background: var(--very-light-grey);
+  box-shadow: var(--dark-blue-transparent) 0px 4px 8px -2px, var(--dark-blue-transparenter) 0px 0px 0px 1px;
 }
 
 .task-form-open {
@@ -156,11 +156,11 @@ export default {
 }
 
 .task-name-link {
-  color: hsl(204, 53%, 51%);
-  text-decoration: underline solid hsla(204, 53%, 51%, 0.4);
+  color: var(--primary-color-light);
+  text-decoration: underline solid var(--primary-color-transparent);
 }
 
 .task-name-link:hover {
-  color: hsl(204, 77%, 68%);
+  color: var(--primary-color);
 }
 </style>

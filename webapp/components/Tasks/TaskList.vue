@@ -58,9 +58,9 @@ export default {
 }
 
 .too-many-tasks {
-  color: hsl(0, 76%, 50%);
+  color: var(--danger-color);
 }
 .good-tasks {
-  color: hsl(204, 53%, 51%);
+  color: var(--primary-color);
 }
 </style>

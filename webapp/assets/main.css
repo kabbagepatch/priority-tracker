@@ -1,5 +1,34 @@
+:root {
+  --text-color: hsl(212, 15%, 23%);
+  --heading-color: hsl(211, 28%, 29%);
+
+  --primary-color: hsl(233, 66%, 35%);
+  --primary-color-transparent: hsla(233, 66%, 35%, 0.4);
+  --primary-color-light: hsl(233, 66%, 45%);
+  --primary-color-lighter: hsl(233, 66%, 55%);
+
+  --secondary-color: hsl(233, 100%, 98%);
+  --secondary-color-light: hsl(233, 90%, 100%);
+  
+  --success-color: hsl(135, 76%, 31%);
+  --success-color-light: hsl(135, 76%, 45%);
+
+  --danger-color: hsl(0, 75%, 50%);
+  --danger-color-light: hsl(0, 75%, 60%);
+
+  --black: hsl(0, 0%, 20%);
+  --black-transparent: hsla(0, 0%, 20%, 0.35);
+  --white: hsl(233, 100%, 99%);
+  --grey: hsl(0, 4%, 88%);
+  --light-grey: hsl(0, 4%, 98%);
+  --very-light-grey: hsl(233, 9%, 99%);
+  --dark-blue: hsl(218, 86%, 12%);
+  --dark-blue-transparent: hsla(218, 86%, 12%, 0.5);
+  --dark-blue-transparenter: hsla(218, 86%, 12%, 0.08);
+}
+
 body {
-  color: hsl(212, 15%, 23%);
+  color: var(--text-color);
 }
 
 h1, h2, h3, h4 {
@@ -15,7 +44,7 @@ h1, h2, h3, h4 {
     sans-serif;
   display: block;
   font-weight: 300 !important;
-  color: hsl(211, 28%, 29%);
+  color: var(--heading-color);
   letter-spacing: 1px;
 }
 
@@ -24,7 +53,7 @@ p {
 }
 
 button {
-  background: hsl(187, 66%, 30%);
+  background: var(--primary-color);
   transition: background ease 0.25s;
   border-radius: 5px;
   display: inline-block;
@@ -32,7 +61,7 @@ button {
   padding: 0.5rem 1rem;
   margin: 0;
   text-decoration: none;
-  color: hsl(0, 0%, 100%);
+  color: var(--secondary-color);
   cursor: pointer;
   text-align: center;
   -webkit-appearance: none;
@@ -40,7 +69,8 @@ button {
 }
 
 button:disabled {
-  background: hsl(181, 37%, 55%);
+  background: var(--primary-color-transparent);
+  color: var(--grey);
   cursor: auto;
 }
 
@@ -49,23 +79,8 @@ button.continue {
 }
 
 button:hover:enabled {
-  background: hsl(181, 55%, 33%);
-}
-
-button.outlined {
-  color: hsl(187, 66%, 30%);
-  background: hsl(0, 0%, 100%);
-  transition: background ease 0.5s, color ease 0.5s;
-}
-
-button.outlined:hover {
-  color: hsl(181, 55%, 33%);
-  background: hsl(0, 0%, 95%);
-}
-
-button.outlined:disabled {
-  color: hsl(181, 37%, 55%);
-  background: hsl(0, 0%, 95%);
+  background: var(--primary-color-light);
+  color: var(--secondary-color-light);
 }
 
 button.icon-only {
@@ -75,21 +90,59 @@ button.icon-only {
 }
 
 button.complete {
-  color: hsl(135, 76%, 31%);
+  background: var(--success-color);
   margin-right: 5px;
 }
 
 button.complete:hover {
-  color: hsl(135, 75%, 40%);
+  background: var(--success-color-light);
 }
 
 button.delete {
-  color: hsl(0, 75%, 49%);
+  background: var(--danger-color);
   margin-right: 5px;
 }
 
 button.delete:hover {
-  color: hsl(0, 75%, 60%);
+  background: var(--danger-color-light);
+}
+
+button.outlined {
+  border: 1px solid var(--primary-color);
+}
+
+button.secondary {
+  color: var(--primary-color);
+  background: var(--very-light-grey);
+  transition: background ease 0.5s, color ease 0.5s;
+}
+
+button.secondary:hover {
+  color: var(--primary-color-light);
+  background: var(--secondary-color-light);
+}
+
+button.secondary:disabled {
+  color: var(--primary-color-lighter);
+  background: var(--secondary-color-light);
+}
+
+button.secondary.complete {
+  color: var(--success-color);
+  margin-right: 5px;
+}
+
+button.secondary.complete:hover {
+  color: var(--success-color-light);
+}
+
+button.secondary.delete {
+  color: var(--danger-color);
+  margin-right: 5px;
+}
+
+button.secondary.delete:hover {
+  color: var(--danger-color-light);
 }
 
 .label {
@@ -97,31 +150,20 @@ button.delete:hover {
   line-height: 1.6;
 }
 
-.label span {
-  font-size: 14px;
-  padding: 8px 12px;
-  border-radius: 1000px;
-  background: hsl(357, 93%, 43%);
-  color: white;
-  font-weight: bold;
-}
-
 label {
   margin: 10px 0 5px 0;
   font-size: 15px;
 }
 
-select {
-  font-size: 1em;
+input, select, textarea, fieldset {
+  border-radius: 10px;
+  border: 0.5px solid var(--black);
 }
 
 input, select, textarea {
   padding: 5px 10px;
-  border-radius: 10px;
-  border: 0.5px solid hsl(0, 0%, 20%, 0.4)
 }
 
-fieldset {
-  border-radius: 10px;
-  border: 0.5px solid hsl(0, 0%, 20%, 0.4)
+select {
+  font-size: 1em;
 }

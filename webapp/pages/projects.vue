@@ -17,7 +17,7 @@
           </select>
           <div class="add-project">
             <button :disabled="!curProject.name || !curProject.category" type="submit">{{ formState }}</button>
-            <button type="reset" @click="() => { formState = 'Add' }">Clear</button>
+            <button class="secondary outlined" type="reset" @click="() => { formState = 'Add' }">Clear</button>
           </div>
         </form>
       </card>
@@ -37,21 +37,21 @@
           </div>
           <div class="buttons">
             <button
-              class="outlined icon-only complete"
+              class="secondary icon-only complete"
               aria-label="Mark Project as Complete"
               @click="completeProject(projectId)"
             >
               <v-icon name="check"/>
             </button>
             <button
-              class="outlined icon-only"
+              class="secondary icon-only"
               aria-label="Update Project"
               @click="updateProject(projectId)"
             >
               <v-icon name="edit"/>
             </button>
             <button
-              class="outlined icon-only delete"
+              class="secondary icon-only delete"
               aria-label="Delete Project"
               @click="removeProject(projectId)"
             >
@@ -149,7 +149,7 @@ p {
   margin-bottom: 5px;
 }
 .buttons {
-  min-width: 150px;
+  min-width: 140px;
   margin-left: 10px;
 }
 .project-name {
