@@ -121,37 +121,31 @@ export default {
   padding: 20px;
   padding-top: 10px;
   background: white;
-  box-shadow: hsla(0, 0%, 0%, 0.15) 1.95px 1.95px 2.6px;
+  border: 1px solid hsla(0, 0%, 0%, 0.1);
   border-radius: 10px;
+  border-top: none;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-.task-form label {
-  margin: 10px 0 5px 0;
-  font-size: 15px;
-}
-.task-form input, .task-form select, .task-form textarea {
-  padding: 5px 10px;
-}
-.task-form input, .task-form select, .task-form textarea, .task-form fieldset {
-  font-size: 14px;
-  border-radius: 10px;
-  border: 0.5px solid hsl(0, 0%, 20%, 0.4)
-}
+
 .status {
   margin-top: 20px;
   display: flex;
 }
+
 .status div {
   margin-right: 20px;
 }
+
 .add-task {
   margin-top: 20px;
 }
+
 button.delete {
   background: hsl(0, 76%, 50%);
   margin-right: 5px;
 }
+
 button.delete:hover {
   background: hsl(0, 75%, 60%);
 }

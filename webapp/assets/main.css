@@ -88,6 +88,22 @@ button.icon-only {
   font-weight: bold;
 }
 
+label {
+  margin: 10px 0 5px 0;
+  font-size: 15px;
+}
+
 select {
   font-size: 1em;
+}
+
+input, select, textarea {
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: 0.5px solid hsl(0, 0%, 20%, 0.4)
+}
+
+fieldset {
+  border-radius: 10px;
+  border: 0.5px solid hsl(0, 0%, 20%, 0.4)
 }

@@ -6,7 +6,6 @@
         <h1 class="title">
           priority-tracker
         </h1>
-        Hope you're ready to track your priorities babyyyy
       </div>
     </div>
     <CategorySelection />
@@ -24,10 +23,8 @@ export default {
 <style scoped>
 .container {
   margin: 0 auto;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   text-align: center;
 }
@@ -38,7 +35,8 @@ export default {
 }
 
 .title {
+  padding: 0 20px;
   font-size: 50px;
-  color: #35495e;
+  color: hsl(211, 28%, 29%);
 }
 </style>

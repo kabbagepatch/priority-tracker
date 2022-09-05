@@ -1,18 +1,20 @@
 <template>
   <div class="button-container">
     <button ref="task-form-button" class="add-task-button" @click="toggleTaskForm">Add Task</button>
-    <div v-if="showTaskForm">
+    <collapsible :collapse="!showTaskForm">
       <task-form :onCancelClick="() => { showTaskForm = false }" />
-    </div>
+    </collapsible>
   </div>
 </template>
 
 <script>
 
 import TaskForm from '@/components/Tasks/TaskForm.vue';
+import Collapsible from '@/components/Collapsible.vue';
 export default {
   components: {
     TaskForm,
+    Collapsible,
   },
 
   data() {
@@ -35,14 +37,14 @@ export default {
 }
 .add-task-button {
   width: 100%;
-  border: 1px solid hsl(187, 66%, 30%);
   color: hsl(187, 66%, 30%);
   background: white;
-  box-shadow: hsla(0, 0%, 0%, 0.15) 1.95px 1.95px 2.6px;
+  box-shadow: hsla(0, 0%, 0%, 0.25) 1.95px 1.95px 2.6px;
   font-size: 18px;
   border-radius: 10px;
 }
 .add-task-button:hover, .add-task-button:focus {
   background: hsl(0, 0%, 98%);
+  box-shadow: hsla(218, 86%, 12%, 0.25) 0px 4px 8px -2px, hsla(218, 86%, 12%, 0.08) 0px 0px 0px 1px;
 }
 </style>

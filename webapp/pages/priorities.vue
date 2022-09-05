@@ -1,12 +1,11 @@
 <template>
   <div>
     <h1>Priorities</h1>
-    <div>Now it is time to prioritise projects</div>
-    <div>Select up to five projects to mark as actively being worked on. You will only be adding tasks for these projects</div>
+    <p>Select up to five projects to mark as actively being worked on. You will only be adding tasks for these projects</p>
+    <p>Go to <nuxt-link to="/"><button class="continue">Tasks</button></nuxt-link> when you're done with prioritising projects</p>
     <br />
-    <p>Hit <nuxt-link to="/"><button class="continue">Continue</button></nuxt-link> when you're done with prioritising projects</p>
-    <div v-for="projectId in Object.keys(prioritiesData)" :key="projectId">
-      <div class="project-row">
+    <div class="project" v-for="projectId in Object.keys(prioritiesData)" :key="projectId">
+      <card class="project-row">
         <div>
           <h3 class="project-name">
             {{ prioritiesData[projectId].name }}
@@ -20,11 +19,11 @@
             Unselect
           </button>
         </div>
-      </div>
+      </card>
     </div>
-    <hr v-if="prioritiesData && Object.keys(prioritiesData).length > 0" />
+    <hr class="hr" v-if="prioritiesData && Object.keys(prioritiesData).length > 0" />
     <div v-for="projectId in Object.keys(unprioritisedProjects)" :key="projectId">
-      <div class="project-row">
+      <card class="project-row">
         <div>
           <h3 class="project-name">
             {{ unprioritisedProjects[projectId].name }}
@@ -41,15 +40,17 @@
             Select
           </button>
         </div>
-      </div>
+      </card>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import Card from '../components/Card.vue';
 
 export default {
+  components: { Card },
   computed: {
     ...mapState({
       categoriesData: state => state.categories.categoriesData,
@@ -75,16 +76,24 @@ export default {
 </script>
 
 <style scoped>
+h1, p {
+  margin-bottom: 10px;
+}
 
 .project-row {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin: 10px 0;
 }
+
 .project-name {
   font-size: 1.2em;
 }
+
+.hr {
+  margin: 20px 0;
+}
+
 .project-category {
   font-size: 0.8em;
   font-weight: bold;

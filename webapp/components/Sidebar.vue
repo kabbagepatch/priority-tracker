@@ -19,54 +19,42 @@
         type: Boolean,
         default: false,
       },
-    },
-    mounted() {
-      console.log(this.showSidebar);
     }
   }
 </script>
 
 <style scoped>
 
-.sidebar {
-  border-right: 1px solid hsla(0, 0%, 0%, 0.401);
-  width: 260px;
-  padding: 30px 0;
-  background: white;
-}
-
 .title {
   width: 260px;
   overflow-x: hidden;
   margin: 20px;
-  display: none;
 }
 
-@media only screen and (max-width: 600px) {
-  .sidebar {
-    overflow-x: hidden;
-    max-width: 0;
-    transition: max-width 0.5s ease-in-out;
-    overflow-x: auto;
-    position: fixed;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 3;
-    padding: 0;
-  }
+.sidebar {
+  border-right: 1px solid hsla(0, 0%, 0%, 0.401);
+  width: 260px;
+  padding: 0;
+  background: white;
+  overflow-x: hidden;
+  max-width: 0;
+  transition: max-width 0.5s ease-in-out;
+  overflow-x: auto;
+  position: fixed;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 3;
+}
 
-  .sidebar-open {
-    max-width: 200px;
-  }
-
-  .title {
-    display: block;
-  }
+.sidebar-open {
+  max-width: 260px;
 }
 
 .sidebar-item, .sidebar-subitem {
   color: hsl(187, 88%, 30%);
+  overflow: hidden;
+  width: 260px;
   display: block;
   padding: 8px 0 8px 16px;
   margin: 3px 15px;

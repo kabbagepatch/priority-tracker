@@ -2,8 +2,8 @@
   <main>
     <active-tasks
       v-if="!$nuxt.$route.hash || $nuxt.$route.hash.includes('active')"
+      :showAddButton="!$nuxt.$route.hash || $nuxt.$route.hash.includes('active')"
     />
-    <add-task-button v-if="!$nuxt.$route.hash || $nuxt.$route.hash.includes('active')" />
     <br v-if="!$nuxt.$route.hash" />
     <br v-if="!$nuxt.$route.hash" />
     <queued-tasks

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="prioritiesData && Object.keys(prioritiesData).length > 0">
     <h2>Backlog</h2>
     <div v-for="projectId in Object.keys(backlogProjects).sort((a, b) => backlogProjects[a].createdAt - backlogProjects[b].createdAt)" :key="projectId">
       <div class="project-section" @click="selectProject(projectId)">
@@ -10,8 +10,8 @@
           {{ categoriesData[backlogProjects[projectId].category].name }}
         </div>
       </div>
-      <div v-if="selectedProjects[projectId] === true">
-        <div class="task-list" v-if="backlogTasks[projectId] !== undefined">
+      <collapsible :collapse="!selectedProjects[projectId] || backlogTasks[projectId] === undefined">
+        <div class="task-list">
           <task-list
             :tasks="backlogTasks[projectId]"
             primaryIcon="angle-double-up"
@@ -22,19 +22,22 @@
             :onSecondaryButtonClick="id => toggleTaskQueued(id, true)"
           />
         </div>
-      </div>
+      </collapsible>
     </div>
+    <br />
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
 import TaskList from './TaskList.vue';
+import Collapsible from '../Collapsible.vue';
 
 export default {
   components: {
     TaskList,
-  },
+    Collapsible
+},
 
   data() {
     return {
@@ -75,7 +78,7 @@ export default {
 .project-section {
   cursor: pointer;
   background: white;
-  margin: 20px 0;
+  margin-top: 20px;
   padding: 10px 15px;
   box-shadow: hsla(0, 0%, 0%, 0.52) 0px 1px 3px, hsla(0, 0%, 0%, 0.64) 0px 1px 2px;
   border-radius: 10px;

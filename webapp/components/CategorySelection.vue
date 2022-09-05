@@ -1,8 +1,7 @@
 <template>
   <div class="container">
     <div class="category-list">
-      <p>Let's start by quick-adding categories for your projects and tasks</p>
-      <p>Add as many or as few as you want and hit continue when done</p>
+      <p>Add as many or as few as you want and move on to <nuxt-link to="/projects"><button class="continue">Projects</button></nuxt-link> when done</p>
       <br>
       <form @submit.prevent="addCategory">
         <label>Add a new Category</label>
@@ -19,7 +18,6 @@
         </li>
       </ul>
     </div>
-    <nuxt-link to="/projects"><button class="continue">Continue</button></nuxt-link>
   </div>
 </template>
 
@@ -56,10 +54,6 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border: 1px solid #33333333;
-    min-height: 500px;
-    min-width: 400px;
-    padding: 30px 50px;
   }
   ul {
     list-style-type: none;

@@ -1,33 +1,31 @@
 <template>
   <div>
     <h1>Projects</h1>
-    <div>
-      <p>Now that you've added categories, it's time to add projects within those categories</p>
-      <p>Add as many as you like in any order. We shall prioritise these next</p>
-    </div>
-    <br />
-    <p>Hit <nuxt-link to="/priorities"><button class="continue">Continue</button></nuxt-link> when you're done with adding projects</p>
     <div class="project-form-container">
-      <form class="project-form" @submit.prevent="submitProject">
-        <label class="label" for="input">Give your project a title</label>
-        <input type="text" v-model="curProject.name" />
-        <label class="label" for="input">Describe the project</label>
-        <input type="text" v-model="curProject.description" />
-        <label class="label" for="select">Select Category for the project</label>
-        <select v-model="curProject.category" name="category" id="category">
-          <option value>Please select a category</option>
-          <option v-for="option in categoriesData" :key="option.id" :value="option.id">
-            {{ option.name }}
-          </option>
-        </select>
-        <div class="add-project">
-          <button type="submit">{{ formState }}</button>
-          <button type="reset" @click="() => { formState = 'Add' }">Clear</button>
-        </div>
-      </form>
+      <card>
+        <form class="project-form" @submit.prevent="submitProject">
+          <label class="label" for="input">Give your project a title</label>
+          <input type="text" v-model="curProject.name" />
+          <label class="label" for="input">Describe the project</label>
+          <input type="text" v-model="curProject.description" />
+          <label class="label" for="select">Select Category for the project</label>
+          <select v-model="curProject.category" name="category" id="category">
+            <option value>Please select a category</option>
+            <option v-for="option in categoriesData" :key="option.id" :value="option.id">
+              {{ option.name }}
+            </option>
+          </select>
+          <div class="add-project">
+            <button type="submit">{{ formState }}</button>
+            <button type="reset" @click="() => { formState = 'Add' }">Clear</button>
+          </div>
+        </form>
+      </card>
     </div>
+    <p>Go to <nuxt-link to="/priorities"><button class="continue">Priorities</button></nuxt-link> when you're done with adding projects</p>
+    <br />
     <div class="project-list">
-      <div class="project-data" v-for="projectId in Object.keys(projectData).sort((a, b) => projectData[b].createdAt - projectData[a].createdAt)" :key="projectId">
+      <card v-for="projectId in Object.keys(projectData).sort((a, b) => projectData[b].createdAt - projectData[a].createdAt)" :key="projectId">
         <div class="project-row">
           <div>
             <h3 class="project-name">
@@ -37,8 +35,8 @@
               {{ categoriesData[projectData[projectId].category].name }}
             </div>
           </div>
-          <div>
-            <button @click="() => { curProject = { ...projectData[projectId] }; formState = 'Update' }">
+          <div class="buttons">
+            <button @click="updateProject(projectId)">
               Edit
             </button>
             <button @click="removeProject(projectId)">
@@ -49,16 +47,18 @@
         <div v-if="projectData[projectId].description" class="project-description">
           {{ projectData[projectId].description }}
         </div>
-      </div>
+      </card>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import Card from '../components/Card.vue'
 
 export default {
   name: 'Projects',
+  components: { Card },
   data () {
     return {
       curProject: {
@@ -89,6 +89,11 @@ export default {
         category: ''
       }
     },
+    updateProject (id) {
+      this.curProject = { ...this.projectData[id] };
+      this.formState = 'Update';
+      window.scrollTo(0, 0);
+    },
     removeProject (id) {
       this.$store.dispatch('projects/removeProject', id)
     }
@@ -98,24 +103,20 @@ export default {
 
 <style scoped>
 .project-form-container {
-  border-bottom: 1px solid #33333399;
-  margin-bottom: 20px;
+  margin: 10px 0 20px 0
 }
+
 .project-form {
-  border-top: 1px solid #33333333;
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
-  margin-bottom: 10px;
 }
+
+p {
+  padding: 0 10px;
+}
+
 .add-project {
   margin: 20px 0 10px 0;
-}
-.project-data {
-  padding: 5px;
-  border-bottom: 1px solid #33333333;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
 }
 .project-row {
   width: 100%;
@@ -123,8 +124,13 @@ export default {
   justify-content: space-between;
   margin-bottom: 5px;
 }
+.buttons {
+  min-width: 150px;
+  margin-left: 10px;
+}
 .project-name {
   font-size: 1.2em;
+  margin-bottom: 5px;
 }
 .project-category {
   font-size: 0.8em;

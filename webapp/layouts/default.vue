@@ -3,7 +3,7 @@
     <div class="overlay" :aria-hidden="showSidebar" v-if="showSidebar" @click="toggleSidebar" />
     <div class="header">
       <div class="nav-title-container">
-        <client-only><button @click="toggleSidebar" class="outlined sidebar-toggle"><v-icon name="bars" /></button></client-only>
+        <button @click="toggleSidebar" class="outlined sidebar-toggle"><client-only><v-icon name="bars" /></client-only></button>
         <nuxt-link to="/">
           <h3 class="nav-title">priority-tracker</h3>
         </nuxt-link>
@@ -91,7 +91,6 @@ html {
 
 .overlay {
   position: fixed;
-  display: none;
   width: 100%;
   height: 100%;
   top: 0;
@@ -103,11 +102,9 @@ html {
   cursor: pointer;
 }
 
-@media only screen and (max-width: 600px) {
-  .sidebar-visible {
-    height: 100vh;
-    overflow: hidden;
-  }
+.sidebar-visible {
+  height: 100vh;
+  overflow: hidden;
 }
 
 .header {
@@ -116,6 +113,7 @@ html {
   align-items: center;
   width: 100%;
   margin: 10px 0;
+  padding: 0 5px;
 }
 
 .nav-title-container {
@@ -124,7 +122,7 @@ html {
 }
 
 .nav-title {
-  padding: 0 20px;
+  padding-left: 5px;
 }
 
 .container {
@@ -134,7 +132,7 @@ html {
 }
 
 .content {
-  padding: 40px 50px;
+  padding: 30px;
   width: 100%;
   background-color: hsl(202, 100%, 98%);
 }
@@ -152,21 +150,9 @@ a {
   margin: 0 7px;
 }
 
-.sidebar-toggle {
-  display: none;
-}
-
 @media only screen and (max-width: 600px) {
   .content {
     padding: 15px 20px;
-  }
-
-  .sidebar-toggle, .overlay {
-    display: block;
-  }
-
-  .nav-title {
-    padding: 0;
   }
 
   .nav-links a {

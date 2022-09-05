@@ -9,6 +9,7 @@
           ({{ tasks.length }}/{{ maxTasks }})
         </span>
       </h2>
+      <div v-if="!tasks || tasks.length === 0">Loading...</div>
       <div class="task-list">
         <div v-for="task in tasks" :key="task.id">
           <task-list-item :task="task" />
