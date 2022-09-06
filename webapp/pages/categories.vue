@@ -27,6 +27,7 @@ export default {
   flex-direction: column;
   align-items: center;
   text-align: center;
+  background: var(--secondary-color);
 }
 
 .home-header {
@@ -37,6 +38,8 @@ export default {
 .title {
   padding: 0 20px;
   font-size: 50px;
-  color: var(---dark-blue)
+  color: var(---dark-blue);
+  font-family: 'Homemade Apple';
+  text-shadow: 4px 4px 3px hsl(292deg 38% 52%);
 }
 </style>

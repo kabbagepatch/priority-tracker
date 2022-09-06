@@ -2,13 +2,13 @@
   --text-color: hsl(212, 15%, 23%);
   --heading-color: hsl(211, 28%, 29%);
 
-  --primary-color: hsl(233, 66%, 35%);
-  --primary-color-transparent: hsla(233, 66%, 35%, 0.4);
-  --primary-color-light: hsl(233, 66%, 45%);
-  --primary-color-lighter: hsl(233, 66%, 55%);
+  --primary-color: hsl(212, 51%, 31%);
+  --primary-color-transparent: hsla(212, 51%, 35%, 0.4);
+  --primary-color-light: hsl(212, 51%, 45%);
+  --primary-color-lighter: hsl(212, 51%, 55%);
 
-  --secondary-color: hsl(233, 100%, 98%);
-  --secondary-color-light: hsl(233, 90%, 100%);
+  --secondary-color: hsl(202, 20%, 92%);
+  --secondary-color-light: hsl(202, 20%, 96%);
   
   --success-color: hsl(135, 76%, 31%);
   --success-color-light: hsl(135, 76%, 45%);
@@ -18,7 +18,7 @@
 
   --black: hsl(0, 0%, 20%);
   --black-transparent: hsla(0, 0%, 20%, 0.35);
-  --white: hsl(233, 100%, 99%);
+  --white: hsl(212, 100%, 97%);
   --grey: hsl(0, 4%, 88%);
   --light-grey: hsl(0, 4%, 98%);
   --very-light-grey: hsl(233, 9%, 99%);
@@ -33,7 +33,7 @@ body {
 
 h1, h2, h3, h4 {
   font-family:
-    'Quicksand',
+    'Cairo',
     'Source Sans Pro',
     -apple-system,
     BlinkMacSystemFont,
@@ -46,6 +46,20 @@ h1, h2, h3, h4 {
   font-weight: 300 !important;
   color: var(--heading-color);
   letter-spacing: 1px;
+}
+
+h1 {
+  text-align: center;
+  padding-top: 20px;
+}
+
+h2 {
+  padding: 5px 20px;
+  color: var(--secondary-color);
+  background-color: var(--primary-color);
+  background-image: -webkit-linear-gradient(45deg, var(--primary-color) 50%, var(--primary-color-lighter) 50%);
+  font-weight: 400 !important;
+  text-transform: uppercase;
 }
 
 p {

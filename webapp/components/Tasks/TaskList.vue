@@ -2,7 +2,7 @@
   <client-only>
     <div class="task-list-container">
       <h2 v-if="title">
-        {{ title }}
+        <span>{{ title }}</span>
         <span
           v-if="maxTasks !== null" :class="maxTasks < tasks.length ? 'too-many-tasks' : 'good-tasks'"
         >
@@ -52,15 +52,28 @@ export default {
 </script>
 
 <style scoped>
+.task-list-container {
+  background: var(--secondary-color);
+  padding: 20px 0;
+  border-radius: 10px;
+}
+
+h2 {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
 .task-list {
-  margin: 20px 0;
   padding-left: 0;
 }
 
 .too-many-tasks {
   color: var(--danger-color);
+  text-shadow: 1px 1px 0.5px var(--black-transparent);
 }
 .good-tasks {
-  color: var(--primary-color);
+  color: var(--secondary-color);
+  text-shadow: 1px 1px 0.5px var(--black);
 }
 </style>

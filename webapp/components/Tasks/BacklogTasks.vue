@@ -91,13 +91,14 @@ export default {
 </script>
 
 <style scoped>
+
 .project-section {
   cursor: pointer;
   background: var(--white);
   margin-top: 20px;
+  margin-bottom: 1px;
   padding: 10px 15px;
   box-shadow: var(--dark-blue-transparenter) 0px 1px 3px, var(--dark-blue-transparent) 0px 1px 2px;
-  border-radius: 10px;
   display: flex;
   justify-content: space-between;
   transition: background-color 0.3s ease-in-out;

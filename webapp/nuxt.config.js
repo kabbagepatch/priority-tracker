@@ -15,7 +15,9 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Mulish:wght@300&family=Poppins:wght@600&display=swap' }
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Mulish:wght@300&family=Poppins:wght@600&display=swap' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Homemade Apple' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Cairo' }
     ]
   },
 

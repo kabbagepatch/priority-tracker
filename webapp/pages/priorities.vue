@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="priorities-container">
     <h1>Priorities</h1>
     <p>Select up to five projects to mark as actively being worked on. You will only be adding tasks for these projects</p>
     <p>Go to <nuxt-link to="/"><button class="continue">Tasks</button></nuxt-link> when you're done with prioritising projects</p>
@@ -76,8 +76,16 @@ export default {
 </script>
 
 <style scoped>
+.priorities-container {
+  background: var(--secondary-color);
+}
+  
 h1, p {
   margin-bottom: 10px;
+}
+
+p {
+  padding-left: 20px;
 }
 
 .project-row {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="projects-container">
     <h1>Projects</h1>
     <div class="project-form-container">
       <card>
@@ -126,6 +126,10 @@ export default {
 </script>
 
 <style scoped>
+.projects-container {
+  background: var(--secondary-color);
+}
+
 .project-form-container {
   margin: 10px 0 20px 0
 }

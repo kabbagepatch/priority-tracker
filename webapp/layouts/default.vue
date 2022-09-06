@@ -16,7 +16,6 @@
         <a href="#" @click.prevent="signup"><button>Sign Up</button></a>
       </div>
     </div>
-    <hr />
     <div v-if="user" class="container">
       <sidebar :showSidebar="showSidebar" />
       <div class="content"><Nuxt /></div>
@@ -64,7 +63,7 @@ export default {
 <style>
 html {
   font-family:
-    'Mulish',
+    'Cairo',
     -apple-system,
     BlinkMacSystemFont,
     'Segoe UI',
@@ -112,8 +111,7 @@ html {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin: 10px 0;
-  padding: 0 5px;
+  padding: 10px 5px;
 }
 
 .nav-title-container {
@@ -123,18 +121,20 @@ html {
 
 .nav-title {
   padding-left: 5px;
+  text-shadow: 4px 4px 3px hsl(292deg 38% 52%);
+  font-family: 'Homemade Apple';
 }
 
 .container {
   display: flex;
   width: 100%;
-  min-height: calc(100vh - 55px);
+  min-height: calc(100vh - 200px);
 }
 
 .content {
-  padding: 30px;
+  padding: 20px;
   width: 100%;
-  background-color: var(--secondary-color);
+  background: linear-gradient(to bottom right, var(--primary-color) 10%, var(--primary-color-light));
 }
 
 a {
@@ -156,7 +156,7 @@ a {
 
 @media only screen and (max-width: 600px) {
   .content {
-    padding: 15px 20px;
+    padding: 10px;
   }
 
   .nav-links a {

@@ -108,20 +108,17 @@ export default {
   background: var(--white);
   padding: 15px 20px;
   box-shadow: var(--black-transparent) 1.95px 1.95px 2.6px, var(--dark-blue-transparenter) 0px 0px 0px 2px;
-  border-radius: 10px;
   cursor: pointer;
   transition: background ease 0.25s, box-shadow ease 0.5s;
 }
 
 .task:hover, .task:focus {
   transition: background ease 0.25s, box-shadow ease 0.25s;
-  background: var(--very-light-grey);
+  background: var(--secondary-color-light);
   box-shadow: var(--dark-blue-transparent) 0px 4px 8px -2px, var(--dark-blue-transparenter) 0px 0px 0px 1px;
 }
 
 .task-form-open {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
   margin-bottom: 2px;
 }
 

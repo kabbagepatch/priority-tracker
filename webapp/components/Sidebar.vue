@@ -28,7 +28,9 @@
 .title {
   width: 260px;
   overflow-x: hidden;
-  margin: 20px;
+  padding: 20px;
+  font-family: 'Homemade Apple';
+  text-shadow: 4px 4px 3px hsl(292deg 38% 52%);
 }
 
 .sidebar {
@@ -67,7 +69,7 @@
 }
 
 .sidebar-item:hover, .sidebar-subitem:hover, .nuxt-link-exact-active {
-  background-color: var(--secondary-color);
+  background-color: var(--secondary-color-light);
   box-shadow: var(--black-transparent) 1.95px 1.95px 2.6px;
 }
 

@@ -1,10 +1,10 @@
 <template>
   <main>
+    <h1>Tasks List</h1>
     <active-tasks
       v-if="!$nuxt.$route.hash || $nuxt.$route.hash.includes('active')"
       :showAddButton="!$nuxt.$route.hash || $nuxt.$route.hash.includes('active')"
     />
-    <br v-if="!$nuxt.$route.hash" />
     <br v-if="!$nuxt.$route.hash" />
     <queued-tasks
       v-if="!$nuxt.$route.hash || $nuxt.$route.hash.includes('next')"
@@ -47,4 +47,7 @@ export default {
 </script>
 
 <style scoped>
+main {
+  background: var(--secondary-color);
+}
 </style>
