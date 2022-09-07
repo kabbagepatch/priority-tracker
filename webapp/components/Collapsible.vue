@@ -16,10 +16,12 @@ export default {
 .collapsible {
   max-height: 0px;
   overflow: hidden;
-  transition: max-height .5s ease-in-out;
+  visibility: hidden;
 }
 
 .collapsible-expanded {
   max-height: 1000vh;
+  visibility: visible;
+  transition: max-height 1s ease-in-out;
 }
 </style>

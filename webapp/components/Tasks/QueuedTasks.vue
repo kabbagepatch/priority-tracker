@@ -3,12 +3,8 @@
     title="Up Next"
     :tasks="queuedTasks"
     :maxTasks="5"
-    primaryIcon="angle-up"
-    primaryButtonText="Active"
-    secondaryIcon="angle-down"
-    secodaryButtonText="Backlog"
-    :onPrimaryButtonClick="id => toggleTaskActive(id, true)"
-    :onSecondaryButtonClick="id => toggleTaskQueued(id, false)"
+    moveButtonText="Move To Active"
+    :onMoveButtonClick="id => moveTaskToActive(id)"
     :onUpdateClick="task => { showTaskForm = true; selectedTask = { ...task } }"
   />
 </template>
@@ -29,6 +25,11 @@ export default {
   created () {
     this.$store.dispatch('tasks/getQueuedTasks');
   },
+  methods: {
+    moveTaskToActive (id) {
+      this.$store.dispatch('tasks/updateTaskStatus', { id, status: 'active', value: true });
+    },
+  }
 }
 </script>
 

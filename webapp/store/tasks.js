@@ -19,12 +19,12 @@ export const mutations = {
   setProjectTaskData: (state, data) => {
     state.projectTasksData = {
       ...state.projectTasksData,
-      [data.projectId]: data.tasks.sort((a, b) => a.createdAt - b.createdAt).filter(t => !t.complete)
+      [data.projectId]: data.tasks,
     }
   },
   addTaskToProject: (state, data) => {
     if (state.projectTasksData[data.projectId]) {
-      const projectTasks = state.projectTasksData[data.projectId || 'none'].concat(data.task);
+      const projectTasks = [data.task].concat(state.projectTasksData[data.projectId || 'none']);
       state.projectTasksData = {
         ...state.projectTasksData,
         [data.projectId]: projectTasks
@@ -32,26 +32,26 @@ export const mutations = {
     }
 
     if (state.activeTasks && data.task.active) {
-      const activeTasks = state.activeTasks.concat(data.task);
+      const activeTasks = state.activeTasks.concat([data.task]);
       state.activeTasks = activeTasks;
     }
 
     if (state.queuedTasks && data.task.queued) {
-      const queuedTasks = state.queuedTasks.concat(data.task);
+      const queuedTasks = state.queuedTasks.concat([data.task]);
       state.queuedTasks = queuedTasks;
     }
   },
   removeTask: (state, data) => {
-    const projectTasks = state.projectTasksData[data.projectId];
+    const projectTasks = state.projectTasksData[data.project];
     if (projectTasks) {
       projectTasks.splice(projectTasks.findIndex(t => t.id === data.id), 1);
       state.projectTasksData = {
         ...state.projectTasksData,
-        [data.projectId]: projectTasks
+        [data.project]: projectTasks
       }
     }
 
-    const activeTasks = state.activeTasks;
+    const activeTasks = [].concat(state.activeTasks);
     if (activeTasks) {
       const activeTaskIndex = activeTasks.findIndex(t => t.id === data.id)
       if (activeTaskIndex !== -1) {
@@ -60,7 +60,7 @@ export const mutations = {
       }
     }
 
-    const queuedTasks = state.queuedTasks;
+    const queuedTasks = [].concat(state.queuedTasks);
     if (queuedTasks) {
       const queuedTaskIndex = queuedTasks.findIndex(t => t.id === data.id)
       if (queuedTaskIndex !== -1) {
@@ -70,21 +70,22 @@ export const mutations = {
     }
   },
   updateTask: (state, updatedTask) => {
-    const projectTasks = state.projectTasksData[updatedTask.project];
+    const projectTasks = [].concat(state.projectTasksData[updatedTask.project]);
     if (projectTasks) {
       const taskIndex = projectTasks.findIndex(t => t.id === updatedTask.id)
       if (taskIndex !== -1) {
         projectTasks.splice(taskIndex, 1, updatedTask);
         state.projectTasksData = {
           ...state.projectTasksData,
-          [updatedTask.projectId]: projectTasks
+          [updatedTask.project]: projectTasks,
         }
       }
     }
 
-    const activeTasks = state.activeTasks;
+    const activeTasks = [].concat(state.activeTasks);
+    let activeTaskIndex = -1;
     if (activeTasks) {
-      const activeTaskIndex = activeTasks.findIndex(t => t.id === updatedTask.id)
+      activeTaskIndex = activeTasks.findIndex(t => t.id === updatedTask.id)
       if (updatedTask.active) {
         if (activeTaskIndex === -1) {
           state.activeTasks = activeTasks.concat([updatedTask]);
@@ -99,12 +100,12 @@ export const mutations = {
       }
     }
 
-    const queuedTasks = state.queuedTasks;
+    const queuedTasks = [].concat(state.queuedTasks);
     if (queuedTasks) {
       const queuedTaskIndex = queuedTasks.findIndex(t => t.id === updatedTask.id)
       if (updatedTask.queued) {
         if (queuedTaskIndex === -1) {
-          state.queuedTasks = queuedTasks.concat([updatedTask]);
+          state.queuedTasks = activeTaskIndex === -1 ? queuedTasks.concat([updatedTask]) : [updatedTask].concat(queuedTasks);
         } else {
           queuedTasks.splice(queuedTaskIndex, 1, updatedTask)
           state.queuedTasks = queuedTasks;
@@ -117,10 +118,10 @@ export const mutations = {
     }
   },
   setActiveTasks: (state, data) => {
-    state.activeTasks = data.sort((a, b) => a.updatedAt - b.updatedAt);
+    state.activeTasks = data;
   },
   setQueuedTasks: (state, data) => {
-    state.queuedTasks = data.sort((a, b) => a.updatedAt - b.updatedAt);
+    state.queuedTasks = data;
   }
 }
 
@@ -134,7 +135,7 @@ export const actions = {
         commit('setProjectTaskData', { projectId: 'none', tasks: res.data })
       })
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   },
   async getActiveTasks ({ commit }) {
@@ -146,7 +147,7 @@ export const actions = {
         commit('setActiveTasks', res.data)
       })
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   },
   async getQueuedTasks ({ commit }) {
@@ -158,7 +159,7 @@ export const actions = {
         commit('setQueuedTasks', res.data)
       })
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   },
   async getProjectTasks ({ commit }, projectId) {
@@ -167,11 +168,10 @@ export const actions = {
         {
           headers: { 'Content-Type': 'application/json' }
         }).then((res) => {
-        console.log('getProjectTasks', res.data);
         commit('setProjectTaskData', { projectId, tasks: res.data })
       })
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   },
   async addTask ({ commit }, data) {
@@ -184,7 +184,7 @@ export const actions = {
         commit('addTaskToProject', { projectId: data.project, task: res.data })
       })
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   },
   async removeTask ({ commit }, data) {
@@ -194,7 +194,7 @@ export const actions = {
       )
       commit('removeTask', data)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   },
   async updateTask ({ commit }, data) {
@@ -205,7 +205,7 @@ export const actions = {
       )
       commit('updateTask', res.data)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   },
   async updateTaskStatus ({ commit }, { id, status, value }) {
@@ -216,7 +216,7 @@ export const actions = {
       )
       commit('updateTask', res.data)
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   },
 }

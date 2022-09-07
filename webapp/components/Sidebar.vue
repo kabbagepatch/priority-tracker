@@ -1,5 +1,5 @@
 <template>
-  <div :class="`sidebar ${showSidebar ? 'sidebar-open' : ''}`">
+  <div :class="`sidebar ${showSidebar ? 'sidebar-open' : ''}`" :aria-hidden="!showSidebar">
     <h3 class="title">priority-tracker</h3>
     <nuxt-link class="sidebar-item" to="/">Tasks</nuxt-link>
     <nuxt-link class="sidebar-subitem" to="/#active">Active</nuxt-link>
@@ -40,7 +40,6 @@
   overflow-x: hidden;
   max-width: 0;
   transition: max-width 0.5s ease-in-out;
-  overflow-x: auto;
   position: fixed;
   height: 100%;
   top: 0;

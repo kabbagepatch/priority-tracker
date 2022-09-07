@@ -12,7 +12,7 @@
       <div v-if="!tasks || tasks.length === 0">Loading...</div>
       <div class="task-list">
         <div v-for="task in tasks" :key="task.id">
-          <task-list-item :task="task" />
+          <task-list-item :task="task" :moveButtonText="moveButtonText" :onMoveButtonClick="() => onMoveButtonClick(task.id)" />
         </div>
       </div>
     </div>
@@ -37,7 +37,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: () => "",
+      default: "",
     },
     tasks: {
       type: Array,
@@ -46,7 +46,15 @@ export default {
     maxTasks: {
       type: Number,
       default: null,
-    }
+    },
+    moveButtonText: {
+      type: String,
+      default: null,
+    },
+    onMoveButtonClick: {
+      type: Function,
+      default: () => undefined,
+    },
   },
 }
 </script>

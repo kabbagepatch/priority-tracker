@@ -41,6 +41,7 @@ module.exports.create = async (event) => {
       queued: data.queue,
       category: data.category,
       project: data.project || 'none',
+      order: timestamp,
       createdAt: timestamp,
       updatedAt: timestamp,
     },

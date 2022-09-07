@@ -4,12 +4,6 @@
       title="Active"
       :tasks="activeTasks"
       :maxTasks="2"
-      primaryIcon="angle-down"
-      primaryButtonText="Queue"
-      secondaryIcon="angle-double-down"
-      secodaryButtonText="Backlog"
-      :onPrimaryButtonClick="id => toggleTaskQueued(id, true)"
-      :onSecondaryButtonClick="id => toggleTaskActive(id, false)"
     />
     <add-task-button v-if="showAddButton && activeTasks && activeTasks.length > 0" />
   </div>

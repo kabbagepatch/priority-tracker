@@ -23,6 +23,15 @@
       </div>
       <div class="buttons">
         <button
+          v-if="moveButtonText"
+          :aria-label="moveButtonText"
+          :title="moveButtonText"
+          class="secondary icon-only"
+          @click="(e) => { e.stopPropagation(); onMoveButtonClick(); }"
+        >
+          <v-icon name="angle-double-up"/>
+        </button>
+        <button
           aria-label="Mark Task as Complete"
           title="Mark Task as Complete"
           class="secondary icon-only complete"
@@ -60,6 +69,14 @@ import Collapsible from '../Collapsible.vue';
 export default {
   props: {
     task: {},
+    moveButtonText: {
+      type: String,
+      default: null,
+    },
+    onMoveButtonClick: {
+      type: Function,
+      default: () => undefined,
+    },
   },
 
   components: { TaskForm, Collapsible },

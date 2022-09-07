@@ -14,12 +14,8 @@
         <div class="task-list">
           <task-list
             :tasks="backlogTasks[projectId]"
-            primaryIcon="angle-double-up"
-            primaryButtonText="Active"
-            secondaryIcon="angle-up"
-            secodaryButtonText="Queue"
-            :onPrimaryButtonClick="id => toggleTaskActive(id, true)"
-            :onSecondaryButtonClick="id => toggleTaskQueued(id, true)"
+            moveButtonText="Move To Up Next"
+            :onMoveButtonClick="id => moveTaskToQueued(id)"
           />
         </div>
       </collapsible>
@@ -86,6 +82,9 @@ export default {
       this.$store.dispatch('projects/submitProject', { id, complete: true });
       this.selectedProjects = { ...this.selectedProjects, [id]: false }
     },
+    moveTaskToQueued (id) {
+      this.$store.dispatch('tasks/updateTaskStatus', { id, status: 'queued', value: true });
+    },
   },
 }
 </script>
@@ -104,6 +103,10 @@ export default {
   transition: background-color 0.3s ease-in-out;
 }
 
+.task-list {
+  margin-left: 30px;
+}
+
 @media only screen and (max-width: 600px) {
   .project-section {
     flex-direction: column;
@@ -114,6 +117,10 @@ export default {
     font-size: 0.8em;
     font-weight: 600 !important;
     text-transform: uppercase;
+  }
+
+  .task-list {
+    margin-left: 20px;
   }
 }
 
@@ -129,10 +136,6 @@ export default {
 
 .project-section:hover .project-name {
   color: var(--primary-color-light);
-}
-
-.task-list {
-  margin-left: 20px;
 }
 
 .complete-notice {

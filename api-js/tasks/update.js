@@ -39,7 +39,7 @@ module.exports.update = async (event) => {
     ReturnValues: 'ALL_NEW',
   };
 
-  const allowedFields = ['name', 'link', 'category', 'project'];
+  const allowedFields = ['name', 'link', 'category', 'project', 'order'];
   allowedFields.forEach((field) => {
     if (data[field] !== undefined && data[field] !== null) {
       params.UpdateExpression += `#${field} = :${field},`;

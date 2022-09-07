@@ -31,7 +31,6 @@ module.exports.list = async (event) => {
       }
     }
     const projectIds = result.Items.map(item => item.projectId);
-    console.log(projectIds);
 
     const projectParams = {
       RequestItems: {

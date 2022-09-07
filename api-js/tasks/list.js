@@ -19,7 +19,7 @@ const queryTasks = async (params) => {
     return {
       statusCode: 200,
       headers: getHeaders(),
-      body: JSON.stringify(result.Items),
+      body: JSON.stringify(result.Items.sort((a, b) => (b.order || b.createdAt) - (a.order || a.createdAt)).filter(t => !t.complete)),
     }
   } catch (error) {
     console.error(error);
