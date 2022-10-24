@@ -70,14 +70,17 @@ export const mutations = {
     }
   },
   updateTask: (state, updatedTask) => {
-    const projectTasks = [].concat(state.projectTasksData[updatedTask.project]);
-    if (projectTasks) {
-      const taskIndex = projectTasks.findIndex(t => t.id === updatedTask.id)
-      if (taskIndex !== -1) {
-        projectTasks.splice(taskIndex, 1, updatedTask);
-        state.projectTasksData = {
-          ...state.projectTasksData,
-          [updatedTask.project]: projectTasks,
+    if (state.projectTasksData[updatedTask.project]) {
+      const projectTasks = [].concat(state.projectTasksData[updatedTask.project]);
+      console.log({projectTasks});
+      if (projectTasks) {
+        const taskIndex = projectTasks.findIndex(t => t.id === updatedTask.id)
+        if (taskIndex !== -1) {
+          projectTasks.splice(taskIndex, 1, updatedTask);
+          state.projectTasksData = {
+            ...state.projectTasksData,
+            [updatedTask.project]: projectTasks,
+          }
         }
       }
     }
