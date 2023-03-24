@@ -54,6 +54,8 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    border-radius: 20px;
+    margin-bottom: 30px;
   }
   ul {
     list-style-type: none;

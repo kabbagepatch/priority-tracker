@@ -90,21 +90,38 @@ export default {
 </script>
 
 <style scoped>
+h2 {
+  border-radius: 20px;
+  font-weight: 900 !important;
+}
 
 .project-section {
   cursor: pointer;
-  background: var(--white);
+  background: var(--secondary-color-light);
   margin-top: 20px;
   margin-bottom: 1px;
   padding: 10px 15px;
-  box-shadow: var(--dark-blue-transparenter) 0px 1px 3px, var(--dark-blue-transparent) 0px 1px 2px;
+  border-radius: 20px;
+  box-shadow: var(--black-transparent) 2.95px 2.95px 3.6px, var(--dark-blue-transparenter) 0px 0px 2px 3px;
   display: flex;
   justify-content: space-between;
   transition: background-color 0.3s ease-in-out;
 }
 
+.project-name {
+  transition: color 0.25s ease-in-out;
+  color: var(--primary-color);
+  font-weight: bold !important;
+}
+
+.project-section:hover {
+  background: var(--primary-color-very-light);
+  box-shadow: var(--black-transparent) 2.95px 2.95px 3.6px, var(--dark-blue-transparent) 0px 0px 2px 3px;
+}
+
 .task-list {
-  margin-left: 30px;
+  margin-left: 20px;
+  margin-right: 3px;
 }
 
 @media only screen and (max-width: 600px) {
@@ -122,20 +139,6 @@ export default {
   .task-list {
     margin-left: 20px;
   }
-}
-
-.project-name {
-  transition: color 0.25s ease-in-out;
-  color: var(--primary-color);
-  font-weight: bold !important;
-}
-
-.project-section:hover {
-  background: var(--light-grey);
-}
-
-.project-section:hover .project-name {
-  color: var(--primary-color-light);
 }
 
 .complete-notice {

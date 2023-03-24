@@ -5,7 +5,7 @@
       tabindex="0"
       aria-label="toggle task form"
       @click="toggleTaskForm"
-      :class="`task ${delayedShowTaskForm ? 'task-form-open' : ''}`"
+      :class="`task ${delayedShowTaskForm ? 'task-form-open' : ''} ${showTaskForm ? 'task-form-border-zero' : ''}`"
     >
       <div class="task-info">
         <h4 :class="task.complete ? 'complete-task' : ''">
@@ -122,21 +122,28 @@ export default {
   align-items: center;
   margin: 0;
   margin-top: 15px;
-  background: var(--white);
+  background: var(--secondary-color-light);
   padding: 15px 20px;
-  box-shadow: var(--black-transparent) 1.95px 1.95px 2.6px, var(--dark-blue-transparenter) 0px 0px 0px 2px;
+  box-shadow: var(--black-transparent) 2.95px 2.95px 3.6px, var(--dark-blue-transparenter) 0px 0px 2px 3px;
   cursor: pointer;
   transition: background ease 0.25s, box-shadow ease 0.5s;
+  border-radius: 20px;
 }
 
-.task:hover, .task:focus {
+.task:hover {
   transition: background ease 0.25s, box-shadow ease 0.25s;
-  background: var(--secondary-color-light);
-  box-shadow: var(--dark-blue-transparent) 0px 4px 8px -2px, var(--dark-blue-transparenter) 0px 0px 0px 1px;
+  background: var(--primary-color-very-light);
+  box-shadow: var(--black-transparent) 2.95px 2.95px 3.6px, var(--dark-blue-transparent) 0px 0px 2px 3px;
 }
 
 .task-form-open {
   margin-bottom: 2px;
+  box-shadow: var(--black-transparent) 0.95px 0.95px 1.6px, var(--dark-blue-transparenter) 0px 0px 1px 2px;
+}
+
+.task-form-border-zero {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .task-info {
@@ -170,11 +177,11 @@ export default {
 }
 
 .task-name-link {
-  color: var(--primary-color-light);
+  color: var(--primary-color);
   text-decoration: underline solid var(--primary-color-transparent);
 }
 
 .task-name-link:hover {
-  color: var(--primary-color);
+  color: var(--primary-color-light);
 }
 </style>

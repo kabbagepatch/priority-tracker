@@ -1,9 +1,10 @@
 <template>
   <div class="priorities-container">
-    <h1>Priorities</h1>
-    <p>Select up to five projects to mark as actively being worked on. You will only be adding tasks for these projects</p>
-    <p>Go to <nuxt-link to="/"><button class="continue">Tasks</button></nuxt-link> when you're done with prioritising projects</p>
-    <br />
+    <h2>Priorities</h2>
+    <div class="info">
+      <p>Select up to five projects to mark as actively being worked on. You will only be adding tasks for these projects</p>
+      <p>Go to <nuxt-link to="/"><button class="continue">Tasks</button></nuxt-link> when you're done with prioritising projects</p>
+    </div>
     <div class="project" v-for="projectId in Object.keys(prioritiesData).sort((a, b) => prioritiesData[b].updatedAt - prioritiesData[a].updatedAt)" :key="projectId">
       <card class="project-row">
         <div>
@@ -76,11 +77,18 @@ export default {
 </script>
 
 <style scoped>
-.priorities-container {
-  background: var(--secondary-color);
+h2 {
+  border-radius: 20px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: -5px;
 }
-  
-h1, p {
+
+.info {
+  background: var(--primary-color-very-light);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  padding: 10px 0;
   margin-bottom: 10px;
 }
 

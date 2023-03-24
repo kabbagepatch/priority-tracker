@@ -206,18 +206,20 @@ export const actions = {
         data,
         { headers: { 'Content-Type': 'application/json' } }
       )
-      commit('updateTask', res.data)
+      commit('updateTask', res.data);
+      data.onCallComplete();
     } catch (error) {
       console.error(error)
     }
   },
-  async updateTaskStatus ({ commit }, { id, status, value }) {
+  async updateTaskStatus ({ commit }, { id, status, value, onCallComplete }) {
     try {
       const res = await this.$axios.put(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/tasks/${id}/${status}`,
         { status: value },
         { headers: { 'Content-Type': 'application/json' } }
       )
       commit('updateTask', res.data)
+      onCallComplete();
     } catch (error) {
       console.error(error)
     }

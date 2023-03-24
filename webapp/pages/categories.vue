@@ -38,7 +38,7 @@ export default {
 .title {
   padding: 0 20px;
   font-size: 50px;
-  color: var(---dark-blue);
+  color: var(---text-dark);
   font-family: 'Homemade Apple';
   text-shadow: 4px 4px 3px hsl(292deg 38% 52%);
 }

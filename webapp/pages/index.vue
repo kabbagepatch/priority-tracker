@@ -1,6 +1,5 @@
 <template>
   <main>
-    <h1>Tasks List</h1>
     <active-tasks
       v-if="!$nuxt.$route.hash || $nuxt.$route.hash.includes('active')"
       :showAddButton="!$nuxt.$route.hash || $nuxt.$route.hash.includes('active')"
@@ -48,6 +47,7 @@ export default {
 
 <style scoped>
 main {
-  background: var(--secondary-color);
+  /* background: var(--secondary-color); */
 }
+
 </style>

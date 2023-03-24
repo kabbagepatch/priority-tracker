@@ -60,25 +60,24 @@ export default {
 </script>
 
 <style scoped>
-.task-list-container {
-  background: var(--secondary-color);
-  padding: 20px 0;
-  border-radius: 10px;
-}
 
 h2 {
   display: flex;
   width: 100%;
+  border-radius: 20px;
   justify-content: space-between;
+  font-weight: 900 !important;
+  box-shadow: var(--black-transparent) 1.95px 1.95px 2.6px, var(--dark-blue-transparenter) 0px 0px 1px 2px;
 }
 
 .task-list {
   padding-left: 0;
+  margin: 15px 0;
 }
 
 .too-many-tasks {
   color: var(--danger-color);
-  text-shadow: 1px 1px 0.5px var(--black-transparent);
+  text-shadow: 1px 1px 0.5px var(--black);
 }
 .good-tasks {
   color: var(--secondary-color);

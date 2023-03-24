@@ -1,6 +1,6 @@
 <template>
   <div class="projects-container">
-    <h1>Projects</h1>
+    <h2>Projects</h2>
     <div class="project-form-container">
       <card>
         <form class="project-form" @submit.prevent="submitProject">
@@ -20,10 +20,9 @@
             <button class="secondary outlined" type="reset" @click="() => { formState = 'Add' }">Clear</button>
           </div>
         </form>
+        <p>Go to <nuxt-link to="/priorities"><button class="continue">Priorities</button></nuxt-link> when you're done with adding projects</p>
       </card>
     </div>
-    <p>Go to <nuxt-link to="/priorities"><button class="continue">Priorities</button></nuxt-link> when you're done with adding projects</p>
-    <br />
     <div class="project-list">
       <card v-for="projectId in Object.keys(projectData).sort((a, b) => projectData[b].createdAt - projectData[a].createdAt)" :key="projectId">
         <div class="project-row">
@@ -126,12 +125,12 @@ export default {
 </script>
 
 <style scoped>
-.projects-container {
-  background: var(--secondary-color);
+h2 {
+  border-radius: 20px;
 }
 
 .project-form-container {
-  margin: 10px 0 20px 0
+  margin: 10px 0 20px 0;
 }
 
 .project-form {
@@ -140,18 +139,20 @@ export default {
 }
 
 p {
-  padding: 0 10px;
+  padding-top: 10px;
 }
 
 .add-project {
   margin: 20px 0 10px 0;
 }
+
 .project-row {
   width: 100%;
   display: flex;
   justify-content: space-between;
   margin-bottom: 5px;
 }
+
 .buttons {
   min-width: 140px;
   margin-left: 10px;

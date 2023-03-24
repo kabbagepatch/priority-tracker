@@ -96,13 +96,13 @@ export default {
       };
     },
     updateTask () {
-      this.$store.dispatch('tasks/updateTask', this.curTask);
+      this.$store.dispatch('tasks/updateTask', { ...this.curTask, onCallComplete: this.onCancelClick });
       const prevStatus = this.selectedTask.active ? 'active' : (this.selectedTask.queued ? 'queued' : 'backlog');
       if (prevStatus !== this.curTask.status) {
         if (this.curTask.status === 'backlog') {
-          this.$store.dispatch('tasks/updateTaskStatus', { id: this.curTask.id, status: prevStatus, value: false });
+          this.$store.dispatch('tasks/updateTaskStatus', { id: this.curTask.id, status: prevStatus, value: false, onCallComplete: this.onCancelClick });
         } else {
-          this.$store.dispatch('tasks/updateTaskStatus', { id: this.curTask.id, status: this.curTask.status, value: true });
+          this.$store.dispatch('tasks/updateTaskStatus', { id: this.curTask.id, status: this.curTask.status, value: true, onCallComplete: this.onCancelClick });
         }
       }
     },
@@ -120,9 +120,9 @@ export default {
   flex-direction: column;
   padding: 20px;
   padding-top: 10px;
-  background: var(--white);
+  background: var(--primary-color-very-light);
   border: 1px solid var(--black-transparent);
-  border-radius: 10px;
+  border-radius: 20px;
   border-top: none;
   border-top-left-radius: 0;
   border-top-right-radius: 0;

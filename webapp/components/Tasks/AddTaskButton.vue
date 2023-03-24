@@ -39,10 +39,10 @@ export default {
   width: 100%;
   box-shadow: var(--black-transparent) 1.95px 1.95px 2.6px;
   font-size: 18px;
-  border-radius: 0;
+  border-radius: 20px;
 }
 .add-task-button:hover, .add-task-button:focus {
   background: var(--secondary-color-light);
-  box-shadow: var(--dark-blue-transparent) 0px 4px 8px -2px, var(--dark-blue-transparenter) 0px 0px 0px 1px;
+  box-shadow: var(--text-dark-transparent) 0px 4px 8px -2px, var(--text-dark-transparenter) 0px 0px 0px 1px;
 }
 </style>

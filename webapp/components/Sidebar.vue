@@ -36,7 +36,7 @@
 .sidebar {
   width: 260px;
   padding: 0;
-  background: var(--white);
+  background: var(--primary-color-very-light);
   overflow-x: hidden;
   max-width: 0;
   transition: max-width 0.5s ease-in-out;

@@ -129,12 +129,13 @@ html {
   display: flex;
   width: 100%;
   min-height: calc(100vh - 200px);
+  border-radius: 20px;
 }
 
 .content {
   padding: 20px;
   width: 100%;
-  background: linear-gradient(to bottom right, var(--primary-color) 10%, var(--primary-color-light));
+  background: linear-gradient(to right, var(--primary-color) -50%, var(--primary-color-lighter));
 }
 
 a {
