@@ -66,7 +66,7 @@ export default {
   },
   watch: { 
     tasks: function(newTasks) {
-      if (this.tasksDisplayed.length === 0 && newTasks.length > 0) this.tasksDisplayed = [].concat(newTasks);
+      if (this.tasksDisplayed.length !== newTasks.length) this.tasksDisplayed = [].concat(newTasks);
     }
   },
   computed: {
