@@ -72,7 +72,6 @@ export const mutations = {
   updateTask: (state, updatedTask) => {
     if (state.projectTasksData[updatedTask.project]) {
       const projectTasks = [].concat(state.projectTasksData[updatedTask.project]);
-      console.log({projectTasks});
       if (projectTasks) {
         const taskIndex = projectTasks.findIndex(t => t.id === updatedTask.id)
         if (taskIndex !== -1) {
@@ -207,7 +206,7 @@ export const actions = {
         { headers: { 'Content-Type': 'application/json' } }
       )
       commit('updateTask', res.data);
-      data.onCallComplete();
+      if (data.onCallComplete) data.onCallComplete();
     } catch (error) {
       console.error(error)
     }
@@ -219,7 +218,7 @@ export const actions = {
         { headers: { 'Content-Type': 'application/json' } }
       )
       commit('updateTask', res.data)
-      onCallComplete();
+      if (onCallComplete) onCallComplete();
     } catch (error) {
       console.error(error)
     }

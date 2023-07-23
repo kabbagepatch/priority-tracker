@@ -11,20 +11,26 @@
       </h2>
       <div v-if="!tasks || tasks.length === 0">Loading...</div>
       <div class="task-list">
-        <div v-for="task in tasks" :key="task.id">
-          <task-list-item :task="task" :moveButtonText="moveButtonText" :onMoveButtonClick="() => onMoveButtonClick(task.id)" />
-        </div>
+        <draggable v-model="tasksDisplayed" v-bind="dragOptions" @start="drag=true" @end="onDragEnd">
+          <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+            <div v-for="task in tasksDisplayed" :key="task.id">
+              <task-list-item :task="task" :moveButtonText="moveButtonText" :onMoveButtonClick="() => onMoveButtonClick(task.id)" />
+            </div>
+          </transition-group>
+        </draggable>
       </div>
     </div>
   </client-only>
 </template>
 
 <script>
+import Draggable from 'vuedraggable'
 import TaskForm from './TaskForm.vue';
 import TaskListItem from './TaskListItem.vue';
 
 export default {
   components: {
+    Draggable,
     TaskForm,
     TaskListItem,
   },
@@ -32,6 +38,8 @@ export default {
     return {
       selectedTask: undefined,
       showTaskForm: false,
+      drag: false,
+      tasksDisplayed: this.tasks ? [].concat(this.tasks) : [],
     }
   },
   props: {
@@ -54,6 +62,38 @@ export default {
     onMoveButtonClick: {
       type: Function,
       default: () => undefined,
+    },
+  },
+  watch: { 
+    tasks: function(newTasks) {
+      if (this.tasksDisplayed.length === 0 && newTasks.length > 0) this.tasksDisplayed = [].concat(newTasks);
+    }
+  },
+  computed: {
+    dragOptions() {
+      return {
+        animation: 200,
+        group: this.title,
+        disabled: false,
+        ghostClass: "ghost"
+      };
+    },
+  },
+  methods: {
+    onDragEnd (e) {
+      this.drag = false
+      const curIndex = e.oldIndex;
+      const newIndex = e.newIndex;
+      const curTask = this.tasks[curIndex];
+      let newOrder;
+      const existingTaskOrder = this.tasks[newIndex].order || this.tasks[newIndex].createdAt;
+      if (newIndex > curIndex) {
+        newOrder = existingTaskOrder - 1;
+      } else {
+        newOrder = existingTaskOrder + 1;
+      }
+
+      this.$store.dispatch('tasks/updateTask', { ...curTask, order: newOrder });
     },
   },
 }
@@ -82,5 +122,10 @@ h2 {
 .good-tasks {
   color: var(--secondary-color);
   text-shadow: 1px 1px 0.5px var(--black);
+}
+
+.ghost {
+  opacity: 0.5;
+  background: hsl(199, 86%, 88%);
 }
 </style>

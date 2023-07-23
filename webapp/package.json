@@ -16,7 +16,8 @@
     "date-fns": "^2.28.0",
     "netlify-identity-widget": "^1.9.2",
     "nuxt": "^2.15.3",
-    "vue-awesome": "^4.3.1"
+    "vue-awesome": "^4.3.1",
+    "vuedraggable": "^2.24.3"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^6.0.0",
