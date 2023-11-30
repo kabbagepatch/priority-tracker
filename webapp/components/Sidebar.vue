@@ -6,9 +6,9 @@
     <nuxt-link class="sidebar-subitem" to="/#next">Up Next</nuxt-link>
     <nuxt-link class="sidebar-subitem" to="/#backlog">Backlog</nuxt-link>
     <hr class="sidebar-separator" />
-    <nuxt-link class="sidebar-item" to="/categories">Categories</nuxt-link>
     <nuxt-link class="sidebar-item" to="/projects">Projects</nuxt-link>
     <nuxt-link class="sidebar-item" to="/priorities">Priorities</nuxt-link>
+    <nuxt-link class="sidebar-item" to="/categories">Categories</nuxt-link>
   </div>
 </template>
 
@@ -26,35 +26,43 @@
 <style scoped>
 
 .title {
-  width: 260px;
+  width: var(--sidebar-width);
   overflow-x: hidden;
-  padding: 20px;
+  padding: 20px 0px 9px 30px;
   font-family: 'Homemade Apple';
   text-shadow: 4px 4px 3px hsl(292deg 38% 52%);
+  color: var(--white);
+  border-bottom: 2px solid white;
+  margin-bottom: 25px
 }
 
 .sidebar {
-  width: 260px;
+  width: var(--sidebar-width);
   padding: 0;
-  background: var(--primary-color-very-light);
+  background: var(--primary-color);
   overflow-x: hidden;
-  max-width: 0;
   transition: max-width 0.5s ease-in-out;
-  position: fixed;
-  height: 100%;
   top: 0;
   left: 0;
   z-index: 3;
+  position: fixed;
+  height: 100%;
+}
+
+@media (max-width: 800px) {
+  .sidebar {
+    max-width: 0;
+  }
 }
 
 .sidebar-open {
-  max-width: 260px;
+  max-width: var(--sidebar-width);
 }
 
 .sidebar-item, .sidebar-subitem {
-  color: var(--primary-color);
+  color: var(--white);
   overflow: hidden;
-  width: 260px;
+  width: var(--sidebar-width);
   display: block;
   padding: 8px 0 8px 16px;
   margin: 3px 15px;
@@ -68,8 +76,12 @@
 }
 
 .sidebar-item:hover, .sidebar-subitem:hover, .nuxt-link-exact-active {
-  background-color: var(--secondary-color-light);
   box-shadow: var(--black-transparent) 1.95px 1.95px 2.6px;
+}
+
+.nuxt-link-exact-active {
+  color: var(--primary-color);
+  background-color: var(--white);
 }
 
 .nuxt-link-exact-active {

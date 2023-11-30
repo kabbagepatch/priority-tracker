@@ -1,11 +1,11 @@
 <template>
-  <div :class="showSidebar ? 'sidebar-visible' : ''">
+  <div :class="showSidebar ? 'sidebar-visible everything' : 'everything'">
     <div class="overlay" :aria-hidden="showSidebar" v-if="showSidebar" @click="toggleSidebar" />
     <div class="header">
       <div class="nav-title-container">
         <button @click="toggleSidebar" class="secondary sidebar-toggle"><client-only><v-icon name="bars" /></client-only></button>
         <nuxt-link to="/">
-          <h3 class="nav-title">priority-tracker</h3>
+          <h3 class="nav-title" :aria-hidden="!showSidebar" v-if="!showSidebar">priority-tracker</h3>
         </nuxt-link>
       </div>
       <div class="nav-links" v-if="user">
@@ -79,6 +79,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
+  background: rgb(225, 231, 237);
 }
 
 *,
@@ -111,7 +112,8 @@ html {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 10px 5px;
+  padding: 20px;
+  background: var(--white)
 }
 
 .nav-title-container {
@@ -133,9 +135,11 @@ html {
 }
 
 .content {
-  padding: 20px;
+  padding: 30px;
+  padding-top: 22px;
   width: 100%;
-  background: linear-gradient(to right, var(--primary-color) -50%, var(--primary-color-lighter));
+  height: 100%;
+  background: rgb(225, 231, 237) /* linear-gradient(to right, var(--primary-color) -50%, var(--primary-color-lighter)); */
 }
 
 a {
@@ -155,9 +159,24 @@ a {
   color: var(--primary-color);
 }
 
+@media (min-width: 800px) {
+  .everything {
+    margin-left: var(--sidebar-width);
+  }
+
+  .nav-title-container {
+    display: none
+  }
+
+  .nav-links {
+    width: 100%;
+    text-align: right;
+  }
+}
+
 @media only screen and (max-width: 600px) {
   .content {
-    padding: 10px;
+    padding: 20px;
   }
 
   .nav-links a {

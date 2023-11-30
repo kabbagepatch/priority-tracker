@@ -97,7 +97,7 @@ h2 {
 
 .project-section {
   cursor: pointer;
-  background: var(--secondary-color-light);
+  background: var(--white);
   margin-top: 20px;
   margin-bottom: 1px;
   padding: 10px 15px;
@@ -115,7 +115,7 @@ h2 {
 }
 
 .project-section:hover {
-  background: var(--primary-color-very-light);
+  background: var(--white);
   box-shadow: var(--black-transparent) 2.95px 2.95px 3.6px, var(--dark-blue-transparent) 0px 0px 2px 3px;
 }
 

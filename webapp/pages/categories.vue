@@ -27,7 +27,8 @@ export default {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background: var(--secondary-color);
+  background: var(--white);
+  padding: 10px;
 }
 
 .home-header {

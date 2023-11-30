@@ -14,7 +14,7 @@
         <draggable v-model="tasksDisplayed" v-bind="dragOptions" @start="drag=true" @end="onDragEnd">
           <transition-group type="transition" :name="!drag ? 'flip-list' : null">
             <div v-for="task in tasksDisplayed" :key="task.id">
-              <task-list-item :task="task" :moveButtonText="moveButtonText" :onMoveButtonClick="() => onMoveButtonClick(task.id)" />
+              <task-list-item :task="task" :moveButtonText="moveButtonText" :onMoveButtonClick="() => onMoveButtonClick(task.id)" :toggleTaskFormOuter="() => toggleTaskForm()" />
             </div>
           </transition-group>
         </draggable>
@@ -37,7 +37,7 @@ export default {
   data () {
     return {
       selectedTask: undefined,
-      showTaskForm: false,
+      taskFormVisible: false,
       drag: false,
       tasksDisplayed: this.tasks ? [].concat(this.tasks) : [],
     }
@@ -67,6 +67,24 @@ export default {
   watch: { 
     tasks: function(newTasks) {
       if (this.tasksDisplayed.length !== newTasks.length) this.tasksDisplayed = [].concat(newTasks);
+      this.tasksDisplayed.forEach((displayedTask, i) => {
+        newTasks.forEach(newTask => {
+          if (displayedTask.id === newTask.id) {
+            if (displayedTask.name !== newTask.name) {
+              this.tasksDisplayed[i].name = newTask.name
+            }
+            if (displayedTask.link !== newTask.link) {
+              this.tasksDisplayed[i].link = newTask.link
+            }
+            if (displayedTask.project !== newTask.project) {
+              this.tasksDisplayed[i].project = newTask.project
+            }
+            if (displayedTask.category !== newTask.category) {
+              this.tasksDisplayed[i].category = newTask.category
+            }
+          }
+        });
+      });
     }
   },
   computed: {
@@ -74,7 +92,7 @@ export default {
       return {
         animation: 200,
         group: this.title,
-        disabled: false,
+        disabled: this.taskFormVisible,
         ghostClass: "ghost"
       };
     },
@@ -95,6 +113,9 @@ export default {
 
       this.$store.dispatch('tasks/updateTask', { ...curTask, order: newOrder });
     },
+    toggleTaskForm () {
+      this.taskFormVisible = !this.taskFormVisible;
+    }
   },
 }
 </script>
@@ -104,7 +125,7 @@ export default {
 h2 {
   display: flex;
   width: 100%;
-  border-radius: 20px;
+  border-radius: 15px;
   justify-content: space-between;
   font-weight: 900 !important;
   box-shadow: var(--black-transparent) 1.95px 1.95px 2.6px, var(--dark-blue-transparenter) 0px 0px 1px 2px;

@@ -85,7 +85,7 @@ h2 {
 }
 
 .info {
-  background: var(--primary-color-very-light);
+  background: var(--white);
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
   padding: 10px 0;
@@ -94,6 +94,10 @@ h2 {
 
 p {
   padding-left: 20px;
+}
+
+.project {
+  margin: 25px 0;
 }
 
 .project-row {

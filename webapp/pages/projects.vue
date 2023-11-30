@@ -2,26 +2,24 @@
   <div class="projects-container">
     <h2>Projects</h2>
     <div class="project-form-container">
-      <card>
-        <form class="project-form" @submit.prevent="submitProject">
-          <label class="label" for="input">Give your project a title</label>
-          <input type="text" v-model="curProject.name" />
-          <label class="label" for="input">Describe the project</label>
-          <input type="text" v-model="curProject.description" />
-          <label class="label" for="select">Select Category for the project</label>
-          <select v-model="curProject.category" name="category" id="category">
-            <option value>Please select a category</option>
-            <option v-for="option in categoriesData" :key="option.id" :value="option.id">
-              {{ option.name }}
-            </option>
-          </select>
-          <div class="add-project">
-            <button :disabled="!curProject.name || !curProject.category" type="submit">{{ formState }}</button>
-            <button class="secondary outlined" type="reset" @click="() => { formState = 'Add' }">Clear</button>
-          </div>
-        </form>
-        <p>Go to <nuxt-link to="/priorities"><button class="continue">Priorities</button></nuxt-link> when you're done with adding projects</p>
-      </card>
+      <form class="project-form" @submit.prevent="submitProject">
+        <label class="label" for="input">Give your project a title</label>
+        <input type="text" v-model="curProject.name" />
+        <label class="label" for="input">Describe the project</label>
+        <input type="text" v-model="curProject.description" />
+        <label class="label" for="select">Select Category for the project</label>
+        <select v-model="curProject.category" name="category" id="category">
+          <option value>Please select a category</option>
+          <option v-for="option in categoriesData" :key="option.id" :value="option.id">
+            {{ option.name }}
+          </option>
+        </select>
+        <div class="add-project">
+          <button :disabled="!curProject.name || !curProject.category" type="submit">{{ formState }}</button>
+          <button class="secondary outlined" type="reset" @click="() => { formState = 'Add' }">Clear</button>
+        </div>
+      </form>
+      <p>Go to <nuxt-link to="/priorities"><button class="continue">Priorities</button></nuxt-link> when you're done with adding projects</p>
     </div>
     <div class="project-list">
       <card v-for="projectId in Object.keys(projectData).sort((a, b) => projectData[b].createdAt - projectData[a].createdAt)" :key="projectId">
@@ -127,10 +125,17 @@ export default {
 <style scoped>
 h2 {
   border-radius: 20px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: -5px;
 }
 
 .project-form-container {
-  margin: 10px 0 20px 0;
+  background: var(--white);
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  padding: 20px;
+  margin-bottom: 25px;
 }
 
 .project-form {
@@ -146,11 +151,14 @@ p {
   margin: 20px 0 10px 0;
 }
 
+.card {
+  margin-bottom: 25px;
+}
+
 .project-row {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 5px;
 }
 
 .buttons {

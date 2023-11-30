@@ -37,12 +37,15 @@ export default {
 }
 .add-task-button {
   width: 100%;
-  box-shadow: var(--black-transparent) 1.95px 1.95px 2.6px;
+  box-shadow: var(--black-transparent) 2.95px 2.95px 3.6px, var(--dark-blue-transparenter) 0px 0px 2px 3px;
   font-size: 18px;
-  border-radius: 20px;
+  border-radius: 15px;
+  margin-top: 10px;
 }
 .add-task-button:hover, .add-task-button:focus {
+  color: black;
+  transition: background ease 0.25s, box-shadow ease 0.25s;
   background: var(--secondary-color-light);
-  box-shadow: var(--text-dark-transparent) 0px 4px 8px -2px, var(--text-dark-transparenter) 0px 0px 0px 1px;
+  box-shadow: var(--black-transparent) 2.95px 2.95px 3.6px, var(--dark-blue-transparent) 0px 0px 2px 3px;
 }
 </style>

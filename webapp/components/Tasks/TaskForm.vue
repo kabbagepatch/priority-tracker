@@ -118,14 +118,19 @@ export default {
 .task-form {
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  padding-top: 10px;
-  background: var(--primary-color-very-light);
+  padding: 30px;
+  padding-top: 20px;
+  margin-top: -10px;
+  background: var(--white);
   border: 1px solid var(--black-transparent);
-  border-radius: 20px;
+  border-radius: 15px;
   border-top: none;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+label {
+  margin-top: 15px;
 }
 
 .status {
@@ -138,7 +143,7 @@ export default {
 }
 
 .add-task {
-  margin-top: 20px;
+  margin-top: 25px;
 }
 
 button.delete {

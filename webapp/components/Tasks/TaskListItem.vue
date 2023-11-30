@@ -77,6 +77,10 @@ export default {
       type: Function,
       default: () => undefined,
     },
+    toggleTaskFormOuter: {
+      type: Function,
+      default: () => undefined,
+    },
   },
 
   components: { TaskForm, Collapsible },
@@ -106,6 +110,7 @@ export default {
       } else {
         this.delayedShowTaskForm = true;
       }
+      this.toggleTaskFormOuter()
     },
     completeTask (e) {
       e.stopPropagation();
@@ -121,18 +126,18 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin: 0;
-  margin-top: 15px;
-  background: var(--secondary-color-light);
+  margin-top: 30px;
+  background: var(--white);
   padding: 15px 20px;
   box-shadow: var(--black-transparent) 2.95px 2.95px 3.6px, var(--dark-blue-transparenter) 0px 0px 2px 3px;
   cursor: pointer;
   transition: background ease 0.25s, box-shadow ease 0.5s;
-  border-radius: 20px;
+  border-radius: 15px;
 }
 
 .task:hover {
   transition: background ease 0.25s, box-shadow ease 0.25s;
-  background: var(--primary-color-very-light);
+  background: var(--secondary-color-light);
   box-shadow: var(--black-transparent) 2.95px 2.95px 3.6px, var(--dark-blue-transparent) 0px 0px 2px 3px;
 }
 
