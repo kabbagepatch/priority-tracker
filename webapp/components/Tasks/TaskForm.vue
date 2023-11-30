@@ -1,7 +1,7 @@
 <template>
   <form class="task-form" @submit.prevent="selectedTask ? updateTask() : addTask()">
-    <label class="label" for="input">Title*</label>
-    <input type="text" v-model="curTask.name" />
+    <label :class="`label ${errors.name ? 'error' : ''}`" for="input">Title*</label>
+    <input :class="errors.name ? 'error' : ''" type="text" v-model="curTask.name" @blur="onNameBlur" />
     <label class="label" for="input">Link</label>
     <input type="text" v-model="curTask.link" />
     <label class="label" for="select">Project</label>
@@ -11,8 +11,15 @@
         {{ prioritiesData[id].name }}
       </option>
     </select>
-    <label class="label" for="select">Cagetory*</label>
-    <select :disabled="curTask.project.length !== 0 && curTask.project !== 'none'" v-model="curTask.category" name="category" id="category">
+    <label :class="`label ${errors.category ? 'error' : ''}`" for="select">Cagetory*</label>
+    <select
+      :disabled="curTask.project.length !== 0 && curTask.project !== 'none'"
+      v-model="curTask.category"
+      name="category"
+      id="category"
+      @blur="onCategoryBlur"
+      :class="errors.category ? 'error' : ''"
+    >
       <option value>Please select a category</option>
       <option v-for="categoryId in Object.keys(categoriesData)" :key="categoryId" :value="categoryId">
         {{ categoriesData[categoryId].name }}
@@ -33,7 +40,7 @@
       </div>
     </fieldset>
     <div class="add-task">
-      <button type="submit">{{ selectedTask ? 'Update' : 'Add' }}</button>
+      <button type="submit" :disabled="cannotSubmit">{{ selectedTask ? 'Update' : 'Add' }}</button>
       <button class="outlined secondary" type="button" @click="onCancel">Cancel</button>
       <button v-if="selectedTask" class="delete" type="button" @click="removeTask">Delete</button>
     </div>
@@ -49,21 +56,26 @@ export default {
     onCancelClick: Function,
   },
   data() {
+    let curTask = {};
     if (this.selectedTask && this.selectedTask.name) {
-      return {
-        curTask: {
-          ...this.selectedTask,
-          status: this.selectedTask.active ? 'active' : (this.selectedTask.queued ? 'queued' : 'backlog'),
-        }
+      curTask = {
+        ...this.selectedTask,
+        status: this.selectedTask.active ? 'active' : (this.selectedTask.queued ? 'queued' : 'backlog'),
       };
-    }
-    return {
-      curTask: {
+    } else {
+      curTask = {
         name: '',
         link: '',
         category: '',
         project: '',
         status: this.$nuxt.$route.hash === '#next' ? 'queued' : (this.$nuxt.$route.hash ? this.$nuxt.$route.hash.substr(1) : 'backlog'),
+      };
+    }
+    return {
+      curTask,
+      errors: {
+        name: false,
+        category: false,
       },
     }
   },
@@ -72,8 +84,17 @@ export default {
       categoriesData: state => state.categories.categoriesData,
       prioritiesData: state => state.projects.prioritiesData,
     }),
+    cannotSubmit() {
+      return !this.curTask.name || this.curTask.name.trim === '' || !this.curTask.category || this.curTask.category.trim === ''
+    },
   },
   methods: {
+    onNameBlur() {
+      this.errors.name = !this.curTask.name || this.curTask.name.trim() === '';
+    },
+    onCategoryBlur() {
+      this.errors.category = !this.curTask.category || this.curTask.category.trim() === '';
+    },
     onCancel () {
       this.onCancelClick();
     },
@@ -81,11 +102,15 @@ export default {
       const selectedProject = this.prioritiesData[e.target.value];
       if (selectedProject) {
         this.curTask.category = selectedProject.category;
+        this.errors.category = false
       } else {
         this.curTask.category = '';
       }
     },
     addTask () {
+      if (!this.cannotSubmit) {
+        return;
+      }
       this.$store.dispatch('tasks/addTask', this.curTask);
       this.curTask = {
         name: '',
@@ -96,6 +121,9 @@ export default {
       };
     },
     updateTask () {
+      if (!this.cannotSubmit) {
+        return;
+      }
       this.$store.dispatch('tasks/updateTask', { ...this.curTask, onCallComplete: this.onCancelClick });
       const prevStatus = this.selectedTask.active ? 'active' : (this.selectedTask.queued ? 'queued' : 'backlog');
       if (prevStatus !== this.curTask.status) {
@@ -131,6 +159,14 @@ export default {
 
 label {
   margin-top: 15px;
+}
+
+label.error {
+  color: var(--danger-color);
+}
+
+input.error {
+  border: 1px solid var(--danger-color);
 }
 
 .status {

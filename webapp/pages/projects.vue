@@ -3,19 +3,19 @@
     <h2>Projects</h2>
     <div class="project-form-container">
       <form class="project-form" @submit.prevent="submitProject">
-        <label class="label" for="input">Give your project a title</label>
-        <input type="text" v-model="curProject.name" />
+        <label :class="`label ${errors.name ? 'error' : ''}`" for="input">Give your project a title</label>
+        <input :class="errors.name ? 'error' : ''" type="text" v-model="curProject.name" @blur="onNameBlur" />
         <label class="label" for="input">Describe the project</label>
         <input type="text" v-model="curProject.description" />
-        <label class="label" for="select">Select Category for the project</label>
-        <select v-model="curProject.category" name="category" id="category">
+        <label :class="`label ${errors.category ? 'error' : ''}`" for="select">Select Category for the project</label>
+        <select :class="errors.category ? 'error' : ''" v-model="curProject.category" name="category" id="category" @blur="onCategoryBlur">
           <option value>Please select a category</option>
           <option v-for="option in categoriesData" :key="option.id" :value="option.id">
             {{ option.name }}
           </option>
         </select>
         <div class="add-project">
-          <button :disabled="!curProject.name || !curProject.category" type="submit">{{ formState }}</button>
+          <button :disabled="cannotSubmit" type="submit">{{ formState }}</button>
           <button class="secondary outlined" type="reset" @click="() => { formState = 'Add' }">Clear</button>
         </div>
       </form>
@@ -78,20 +78,33 @@ export default {
         description: '',
         category: ''
       },
-      formState: 'Add'
+      formState: 'Add',
+      errors: {
+        name: false,
+        category: false,
+      },
     }
   },
   computed: {
     ...mapState({
       categoriesData: state => state.categories.categoriesData,
       projectData: state => state.projects.projectData,
-    })
+    }),
+    cannotSubmit() {
+      return !this.curProject.name || this.curProject.name.trim === '' || !this.curProject.category || this.curProject.category.trim === ''
+    }
   },
   mounted () {
     this.$store.dispatch('categories/getCategoryData');
     this.$store.dispatch('projects/getProjectData')
   },
   methods: {
+    onNameBlur() {
+      this.errors.name = !this.curProject.name || this.curProject.name.trim() === '';
+    },
+    onCategoryBlur() {
+      this.errors.category = !this.curProject.category || this.curProject.category.trim() === '';
+    },
     submitProject () {
       this.$store.dispatch('projects/submitProject', this.curProject);
       this.formState = 'Add'
@@ -143,6 +156,14 @@ h2 {
   flex-direction: column;
 }
 
+label.error {
+  color: var(--danger-color);
+}
+
+input.error {
+  border: 1px solid var(--danger-color);
+}
+
 p {
   padding-top: 10px;
 }
@@ -165,10 +186,12 @@ p {
   min-width: 140px;
   margin-left: 10px;
 }
+
 .project-name {
   font-size: 1.2em;
   margin-bottom: 5px;
 }
+
 .project-category {
   font-size: 0.8em;
   font-weight: bold;
