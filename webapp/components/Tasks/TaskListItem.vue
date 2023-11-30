@@ -7,18 +7,21 @@
       @click="toggleTaskForm"
       :class="`task ${delayedShowTaskForm ? 'task-form-open' : ''} ${showTaskForm ? 'task-form-border-zero' : ''}`"
     >
-      <div class="task-info">
-        <h4 :class="task.complete ? 'complete-task' : ''">
-          <a class="task-name task-name-link" v-if="task.link" :href="task.link" target="_blank" @click="(e) => e.stopPropagation()">
-            {{ task.name }}
-          </a>
-          <span class="task-name" v-else>{{ task.name }}</span>
-        </h4>
-        <div v-if="prioritiesData[task.project]" class="subTitle">
-          {{ prioritiesData[task.project].name }}
-        </div>
-        <div v-else-if="categoriesData[task.category]" class="subTitle">
-          {{ categoriesData[task.category].name }}
+      <div class="task-with-handle">
+        <div class="handle-container"><v-icon name="grip-vertical" width="10" height="16" class="handle" /></div>
+        <div class="task-info">
+          <h4 :class="task.complete ? 'complete-task' : ''">
+            <a class="task-name task-name-link" v-if="task.link" :href="task.link" target="_blank" @click="(e) => e.stopPropagation()">
+              {{ task.name }}
+            </a>
+            <span class="task-name" v-else>{{ task.name }}</span>
+          </h4>
+          <div v-if="prioritiesData[task.project]" class="subTitle">
+            {{ prioritiesData[task.project].name }}
+          </div>
+          <div v-else-if="categoriesData[task.category]" class="subTitle">
+            {{ categoriesData[task.category].name }}
+          </div>
         </div>
       </div>
       <div class="buttons">
@@ -42,7 +45,7 @@
         <button
           aria-label="Expand task"
           title="Expand task"
-          class="secondary icon-only"
+          class="secondary icon-only open-task"
           @click="toggleTaskForm"
         >
           <v-icon name="chevron-down"/>
@@ -141,6 +144,15 @@ export default {
   box-shadow: var(--black-transparent) 2.95px 2.95px 3.6px, var(--dark-blue-transparent) 0px 0px 2px 3px;
 }
 
+.task-with-handle {
+  display: flex;
+  align-items: center;
+}
+
+.handle-container {
+  margin-right: 20px;
+}
+
 .task-form-open {
   margin-bottom: 2px;
   box-shadow: var(--black-transparent) 0.95px 0.95px 1.6px, var(--dark-blue-transparenter) 0px 0px 1px 2px;
@@ -154,7 +166,16 @@ export default {
 .task-info {
   min-width: 200px;
   overflow: auto;
-  margin-right: 20px;
+}
+
+@media (max-width: 400px) {
+  .task-info {
+    min-width: 180px;
+  }
+
+  button.open-task {
+    display: none;
+  }
 }
 
 .task-info * {

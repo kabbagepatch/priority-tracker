@@ -183,6 +183,14 @@ a {
     font-size: 0.8em;
     margin: 0 2px;
   }
+
+  .nav-title {
+    font-size: 15px;
+  }
+
+  .header {
+    padding: 18px 6px;
+  }
 }
 
 </style>
