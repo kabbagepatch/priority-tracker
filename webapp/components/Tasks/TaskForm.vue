@@ -108,7 +108,7 @@ export default {
       }
     },
     addTask () {
-      if (!this.cannotSubmit) {
+      if (this.cannotSubmit) {
         return;
       }
       this.$store.dispatch('tasks/addTask', this.curTask);
