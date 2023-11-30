@@ -108,9 +108,7 @@ export default {
       }
     },
     addTask () {
-      if (this.cannotSubmit) {
-        return;
-      }
+      if (this.cannotSubmit) return;
       this.$store.dispatch('tasks/addTask', this.curTask);
       this.curTask = {
         name: '',
@@ -121,9 +119,7 @@ export default {
       };
     },
     updateTask () {
-      if (!this.cannotSubmit) {
-        return;
-      }
+      if (this.cannotSubmit) return;
       this.$store.dispatch('tasks/updateTask', { ...this.curTask, onCallComplete: this.onCancelClick });
       const prevStatus = this.selectedTask.active ? 'active' : (this.selectedTask.queued ? 'queued' : 'backlog');
       if (prevStatus !== this.curTask.status) {

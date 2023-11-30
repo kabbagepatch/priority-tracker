@@ -106,6 +106,7 @@ export default {
       this.errors.category = !this.curProject.category || this.curProject.category.trim() === '';
     },
     submitProject () {
+      if (this.cannotSubmit) return;
       this.$store.dispatch('projects/submitProject', this.curProject);
       this.formState = 'Add'
       this.curProject = {
@@ -124,6 +125,7 @@ export default {
       }
     },
     updateProject (id) {
+      if (this.cannotSubmit) return;
       this.curProject = { ...this.projectData[id] };
       this.formState = 'Update';
       window.scrollTo(0, 0);
