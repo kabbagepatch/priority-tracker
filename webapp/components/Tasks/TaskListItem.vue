@@ -5,6 +5,7 @@
       tabindex="0"
       aria-label="toggle task form"
       @click="toggleTaskForm"
+      @contextmenu="openRightClickMenu"
       :class="`task ${delayedShowTaskForm ? 'task-form-open' : ''} ${showTaskForm ? 'task-form-border-zero' : ''}`"
     >
       <div class="task-with-handle">
@@ -52,6 +53,7 @@
         </button>
       </div>
     </div>
+    <task-right-click-menu :task="task" :viewMenu="viewRightClickMenu" :top="rightClickMenuTop" :left="rightClickMenuLeft" :closeMenu="closeRightClickMenu" />
     <collapsible
       :collapse="!showTaskForm"
       :ref="'task-form-' + task.id"
@@ -67,6 +69,7 @@
 <script>
 import { mapState } from 'vuex';
 import TaskForm from './TaskForm.vue';
+import TaskRightClickMenu from './TaskRightClickMenu.vue';
 import Collapsible from '../Collapsible.vue';
 
 export default {
@@ -86,12 +89,15 @@ export default {
     },
   },
 
-  components: { TaskForm, Collapsible },
+  components: { TaskForm, TaskRightClickMenu, Collapsible },
 
   data() {
     return {
       showTaskForm: false,
       delayedShowTaskForm: false,
+      viewRightClickMenu: false,
+      rightClickMenuTop: '0px',
+      rightClickMenuLeft: '0px',
     };
   },
 
@@ -115,9 +121,30 @@ export default {
       }
       this.toggleTaskFormOuter()
     },
-    completeTask (e) {
+    completeTask(e) {
       e.stopPropagation();
       this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'complete', value: true });
+    },
+    openRightClickMenu(e) {
+      this.viewRightClickMenu = true;
+      this.$nextTick(() => {
+        this.$el.querySelector("#right-click-menu").focus();
+        this.setRightClickMenu(e.y, e.x);
+      });
+      e.preventDefault();
+    },
+    closeRightClickMenu() {
+      this.viewRightClickMenu = false;
+    },
+    setRightClickMenu(top, left) {
+      let largestHeight = window.innerHeight - this.$el.querySelector("#right-click-menu").offsetHeight - 25;
+      let largestWidth = window.innerWidth - this.$el.querySelector("#right-click-menu").offsetWidth - 25;
+
+      if (top > largestHeight) top = largestHeight;
+      if (left > largestWidth) left = largestWidth;
+
+      this.rightClickMenuTop = top + 'px';
+      this.rightClickMenuLeft = left + 'px';
     },
   },
 }

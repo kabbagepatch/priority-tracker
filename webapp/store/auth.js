@@ -2,7 +2,7 @@ export const ACTION_KEY_LOGIN = 'login'
 export const ACTION_KEY_SIGNUP = 'signup'
 
 export const state = () => ({
-  user: null || { username: 'Kavish', email: 'kavishrmunjal@gmail.com' },
+  user: null // || { username: 'Kavish', email: 'kavishrmunjal@gmail.com' },
 })
 
 export const getters = {

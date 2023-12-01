@@ -14,7 +14,12 @@
         <draggable v-model="tasksDisplayed" v-bind="dragOptions" @start="drag=true" @end="onDragEnd" handle=".handle">
           <transition-group type="transition" :name="!drag ? 'flip-list' : null">
             <div v-for="task in tasksDisplayed" :key="task.id">
-              <task-list-item :task="task" :moveButtonText="moveButtonText" :onMoveButtonClick="() => onMoveButtonClick(task.id)" :toggleTaskFormOuter="() => toggleTaskForm()" />
+              <task-list-item
+                :task="task"
+                :moveButtonText="moveButtonText"
+                :onMoveButtonClick="() => onMoveButtonClick(task.id)"
+                :toggleTaskFormOuter="() => toggleTaskForm()"
+              />
             </div>
           </transition-group>
         </draggable>
