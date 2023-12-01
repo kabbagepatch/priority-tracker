@@ -38,7 +38,7 @@ module.exports.create = async (event) => {
       link: data.link,
       complete: false,
       active: data.active,
-      queued: data.queue,
+      queued: data.queued,
       category: data.category,
       project: data.project || 'none',
       order: timestamp,
