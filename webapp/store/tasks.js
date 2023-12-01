@@ -128,9 +128,9 @@ export const mutations = {
 }
 
 export const actions = {
-  async getIndependentTasks ({ commit }) {
+  async getIndependentTasks ({ commit, rootState }) {
     try {
-      await this.$axios.get(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/projects/none/tasks`,
+      await this.$axios.get(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/projects/none/tasks?user=${rootState.auth.user.username}`,
         {
           headers: { 'Content-Type': 'application/json' }
         }).then((res) => {
@@ -140,9 +140,10 @@ export const actions = {
       console.error(error)
     }
   },
-  async getActiveTasks ({ commit }) {
+  async getActiveTasks ({ commit, rootState }) {
+    console.log({ username: rootState.auth.user.username });
     try {
-      await this.$axios.get(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/tasks/active`,
+      await this.$axios.get(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/tasks/active?user=${rootState.auth.user.username}`,
         {
           headers: { 'Content-Type': 'application/json' }
         }).then((res) => {
@@ -152,9 +153,9 @@ export const actions = {
       console.error(error)
     }
   },
-  async getQueuedTasks ({ commit }) {
+  async getQueuedTasks ({ commit, rootState }) {
     try {
-      await this.$axios.get(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/tasks/queued`,
+      await this.$axios.get(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/tasks/queued?user=${rootState.auth.user.username}`,
         {
           headers: { 'Content-Type': 'application/json' }
         }).then((res) => {
@@ -164,9 +165,9 @@ export const actions = {
       console.error(error)
     }
   },
-  async getProjectTasks ({ commit }, projectId) {
+  async getProjectTasks ({ commit, rootState }, projectId) {
     try {
-      await this.$axios.get(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/projects/${projectId}/tasks`,
+      await this.$axios.get(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/projects/${projectId}/tasks?user=${rootState.auth.user.username}`,
         {
           headers: { 'Content-Type': 'application/json' }
         }).then((res) => {
@@ -176,9 +177,9 @@ export const actions = {
       console.error(error)
     }
   },
-  async addTask ({ commit }, data) {
+  async addTask ({ commit, rootState }, data) {
     try {
-      await this.$axios.post('https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/tasks',
+      await this.$axios.post(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/tasks?user=${rootState.auth.user.username}`,
         { ...data, [data.status]: true },
         {
           headers: { 'Content-Type': 'application/json' }
@@ -189,9 +190,9 @@ export const actions = {
       console.error(error)
     }
   },
-  async removeTask ({ commit }, data) {
+  async removeTask ({ commit, rootState }, data) {
     try {
-      await this.$axios.delete(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/tasks/${data.id}`,
+      await this.$axios.delete(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/tasks/${data.id}?user=${rootState.auth.user.username}`,
         { headers: { 'Content-Type': 'application/json' } }
       )
       commit('removeTask', data)
@@ -199,9 +200,9 @@ export const actions = {
       console.error(error)
     }
   },
-  async updateTask ({ commit }, data) {
+  async updateTask ({ commit, rootState }, data) {
     try {
-      const res = await this.$axios.put(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/tasks/${data.id}`,
+      const res = await this.$axios.put(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/tasks/${data.id}?user=${rootState.auth.user.username}`,
         data,
         { headers: { 'Content-Type': 'application/json' } }
       )
@@ -211,9 +212,9 @@ export const actions = {
       console.error(error)
     }
   },
-  async updateTaskStatus ({ commit }, { id, status, value, onCallComplete }) {
+  async updateTaskStatus ({ commit, rootState }, { id, status, value, onCallComplete }) {
     try {
-      const res = await this.$axios.put(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/tasks/${id}/${status}`,
+      const res = await this.$axios.put(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/tasks/${id}/${status}?user=${rootState.auth.user.username}`,
         { status: value },
         { headers: { 'Content-Type': 'application/json' } }
       )

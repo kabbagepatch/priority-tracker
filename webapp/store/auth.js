@@ -2,7 +2,7 @@ export const ACTION_KEY_LOGIN = 'login'
 export const ACTION_KEY_SIGNUP = 'signup'
 
 export const state = () => ({
-  user: null // || { username: 'Kavish', email: 'kavishrmunjal@gmail.com' },
+  user: {}, // || { username: 'Kavish', email: 'kavishrmunjal@gmail.com' },
 })
 
 export const getters = {
@@ -19,22 +19,22 @@ export const mutations = {
 export const actions = {
   init({ commit }) {
     this.$netlifyIdentity.on('init', (user) => {
-      console.log({user});
       if (user) {
         commit('setUser', {
-          username: user.user_metadata.full_name,
-          email: user.email
+          username: user.user_metadata.full_name.toLowerCase(),
+          email: user.email,
+          id: user.id,
         })
       }
     })
     this.$netlifyIdentity.on('close', () => {
       const user = this.$netlifyIdentity.currentUser();
-      console.log({user});
 
       if (user) {
         commit('setUser', {
-          username: user.user_metadata.full_name,
-          email: user.email
+          username: user.user_metadata.full_name.toLowerCase(),
+          email: user.email,
+          id: user.id,
         })
       }
     })
@@ -55,11 +55,11 @@ export const actions = {
   open({ commit }, action) {
     this.$netlifyIdentity.open(action)
     this.$netlifyIdentity.on(action, (user) => {
-      console.log({user});
 
       commit('setUser', {
-        username: user.user_metadata.full_name,
-        email: user.email
+        username: user.user_metadata.full_name.toLowerCase(),
+        email: user.email,
+        id: user.id,
       })
       this.$netlifyIdentity.close()
     })
