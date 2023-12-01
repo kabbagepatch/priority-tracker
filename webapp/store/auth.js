@@ -19,21 +19,21 @@ export const mutations = {
 export const actions = {
   init({ commit }) {
     this.$netlifyIdentity.on('init', (user) => {
-      // if (user) {
-      //   commit('setUser', {
-      //     username: user.user_metadata.full_name,
-      //     email: user.email
-      //   })
-      // }
+      if (user) {
+        commit('setUser', {
+          username: user.user_metadata.full_name,
+          email: user.email
+        })
+      }
     })
     this.$netlifyIdentity.on('close', () => {
       const user = this.$netlifyIdentity.currentUser()
-      // if (user) {
-      //   commit('setUser', {
-      //     username: user.user_metadata.full_name,
-      //     email: user.email
-      //   })
-      // }
+      if (user) {
+        commit('setUser', {
+          username: user.user_metadata.full_name,
+          email: user.email
+        })
+      }
     })
     this.$netlifyIdentity.init({
       APIUrl: process.env.NETLIFY_IDENTITY_ENDPOINT_URL,
