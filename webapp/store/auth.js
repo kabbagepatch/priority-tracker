@@ -52,10 +52,10 @@ export const actions = {
   open({ commit }, action) {
     this.$netlifyIdentity.open(action)
     this.$netlifyIdentity.on(action, (user) => {
-      // commit('setUser', {
-      //   username: user.user_metadata.full_name,
-      //   email: user.email
-      // })
+      commit('setUser', {
+        username: user.user_metadata.full_name,
+        email: user.email
+      })
       this.$netlifyIdentity.close()
     })
   }
