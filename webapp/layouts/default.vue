@@ -9,6 +9,7 @@
         </nuxt-link>
       </div>
       <div class="nav-links" v-if="user">
+        <span class="username">Hi {{user.username}}!</span>
         <a href="#" @click.prevent="onLogout"><button>Logout</button></a>
       </div>
       <div class="nav-links" v-else>
@@ -157,6 +158,10 @@ a {
 
 .nav-links a:hover {
   color: var(--primary-color);
+}
+
+.username {
+  text-transform: capitalize;
 }
 
 @media (min-width: 800px) {

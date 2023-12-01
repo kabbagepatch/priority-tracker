@@ -6,6 +6,7 @@
       <form @submit.prevent="addCategory">
         <label>Add a new Category</label>
         <input v-model="newCategory.name" />
+        <button type="submit" :disabled="!newCategory.name || newCategory.name.trim().length === 0">Add</button>
       </form>
       <ul>
         <li v-for="categoryId in Object.keys(categoriesData)" :key="categoryId">

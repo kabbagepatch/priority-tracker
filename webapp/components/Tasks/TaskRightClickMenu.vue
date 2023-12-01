@@ -63,7 +63,7 @@ export default {
     deleteTask (e) {
       e.stopPropagation()
       if (confirm('Are you sure you want to delete this task?')) {
-        this.$store.dispatch('tasks/removeTask', this.curTask);
+        this.$store.dispatch('tasks/removeTask', this.task);
       }
     }
   }
