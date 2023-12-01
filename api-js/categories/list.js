@@ -17,7 +17,7 @@ module.exports.list = async (event) => {
     TableName: `${process.env.DYNAMODB_TABLE}-Categories`,
     KeyConditionExpression: "userId = :userId",
     ExpressionAttributeValues: {
-      ":userId": 'kavish',
+      ":userId": event.queryStringParameters.user,
     },
   };
 

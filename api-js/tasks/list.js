@@ -36,7 +36,7 @@ module.exports.list = async (event) => {
     TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
     KeyConditionExpression: "userId = :userId",
     ExpressionAttributeValues: {
-      ":userId": 'kavish',
+      ":userId": event.queryStringParameters.user,
     },
   };
 
@@ -49,7 +49,7 @@ module.exports.listActive = async (event) => {
     KeyConditionExpression: "userId = :userId",
     FilterExpression: "active = :active",
     ExpressionAttributeValues: {
-      ":userId": 'kavish',
+      ":userId": event.queryStringParameters.user,
       ":active": true,
     },
   };
@@ -63,7 +63,7 @@ module.exports.listQueued = async (event) => {
     KeyConditionExpression: "userId = :userId",
     FilterExpression: "queued = :queued",
     ExpressionAttributeValues: {
-      ":userId": 'kavish',
+      ":userId": event.queryStringParameters.user,
       ":queued": true,
     },
   };

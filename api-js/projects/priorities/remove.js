@@ -16,7 +16,7 @@ module.exports.remove = async (event) => {
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-PrioritisedProjects`,
     Key: {
-      userId: 'kavish',
+      userId: event.queryStringParameters.user,
       projectId: event.pathParameters.projectId,
     },
   };

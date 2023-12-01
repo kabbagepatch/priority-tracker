@@ -18,7 +18,7 @@ module.exports.list = async (event) => {
     KeyConditionExpression: "userId = :userId",
     FilterExpression: "complete <> :complete",
     ExpressionAttributeValues: {
-      ":userId": 'kavish',
+      ":userId": event.queryStringParameters.user,
       ":complete": true,
     },
   };

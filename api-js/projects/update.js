@@ -30,7 +30,7 @@ module.exports.update = async (event) => {
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Projects`,
     Key: {
-      userId: 'kavish',
+      userId: event.queryStringParameters.user,
       id: event.pathParameters.projectId,
     },
     UpdateExpression: "SET ",

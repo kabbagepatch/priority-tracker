@@ -17,7 +17,7 @@ module.exports.list = async (event) => {
     TableName: `${process.env.DYNAMODB_TABLE}-PrioritisedProjects`,
     KeyConditionExpression: "userId = :userId",
     ExpressionAttributeValues: {
-      ":userId": 'kavish',
+      ":userId": event.queryStringParameters.user,
     },
   };
 
@@ -35,7 +35,7 @@ module.exports.list = async (event) => {
     const projectParams = {
       RequestItems: {
         [`${process.env.DYNAMODB_TABLE}-Projects`]: {
-          Keys: projectIds.map(id => ({ userId: 'kavish', id })),
+          Keys: projectIds.map(id => ({ userId: event.queryStringParameters.user, id })),
         },
       },
     };

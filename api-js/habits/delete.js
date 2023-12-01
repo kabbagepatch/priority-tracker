@@ -16,7 +16,7 @@ module.exports.delete = async (event) => {
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Habits`,
     Key: {
-      userId: 'kavish',
+      userId: event.queryStringParameters.user,
       habitId: event.pathParameters.habitId,
     },
   };

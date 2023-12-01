@@ -38,7 +38,7 @@ module.exports.active = async (event) => {
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
     Key: {
-      userId: 'kavish',
+      userId: event.queryStringParameters.user,
       id: event.pathParameters.id,
     },
     UpdateExpression: "SET #active = :active,",
@@ -73,7 +73,7 @@ module.exports.queued = async (event) => {
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
     Key: {
-      userId: 'kavish',
+      userId: event.queryStringParameters.user,
       id: event.pathParameters.id,
     },
     UpdateExpression: "SET #queued = :queued,",
@@ -108,7 +108,7 @@ module.exports.complete = async (event) => {
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
     Key: {
-      userId: 'kavish',
+      userId: event.queryStringParameters.user,
       id: event.pathParameters.id,
     },
     UpdateExpression: "SET #complete = :complete,",
