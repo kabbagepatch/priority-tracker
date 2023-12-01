@@ -42,6 +42,7 @@ export default {
   methods: {
     addCategory () {
       this.$store.dispatch('categories/addCategory', { name: this.newCategory.name })
+      this.newCategory = {  name: '' }
     },
     removeCategory (categoryId) {
       this.$store.dispatch('categories/removeCategory', categoryId)
