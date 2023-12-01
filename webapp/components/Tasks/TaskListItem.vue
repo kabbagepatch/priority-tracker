@@ -8,6 +8,14 @@
       @contextmenu="openRightClickMenu"
       :class="`task ${delayedShowTaskForm ? 'task-form-open' : ''} ${showTaskForm ? 'task-form-border-zero' : ''}`"
     >
+      <task-right-click-menu
+        :task="task"
+        :viewMenu="viewRightClickMenu"
+        :top="rightClickMenuTop"
+        :left="rightClickMenuLeft"
+        :closeMenu="closeRightClickMenu"
+        :updateTask="toggleTaskForm"
+      />
       <div class="task-with-handle">
         <div class="handle-container"><v-icon name="grip-vertical" width="10" height="16" class="handle" /></div>
         <div class="task-info">
@@ -53,7 +61,6 @@
         </button>
       </div>
     </div>
-    <task-right-click-menu :task="task" :viewMenu="viewRightClickMenu" :top="rightClickMenuTop" :left="rightClickMenuLeft" :closeMenu="closeRightClickMenu" />
     <collapsible
       :collapse="!showTaskForm"
       :ref="'task-form-' + task.id"
@@ -110,7 +117,7 @@ export default {
 
   methods: {
     toggleTaskForm(e) {
-      e.stopPropagation();
+      if (e) e.stopPropagation();
       this.showTaskForm = !this.showTaskForm;
       if (this.delayedShowTaskForm) {
         setTimeout(() => {
@@ -126,21 +133,28 @@ export default {
       this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'complete', value: true });
     },
     openRightClickMenu(e) {
-      this.viewRightClickMenu = true;
-      this.$nextTick(() => {
-        this.$el.querySelector("#right-click-menu").focus();
-        this.setRightClickMenu(e.y, e.x);
-      });
+      setTimeout(() => {
+        this.viewRightClickMenu = true;
+        this.$nextTick(() => {
+          const scrollY = window.scrollY;
+          this.$el.querySelector("#right-click-menu").focus();
+          window.scroll(0, scrollY);
+          this.setRightClickMenu(e.y, e.x, scrollY);
+        });
+      }, 100);
       e.preventDefault();
     },
     closeRightClickMenu() {
-      this.viewRightClickMenu = false;
+      setTimeout(() => {
+        this.viewRightClickMenu = false;
+      }, 100);
     },
-    setRightClickMenu(top, left) {
-      let largestHeight = window.innerHeight - this.$el.querySelector("#right-click-menu").offsetHeight - 25;
-      let largestWidth = window.innerWidth - this.$el.querySelector("#right-click-menu").offsetWidth - 25;
+    setRightClickMenu(top, left, scrollY) {
+      const menuEl = this.$el.querySelector("#right-click-menu");
+      let largestHeight = window.innerHeight + scrollY - menuEl.offsetHeight - 25;
+      let largestWidth = window.innerWidth - menuEl.offsetWidth - 25;
 
-      if (top > largestHeight) top = largestHeight;
+      if (top + scrollY > largestHeight) top = largestHeight; else top += scrollY;
       if (left > largestWidth) left = largestWidth;
 
       this.rightClickMenuTop = top + 'px';
