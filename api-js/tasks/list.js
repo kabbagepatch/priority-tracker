@@ -12,14 +12,14 @@ const getHeaders = (contentType) => (contentType ? {
   'Access-Control-Allow-Credentials': true,
 });
 
-const queryTasks = async (params) => {
+const queryTasks = async (params, userId=null) => {
   try {
     const result = await dynamoDb.query(params).promise();
 
     return {
       statusCode: 200,
       headers: getHeaders(),
-      body: JSON.stringify(result.Items.sort((a, b) => (b.order || b.createdAt) - (a.order || a.createdAt)).filter(t => !t.complete)),
+      body: JSON.stringify(result.Items.sort((a, b) => (b.order || b.createdAt) - (a.order || a.createdAt)).filter(t => !t.complete && (!userId || t.userId === userId))),
     }
   } catch (error) {
     console.error(error);
@@ -93,9 +93,9 @@ module.exports.listProject = async (event) => {
       '#project': 'project'
     },
     ExpressionAttributeValues: {
-      ":project": event.pathParameters.projectId,
+        ":project": event.pathParameters.projectId,
     },
   };
 
-  return await queryTasks(params);
+  return await queryTasks(params, event.queryStringParameters.user);
 }
