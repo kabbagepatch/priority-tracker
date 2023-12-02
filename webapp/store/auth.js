@@ -18,15 +18,17 @@ export const mutations = {
 export const actions = {
   init({ commit, dispatch }) {
     this.$netlifyIdentity.on('init', (user) => {
+      setTimeout(() => {
       if (user) {
-        commit('setUser', {
-          username: user.user_metadata.full_name.toLowerCase(),
-          email: user.email,
-          id: user.id,
-        })
-      } else {
-        dispatch('open', 'login');
-      }
+          commit('setUser', {
+            username: user.user_metadata.full_name.toLowerCase(),
+            email: user.email,
+            id: user.id,
+          })
+        } else {
+          dispatch('open', 'login');
+        }
+      }, 100);
     })
     this.$netlifyIdentity.on('close', () => {
       const user = this.$netlifyIdentity.currentUser();
