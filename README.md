@@ -13,7 +13,8 @@ Existing solutions? ***Booooring***. How am I supposed to learn Vue and Nuxt and
 
 You simply start by adding categories for your various projects and tasks. They can be as general as "Development" or as specific as "Web Development" :)
 
-![Categories Page](
+![Categories Page](images/Categories.png?raw=true)
+
 Then you add projects using those categories. Add as many as you like. They will be prioritized next
 
 ![Projects Page](images/Projects.png?raw=true)
