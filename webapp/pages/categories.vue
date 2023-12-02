@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <div class="home-header">
-      <Logo />
       <div>
         <h1 class="title">
           priority-tracker
