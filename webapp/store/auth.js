@@ -17,11 +17,8 @@ export const mutations = {
 
 export const actions = {
   init({ commit, dispatch }) {
-    console.log('init');
-
     this.$netlifyIdentity.on('init', (user) => {
       setTimeout(() => {
-      console.log('init setUser');
       if (user) {
           commit('setUser', {
             username: user.user_metadata.full_name.toLowerCase(),
@@ -35,7 +32,6 @@ export const actions = {
     })
     this.$netlifyIdentity.on('close', () => {
       const user = this.$netlifyIdentity.currentUser();
-      console.log('close setUser');
 
       if (user) {
         commit('setUser', {
@@ -53,7 +49,6 @@ export const actions = {
     dispatch('open', 'signup')
   },
   login({ dispatch }) {
-    console.log('login');
     dispatch('open', 'login')
   },
   logout({ commit }) {
@@ -61,11 +56,8 @@ export const actions = {
     commit('setUser', null)
   },
   open({ commit }, action) {
-    console.log('open');
-
     this.$netlifyIdentity.open(action)
     this.$netlifyIdentity.on(action, (user) => {
-      console.log('open setUser');
       commit('setUser', {
         username: user.user_metadata.full_name.toLowerCase(),
         email: user.email,

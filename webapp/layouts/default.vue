@@ -8,7 +8,6 @@
           <h3 class="nav-title" :aria-hidden="!showSidebar" v-if="!showSidebar">priority-tracker</h3>
         </nuxt-link>
       </div>
-      {{ {user} }}
       <div class="nav-links" v-if="user">
         <span class="username">Hi {{user.username}}!</span>
         <a href="#" @click.prevent="onLogout"><button>Logout</button></a>
