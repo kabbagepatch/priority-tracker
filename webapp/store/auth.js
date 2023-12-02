@@ -28,7 +28,7 @@ export const actions = {
         } else {
           dispatch('open', 'login');
         }
-      }, 100);
+      }, 300);
     })
     this.$netlifyIdentity.on('close', () => {
       const user = this.$netlifyIdentity.currentUser();
