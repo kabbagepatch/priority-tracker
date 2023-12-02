@@ -17,9 +17,9 @@
         <a href="#" @click.prevent="signup"><button>Sign Up</button></a>
       </div>
     </div>
-    <div v-if="user" class="container">
+    <div class="container">
       <sidebar :showSidebar="showSidebar" />
-      <div class="content"><Nuxt /></div>
+      <div v-if="user" class="content"><Nuxt /></div>
     </div>
   </div>
 </template>
