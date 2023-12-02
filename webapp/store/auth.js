@@ -2,7 +2,7 @@ export const ACTION_KEY_LOGIN = 'login'
 export const ACTION_KEY_SIGNUP = 'signup'
 
 export const state = () => ({
-  user: {}, // || { username: 'Kavish', email: 'kavishrmunjal@gmail.com' },
+  user: null, // || { username: 'Kavish', email: 'kavishrmunjal@gmail.com' },
 })
 
 export const getters = {
@@ -12,12 +12,11 @@ export const getters = {
 export const mutations = {
   setUser(state, user) {
     state.user = user;
-    state.loadingUser = false;
   },
 }
 
 export const actions = {
-  init({ commit }) {
+  init({ commit, dispatch }) {
     this.$netlifyIdentity.on('init', (user) => {
       if (user) {
         commit('setUser', {
@@ -25,6 +24,8 @@ export const actions = {
           email: user.email,
           id: user.id,
         })
+      } else {
+        dispatch('open', 'login');
       }
     })
     this.$netlifyIdentity.on('close', () => {
