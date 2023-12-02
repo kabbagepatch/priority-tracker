@@ -6,12 +6,12 @@
     @blur="closeMenu" 
     :style="{ top: top, left: left }"
   >
-    <li role="button" tabindex="0" @click="updateTask">Modify Task</li>
-    <li role="button" tabindex="0" @click="moveTaskToComplete" v-if="!task.complete">Mark as Complete</li>
-    <li role="button" tabindex="0" @click="moveTaskToActive" v-if="!task.active">Move to Active</li>
-    <li role="button" tabindex="0" @click="moveTaskToQueued" v-if="!task.queued">Move to Up Next</li>
-    <li role="button" tabindex="0" @click="moveTaskToBacklog" v-if="task.active || task.queued">Move to Backlog</li>
-    <li role="button" tabindex="0" @click="deleteTask">Delete Task</li>
+    <li role="button" tabindex="0" @click.stop="updateTask">Modify Task</li>
+    <li role="button" tabindex="0" @click.stop="moveTaskToComplete" v-if="!task.complete">Mark as Complete</li>
+    <li role="button" tabindex="0" @click.stop="moveTaskToActive" v-if="!task.active">Move to Active</li>
+    <li role="button" tabindex="0" @click.stop="moveTaskToQueued" v-if="!task.queued">Move to Up Next</li>
+    <li role="button" tabindex="0" @click.stop="moveTaskToBacklog" v-if="task.active || task.queued">Move to Backlog</li>
+    <li role="button" tabindex="0" @click.stop="deleteTask">Delete Task</li>
   </ul>
 </template>
 
@@ -45,23 +45,18 @@ export default {
   },
   methods: {
     moveTaskToActive (e) {
-      e.stopPropagation()
       this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'active', value: true });
     },
     moveTaskToQueued (e) {
-      e.stopPropagation()
       this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'queued', value: true });
     },
     moveTaskToBacklog (e) {
-      e.stopPropagation()
       this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: this.task.active ? 'active' : 'queued', value: false });
     },
     moveTaskToComplete (e) {
-      e.stopPropagation()
       this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'complete', value: true });
     },
     deleteTask (e) {
-      e.stopPropagation()
       if (confirm('Are you sure you want to delete this task?')) {
         this.$store.dispatch('tasks/removeTask', this.task);
       }

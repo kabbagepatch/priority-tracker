@@ -46,8 +46,4 @@ export default {
 </script>
 
 <style scoped>
-main {
-  /* background: var(--secondary-color); */
-}
-
 </style>
