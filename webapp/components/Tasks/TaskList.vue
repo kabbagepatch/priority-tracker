@@ -9,7 +9,6 @@
           ({{ tasks.length }}/{{ maxTasks }})
         </span>
       </h2>
-      <div v-if="!tasks || tasks.length === 0">Loading...</div>
       <div class="task-list">
         <draggable v-model="tasksDisplayed" v-bind="dragOptions" @start="drag=true" @end="onDragEnd" handle=".handle">
           <transition-group type="transition" :name="!drag ? 'flip-list' : null">

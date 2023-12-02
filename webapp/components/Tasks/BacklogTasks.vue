@@ -19,10 +19,7 @@
           />
         </div>
       </collapsible>
-      <div class="complete-notice" v-if="selectedProjects[projectId] && !backlogTasks[projectId]">
-        <p>Loading...</p>
-      </div>
-      <div class="complete-notice" v-if="selectedProjects[projectId] && backlogTasks[projectId] && backlogTasks[projectId].length === 0">
+      <div class="complete-notice" v-if="noMoreTasks(projectId)">
         <p>This Project has no more tasks. Would you like to mark it as complete?</p>
         <button
           class="secondary icon-only complete"
@@ -59,6 +56,8 @@ export default {
       categoriesData: state => state.categories.categoriesData,
       prioritiesData: state => state.projects.prioritiesData,
       projectTasksData: state => state.tasks.projectTasksData,
+      activeTasks: state => state.tasks.activeTasks,
+      queuedTasks: state => state.tasks.queuedTasks,
     }),
     ...mapGetters('tasks', ['backlogTasks']),
     independentTasks() {
@@ -85,6 +84,11 @@ export default {
     moveTaskToQueued (id) {
       this.$store.dispatch('tasks/updateTaskStatus', { id, status: 'queued', value: true });
     },
+    noMoreTasks(projectId) {
+      const activeTasksInProject = this.activeTasks.filter(task => task.project === projectId).length > 0;
+      const queuedTasksInProject = this.queuedTasks.filter(task => task.project === projectId).length > 0;
+      return this.selectedProjects[projectId] && this.backlogTasks[projectId] && this.backlogTasks[projectId].length === 0 && !activeTasksInProject && !queuedTasksInProject
+    }
   },
 }
 </script>

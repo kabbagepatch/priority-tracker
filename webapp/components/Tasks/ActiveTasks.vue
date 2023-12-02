@@ -5,7 +5,7 @@
       :tasks="activeTasks"
       :maxTasks="2"
     />
-    <add-task-button v-if="showAddButton && activeTasks && activeTasks.length > 0" />
+    <add-task-button v-if="showAddButton" />
   </div>
 </template>
 

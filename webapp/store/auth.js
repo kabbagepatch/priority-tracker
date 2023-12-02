@@ -19,7 +19,7 @@ export const actions = {
   init({ commit, dispatch }) {
     this.$netlifyIdentity.on('init', (user) => {
       setTimeout(() => {
-      if (user) {
+        if (user) {
           commit('setUser', {
             username: user.user_metadata.full_name.toLowerCase(),
             email: user.email,
