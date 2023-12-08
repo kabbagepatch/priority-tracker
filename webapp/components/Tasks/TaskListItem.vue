@@ -147,7 +147,7 @@ export default {
     closeRightClickMenu() {
       setTimeout(() => {
         this.viewRightClickMenu = false;
-      }, 100);
+      }, 300);
     },
     setRightClickMenu(top, left, scrollY) {
       const menuEl = this.$el.querySelector("#right-click-menu");
