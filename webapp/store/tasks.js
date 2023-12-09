@@ -107,7 +107,7 @@ export const mutations = {
       const queuedTaskIndex = queuedTasks.findIndex(t => t.id === updatedTask.id)
       if (updatedTask.queued) {
         if (queuedTaskIndex === -1) {
-          state.queuedTasks = activeTaskIndex === -1 ? queuedTasks.concat([updatedTask]) : [updatedTask].concat(queuedTasks);
+          state.queuedTasks = [updatedTask].concat(queuedTasks);
         } else {
           queuedTasks.splice(queuedTaskIndex, 1, updatedTask)
           state.queuedTasks = queuedTasks;
