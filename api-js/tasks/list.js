@@ -12,14 +12,16 @@ const getHeaders = (contentType) => (contentType ? {
   'Access-Control-Allow-Credentials': true,
 });
 
-const queryTasks = async (params, userId=null) => {
+const queryTasks = async (params, getComplete=false, userId=null) => {
   try {
     const result = await dynamoDb.query(params).promise();
+
+    const tasks = result.Items.filter(t => (getComplete || !t.complete) && (!userId || t.userId === userId)).sort((a, b) => (b.order || b.createdAt) - (a.order || a.createdAt));
 
     return {
       statusCode: 200,
       headers: getHeaders(),
-      body: JSON.stringify(result.Items.sort((a, b) => (b.order || b.createdAt) - (a.order || a.createdAt)).filter(t => !t.complete && (!userId || t.userId === userId))),
+      body: JSON.stringify(tasks),
     }
   } catch (error) {
     console.error(error);
@@ -40,7 +42,7 @@ module.exports.list = async (event) => {
     },
   };
 
-  return await queryTasks(params);
+  return await queryTasks(params, event.queryStringParameters.all == 'true');
 }
 
 module.exports.listActive = async (event) => {
@@ -54,7 +56,7 @@ module.exports.listActive = async (event) => {
     },
   };
 
-  return await queryTasks(params);
+  return await queryTasks(params, event.queryStringParameters.all == 'true');
 }
 
 module.exports.listQueued = async (event) => {
@@ -68,7 +70,7 @@ module.exports.listQueued = async (event) => {
     },
   };
 
-  return await queryTasks(params);
+  return await queryTasks(params, event.queryStringParameters.all == 'true');
 }
 
 module.exports.listCategory = async (event) => {
@@ -81,7 +83,7 @@ module.exports.listCategory = async (event) => {
     },
   };
 
-  return await queryTasks(params);
+  return await queryTasks(params, event.queryStringParameters.all == 'true');
 }
 
 module.exports.listProject = async (event) => {
@@ -97,5 +99,5 @@ module.exports.listProject = async (event) => {
     },
   };
 
-  return await queryTasks(params, event.queryStringParameters.user);
+  return await queryTasks(params, event.queryStringParameters.all == 'true', event.queryStringParameters.user);
 }

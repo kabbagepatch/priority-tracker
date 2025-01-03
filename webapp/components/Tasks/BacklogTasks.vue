@@ -1,7 +1,13 @@
 <template>
   <div v-if="prioritiesData && Object.keys(prioritiesData).length > 0">
-    <h2>Backlog</h2>
-    <div v-for="projectId in Object.keys(backlogProjects).sort((a, b) => backlogProjects[a].createdAt - backlogProjects[b].createdAt)" :key="projectId">
+    <h2>
+      Backlog
+      <div class="show-completed">
+        Show Completed
+        <input type="checkbox" v-model="getCompleted" @change="changeCompleted" />
+      </div>
+    </h2>
+    <div v-for="projectId in Object.keys(backlogProjects).sort((a, b) => backlogProjects[b].createdAt - backlogProjects[a].createdAt)" :key="projectId">
       <div class="project-section" @click="selectProject(projectId)">
         <h3 class="project-name">
           {{ backlogProjects[projectId].name }}
@@ -10,7 +16,11 @@
           {{ categoriesData[backlogProjects[projectId].category].name }}
         </div>
       </div>
+      <div v-if="selectedProjects[projectId] && (backlogTasks[projectId] === undefined || backlogTasks[projectId].length === 0)">Loading...</div>
       <collapsible :collapse="!selectedProjects[projectId] || backlogTasks[projectId] === undefined || backlogTasks[projectId].length === 0">
+        <div class="project-description">
+          {{ backlogProjects[projectId].description }}
+        </div>
         <div class="task-list">
           <task-list
             :tasks="backlogTasks[projectId]"
@@ -48,6 +58,7 @@ export default {
   data() {
     return {
       selectedProjects: {},
+      getCompleted: false,
     }
   },
 
@@ -74,8 +85,15 @@ export default {
         this.selectedProjects = { ...this.selectedProjects, [id]: false }
       } else {
         this.selectedProjects = { ...this.selectedProjects, [id]: true }
-        this.$store.dispatch('tasks/getProjectTasks', id)
+        this.$store.dispatch('tasks/getProjectTasks', { id, getCompleted: this.getCompleted })
       }
+    },
+    changeCompleted () {
+      Object.keys(this.selectedProjects).forEach(id => {
+        if (this.selectedProjects[id]) {
+          this.$store.dispatch('tasks/getProjectTasks', { id, getCompleted: this.getCompleted });
+        }
+      });
     },
     completeProject (id) {
       this.$store.dispatch('projects/submitProject', { id, complete: true });
@@ -97,6 +115,24 @@ export default {
 h2 {
   border-radius: 20px;
   font-weight: 900 !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.show-completed {
+  width: 100%;
+  text-align: right;
+  font-weight: 600 !important;
+  text-transform: capitalize;
+  color: var(--text-color);
+  font-size: 16px;
+}
+
+.show-completed input {
+  width: 16px;
+  height: 16px;
+  margin: 0 3px;
 }
 
 .project-section {
@@ -116,6 +152,13 @@ h2 {
   transition: color 0.25s ease-in-out;
   color: var(--primary-color);
   font-weight: bold !important;
+}
+
+.project-description {
+  color: var(--text-color);
+  font-weight: bold !important;
+  margin-top: 10px;
+  margin-left: 20px;
 }
 
 .project-section:hover {

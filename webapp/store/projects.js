@@ -65,10 +65,12 @@ export const mutations = {
   },
 }
 
+const baseUrl = 'https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev';
+
 export const actions = {
   async getProjectData ({ commit, rootState }) {
     try {
-      await this.$axios.get(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/projects?user=${rootState.auth.user.username}`,
+      await this.$axios.get(`${baseUrl}/projects?user=${rootState.auth.user.username}`,
         {
           headers: { 'Content-Type': 'application/json' }
         }).then((res) => {
@@ -82,12 +84,12 @@ export const actions = {
     try {
       let response
       if (data.id) {
-        response = await this.$axios.put(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/projects/${data.id}?user=${rootState.auth.user.username}`,
+        response = await this.$axios.put(`${baseUrl}/projects/${data.id}?user=${rootState.auth.user.username}`,
           data,
           { headers: { 'Content-Type': 'application/json' } }
         )
       } else {
-        response = await this.$axios.post(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/projects?user=${rootState.auth.user.username}`,
+        response = await this.$axios.post(`${baseUrl}/projects?user=${rootState.auth.user.username}`,
           data,
           { headers: { 'Content-Type': 'application/json' } }
         )
@@ -99,7 +101,7 @@ export const actions = {
   },
   async removeProject ({ commit, rootState }, projectId) {
     try {
-      await this.$axios.delete(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/projects/${projectId}?user=${rootState.auth.user.username}`,
+      await this.$axios.delete(`${baseUrl}/projects/${projectId}?user=${rootState.auth.user.username}`,
         { headers: { 'Content-Type': 'application/json' } }
       )
       commit('removeProject', projectId)
@@ -109,7 +111,7 @@ export const actions = {
   },
   async getPrioritiesData ({ commit, rootState }) {
     try {
-      const res = await this.$axios.get(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/priorities?user=${rootState.auth.user.username}`);
+      const res = await this.$axios.get(`${baseUrl}/priorities?user=${rootState.auth.user.username}`);
       commit('setPrioritiesData', res.data)
     } catch (error) {
       console.log(error)
@@ -117,7 +119,7 @@ export const actions = {
   },
   async prioritiseProject ({ commit, rootState }, projectId) {
     try {
-      await this.$axios.post(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/projects/${projectId}/prioritise?user=${rootState.auth.user.username}`);
+      await this.$axios.post(`${baseUrl}/projects/${projectId}/prioritise?user=${rootState.auth.user.username}`);
       commit('updatePrioritiesData', projectId)
     } catch (error) {
       console.log(error)
@@ -125,7 +127,7 @@ export const actions = {
   },
   async deprioritiseProject ({ commit, rootState }, projectId) {
     try {
-      await this.$axios.post(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/projects/${projectId}/deprioritise?user=${rootState.auth.user.username}`);
+      await this.$axios.post(`${baseUrl}/projects/${projectId}/deprioritise?user=${rootState.auth.user.username}`);
       commit('removePriority', projectId)
     } catch (error) {
       console.log(error)

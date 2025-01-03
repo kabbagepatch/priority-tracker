@@ -125,7 +125,6 @@ export default {
       }
     },
     updateProject (id) {
-      if (this.cannotSubmit) return;
       this.curProject = { ...this.projectData[id] };
       this.formState = 'Update';
       window.scrollTo(0, 0);

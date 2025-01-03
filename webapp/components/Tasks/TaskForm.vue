@@ -40,6 +40,10 @@
       </div>
     </fieldset>
     <div class="add-task">
+      <div class="checkbox">
+        Add Another
+        <input type="checkbox" v-model="addAnother" />
+      </div>
       <button type="submit" :disabled="cannotSubmit">{{ selectedTask ? 'Update' : 'Add' }}</button>
       <button class="outlined secondary" type="button" @click="onCancel">Cancel</button>
       <button v-if="selectedTask" class="delete" type="button" @click="removeTask">Delete</button>
@@ -77,6 +81,7 @@ export default {
         name: false,
         category: false,
       },
+      addAnother: false,
     }
   },
   computed: {
@@ -110,13 +115,23 @@ export default {
     addTask () {
       if (this.cannotSubmit) return;
       this.$store.dispatch('tasks/addTask', this.curTask);
-      this.curTask = {
-        name: '',
-        link: '',
-        category: '',
-        project: '',
-        status: 'backlog',
-      };
+      if (this.addAnother) {
+        this.curTask = {
+          name: '',
+          link: '',
+          category: this.curTask.category,
+          project: this.curTask.project,
+          status: this.curTask.status,
+        };
+      } else {
+        this.curTask = {
+          name: '',
+          link: '',
+          category: '',
+          project: '',
+          status: 'backlog',
+        };
+      }
     },
     updateTask () {
       if (this.cannotSubmit) return;

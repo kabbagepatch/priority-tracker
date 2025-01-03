@@ -25,10 +25,12 @@ export const mutations = {
   },
 }
 
+const baseUrl = 'https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev';
+
 export const actions = {
   async getCategoryData ({ commit, rootState }) {
     try {
-      await this.$axios.get(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/categories?user=${rootState.auth.user.username}`,
+      await this.$axios.get(`${baseUrl}/categories?user=${rootState.auth.user.username}`,
         {
           headers: { 'Content-Type': 'application/json' }
         }).then((res) => {
@@ -40,7 +42,7 @@ export const actions = {
   },
   async addCategory ({ commit, rootState }, data) {
     try {
-      await this.$axios.post(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/categories?user=${rootState.auth.user.username}`,
+      await this.$axios.post(`${baseUrl}/categories?user=${rootState.auth.user.username}`,
         data,
         {
           headers: { 'Content-Type': 'application/json' }
@@ -53,7 +55,7 @@ export const actions = {
   },
   async removeCategory ({ commit, rootState }, categoryId) {
     try {
-      await this.$axios.delete(`https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev/categories/${categoryId}?user=${rootState.auth.user.username}`,
+      await this.$axios.delete(`${baseUrl}/categories/${categoryId}?user=${rootState.auth.user.username}`,
         { headers: { 'Content-Type': 'application/json' } }
       )
       commit('removeCategory', categoryId)

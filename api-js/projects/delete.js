@@ -13,7 +13,19 @@ const getHeaders = (contentType) => (contentType ? {
 });
 
 module.exports.delete = async (event) => {
-  const params = {
+  const getTasksParams = {
+    TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
+    IndexName: 'ProjectTaskIndex',
+    KeyConditionExpression: "#project = :project",
+    ExpressionAttributeNames: {
+      '#project': 'project'
+    },
+    ExpressionAttributeValues: {
+        ":project": event.pathParameters.projectId,
+    },
+  };
+
+  const deleteProjectParams = {
     TableName: `${process.env.DYNAMODB_TABLE}-Projects`,
     Key: {
       userId: event.queryStringParameters.user,
@@ -22,7 +34,20 @@ module.exports.delete = async (event) => {
   };
 
   try {
-    await dynamoDb.delete(params).promise();
+    const result = await dynamoDb.query(getTasksParams).promise();
+    const tasks = result.Items;
+    for (const task of tasks) {
+      const deleteTaskParams = {
+        TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
+        Key: {
+          userId: event.queryStringParameters.user,
+          id: task.id,
+        },
+      };
+      await dynamoDb.delete(deleteTaskParams).promise();
+    }
+
+    await dynamoDb.delete(deleteProjectParams).promise();
 
     return {
       statusCode: 204,

@@ -3,7 +3,7 @@
     <task-list
       title="Active"
       :tasks="activeTasks"
-      :maxTasks="2"
+      :maxTasks="5"
     />
     <add-task-button v-if="showAddButton" />
   </div>
