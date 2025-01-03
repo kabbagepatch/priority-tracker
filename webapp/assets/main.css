@@ -196,3 +196,12 @@ input, select, textarea {
 select {
   font-size: 1em;
 }
+
+a {
+  color: var(--primary-color);
+  text-decoration: underline solid var(--primary-color-transparent) !important;
+}
+
+a:hover {
+  color: var(--primary-color-light);
+}

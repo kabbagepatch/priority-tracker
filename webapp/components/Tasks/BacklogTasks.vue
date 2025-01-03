@@ -18,9 +18,7 @@
       </div>
       <div v-if="selectedProjects[projectId] && (backlogTasks[projectId] === undefined || backlogTasks[projectId].length === 0)">Loading...</div>
       <collapsible :collapse="!selectedProjects[projectId] || backlogTasks[projectId] === undefined || backlogTasks[projectId].length === 0">
-        <div class="project-description">
-          {{ backlogProjects[projectId].description }}
-        </div>
+        <div v-if="backlogProjects[projectId].description" class="project-description" v-html="linkifyHtml(backlogProjects[projectId].description)" />
         <div class="task-list">
           <task-list
             :tasks="backlogTasks[projectId]"
@@ -46,6 +44,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import linkifyHtml from 'linkify-html';
 import TaskList from './TaskList.vue';
 import Collapsible from '../Collapsible.vue';
 
@@ -80,6 +79,9 @@ export default {
   },
 
   methods: {
+    linkifyHtml(a) {
+      return linkifyHtml(a, { target: '_blank' });
+    },
     selectProject (id) {
       if (this.selectedProjects[id]) {
         this.selectedProjects = { ...this.selectedProjects, [id]: false }

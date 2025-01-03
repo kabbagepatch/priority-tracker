@@ -56,9 +56,7 @@
             </button>
           </div>
         </div>
-        <div v-if="projectData[projectId].description" class="project-description">
-          {{ projectData[projectId].description }}
-        </div>
+        <div v-if="projectData[projectId].description" class="project-description" v-html="linkifyHtml(projectData[projectId].description)" />
       </card>
     </div>
   </div>
@@ -66,6 +64,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import linkifyHtml from 'linkify-html';
 import Card from '../components/Card.vue'
 
 export default {
@@ -99,6 +98,9 @@ export default {
     this.$store.dispatch('projects/getProjectData')
   },
   methods: {
+    linkifyHtml(a) {
+      return linkifyHtml(a, { target: '_blank' });
+    },
     onNameBlur() {
       this.errors.name = !this.curProject.name || this.curProject.name.trim() === '';
     },
