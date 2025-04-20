@@ -19,7 +19,7 @@
       <div class="task-with-handle">
         <div class="handle-container"><v-icon name="grip-vertical" width="10" height="16" class="handle" /></div>
         <div class="task-info">
-          <h4 :class="task.complete ? 'complete-task' : ''">
+          <h4 :class="taskComplete ? 'complete-task' : ''">
             <a class="task-name task-name-link" v-if="task.link" :href="task.link" target="_blank" @click="(e) => e.stopPropagation()">
               {{ task.name }}
             </a>
@@ -100,6 +100,7 @@ export default {
 
   data() {
     return {
+      taskComplete : this.task.complete,
       showTaskForm: false,
       delayedShowTaskForm: false,
       viewRightClickMenu: false,
@@ -131,6 +132,7 @@ export default {
     completeTask(e) {
       e.stopPropagation();
       this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'complete', value: true });
+      this.taskComplete = true;
     },
     openRightClickMenu(e) {
       setTimeout(() => {

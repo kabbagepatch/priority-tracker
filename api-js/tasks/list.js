@@ -34,6 +34,13 @@ const queryTasks = async (params, getComplete=false, userId=null) => {
 }
 
 module.exports.list = async (event) => {
+  if (!event.queryStringParameters?.user) {
+    return {
+      statusCode: 401,
+      headers: getHeaders(),
+    }
+  }
+
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
     KeyConditionExpression: "userId = :userId",
@@ -46,6 +53,13 @@ module.exports.list = async (event) => {
 }
 
 module.exports.listActive = async (event) => {
+  if (!event.queryStringParameters?.user) {
+    return {
+      statusCode: 401,
+      headers: getHeaders(),
+    }
+  }
+
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
     KeyConditionExpression: "userId = :userId",
@@ -60,6 +74,13 @@ module.exports.listActive = async (event) => {
 }
 
 module.exports.listQueued = async (event) => {
+  if (!event.queryStringParameters?.user) {
+    return {
+      statusCode: 401,
+      headers: getHeaders(),
+    }
+  }
+
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
     KeyConditionExpression: "userId = :userId",
@@ -74,6 +95,13 @@ module.exports.listQueued = async (event) => {
 }
 
 module.exports.listCategory = async (event) => {
+  if (!event.queryStringParameters?.user) {
+    return {
+      statusCode: 401,
+      headers: getHeaders(),
+    }
+  }
+
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
     IndexName: 'CategoryTaskIndex',
@@ -83,10 +111,17 @@ module.exports.listCategory = async (event) => {
     },
   };
 
-  return await queryTasks(params, event.queryStringParameters.all == 'true');
+  return await queryTasks(params, event.queryStringParameters.all == 'true', event.queryStringParameters.user);
 }
 
 module.exports.listProject = async (event) => {
+  if (!event.queryStringParameters?.user) {
+    return {
+      statusCode: 401,
+      headers: getHeaders(),
+    }
+  }
+
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
     IndexName: 'ProjectTaskIndex',
@@ -95,7 +130,7 @@ module.exports.listProject = async (event) => {
       '#project': 'project'
     },
     ExpressionAttributeValues: {
-        ":project": event.pathParameters.projectId,
+      ":project": event.pathParameters.projectId,
     },
   };
 
