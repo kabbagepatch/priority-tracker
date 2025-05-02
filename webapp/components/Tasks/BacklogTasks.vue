@@ -87,13 +87,13 @@ export default {
         this.selectedProjects = { ...this.selectedProjects, [id]: false }
       } else {
         this.selectedProjects = { ...this.selectedProjects, [id]: true }
-        this.$store.dispatch('tasks/getProjectTasks', { id, getCompleted: this.getCompleted })
+        this.$store.dispatch('tasks/getProjectTasks', { id, statuses: this.getCompleted ? ['complete', 'backlog'] : ['backlog'] });
       }
     },
     changeCompleted () {
       Object.keys(this.selectedProjects).forEach(id => {
         if (this.selectedProjects[id]) {
-          this.$store.dispatch('tasks/getProjectTasks', { id, getCompleted: this.getCompleted });
+          this.$store.dispatch('tasks/getProjectTasks', { id, statuses: this.getCompleted ? ['complete', 'backlog'] : ['backlog'] });
         }
       });
     },
@@ -102,13 +102,13 @@ export default {
       this.selectedProjects = { ...this.selectedProjects, [id]: false }
     },
     moveTaskToQueued (id) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id, status: 'queued', value: true });
+      this.$store.dispatch('tasks/updateTaskStatus', { id, status: 'queued' });
     },
     noMoreTasks(projectId) {
       const activeTasksInProject = this.activeTasks.filter(task => task.project === projectId).length > 0;
       const queuedTasksInProject = this.queuedTasks.filter(task => task.project === projectId).length > 0;
       return this.selectedProjects[projectId] && this.backlogTasks[projectId] && this.backlogTasks[projectId].length === 0 && !activeTasksInProject && !queuedTasksInProject
-    }
+    },
   },
 }
 </script>

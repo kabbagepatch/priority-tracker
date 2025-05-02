@@ -14,6 +14,13 @@ const getHeaders = (contentType) => (contentType ? {
 });
 
 module.exports.create = async (event) => {
+  if (!event.queryStringParameters?.user) {
+    return {
+      statusCode: 401,
+      headers: getHeaders(),
+    }
+  }
+
   const timestamp  = new Date().getTime();
   const data = JSON.parse(event.body);
 
@@ -36,9 +43,7 @@ module.exports.create = async (event) => {
       name: data.name,
       nameLC: data.name.toLowerCase(),
       link: data.link,
-      complete: false,
-      active: data.active,
-      queued: data.queued,
+      taskstatus: data.status || 'backlog',
       category: data.category,
       project: data.project || 'none',
       order: timestamp,
@@ -53,7 +58,7 @@ module.exports.create = async (event) => {
     return {
       statusCode: 201,
       headers: getHeaders(),
-      body: JSON.stringify(params.Item),
+      body: JSON.stringify({ status: data.status, ...params.Item }),
     }
   } catch (error) {
     console.error(error);

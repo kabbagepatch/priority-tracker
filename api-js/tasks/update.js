@@ -12,7 +12,33 @@ const getHeaders = (contentType) => (contentType ? {
   'Access-Control-Allow-Credentials': true,
 });
 
+const updateTask = async (params) => {
+  try {
+    const result = await dynamoDb.update(params).promise();
+
+    return {
+      statusCode: 200,
+      headers: getHeaders(),
+      body: JSON.stringify({ ...result.Attributes, status: result.Attributes.taskstatus }),
+    }
+  } catch (error) {
+    console.error(error);
+    return {
+      statusCode: error.statusCode || 500,
+      headers: getHeaders('text/plain'),
+      body: 'Task update failed. ' + error.message,
+    };
+  };
+}
+
 module.exports.update = async (event) => {
+  if (!event.queryStringParameters?.user) {
+    return {
+      statusCode: 401,
+      headers: getHeaders(),
+    }
+  }
+
   const timestamp  = new Date().getTime();
   const data = JSON.parse(event.body);
 
@@ -22,7 +48,7 @@ module.exports.update = async (event) => {
       return {
         statusCode: 400,
         headers: getHeaders('text/plain'),
-        body: 'Couldn\'t update the task. Invalid fields passed in',
+        body: 'Task update failed. Invalid fields passed in',
       };
     }
   })
@@ -39,12 +65,12 @@ module.exports.update = async (event) => {
     ReturnValues: 'ALL_NEW',
   };
 
-  const allowedFields = ['name', 'link', 'category', 'project', 'order'];
+  const allowedFields = ['name', 'link', 'category', 'project', 'order', 'status'];
   allowedFields.forEach((field) => {
     if (data[field] !== undefined && data[field] !== null) {
-      params.UpdateExpression += `#${field} = :${field},`;
-      params.ExpressionAttributeNames[`#${field}`] = field;
-      params.ExpressionAttributeValues[`:${field}`] = data[field];
+      params.UpdateExpression += `#${field === 'status' ? 'taskstatus' : field} = :${field === 'status' ? 'taskstatus' : field},`;
+      params.ExpressionAttributeNames[`#${field === 'status' ? 'taskstatus' : field}`] = field === 'status' ? 'taskstatus' : field;
+      params.ExpressionAttributeValues[`:${field === 'status' ? 'taskstatus' : field}`] = data[field];
 
       if (field === 'name') {
         params.UpdateExpression += `#nameLC = :nameLC,`;
@@ -57,20 +83,51 @@ module.exports.update = async (event) => {
   params.ExpressionAttributeNames['#updatedAt'] = 'updatedAt';
   params.ExpressionAttributeValues[':updatedAt'] = timestamp;
 
-  try {
-    const result = await dynamoDb.update(params).promise();
+  return await updateTask(params);
+}
 
+module.exports.updateStatus = async (event) => {
+  if (!event.queryStringParameters?.user) {
     return {
-      statusCode: 200,
+      statusCode: 401,
       headers: getHeaders(),
-      body: JSON.stringify(result.Attributes),
     }
-  } catch (error) {
-    console.error(error);
+  }
+
+  const timestamp  = new Date().getTime();
+  const data = JSON.parse(event.body);
+  if (!data || !data.status || !data.status.trim()) {
     return {
-      statusCode: error.statusCode || 500,
+      statusCode: 400,
       headers: getHeaders('text/plain'),
-      body: 'Couldn\'t update the Task. ' + error.message,
+      body: 'Task update failed. No status passed in',
     };
+  }
+  if (['complete', 'active', 'queued', 'backlog'].indexOf(data.status) === -1) {
+    return {
+      statusCode: 400,
+      headers: getHeaders('text/plain'),
+      body: 'Task update failed. Invalid status passed in',
+    };
+  }
+
+  const params = {
+    TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
+    Key: {
+      userId: event.queryStringParameters.user,
+      id: event.pathParameters.id,
+    },
+    UpdateExpression: "SET #taskstatus = :taskstatus, #updatedAt = :updatedAt",
+    ExpressionAttributeNames: {
+      '#taskstatus': 'taskstatus',
+      '#updatedAt': 'updatedAt',
+    },
+    ExpressionAttributeValues: {
+      ':taskstatus': data.status,
+      ':updatedAt': timestamp,
+    },
+    ReturnValues: 'ALL_NEW',
   };
+
+  return await updateTask(params);
 }

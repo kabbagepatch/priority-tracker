@@ -7,10 +7,10 @@
     :style="{ top: top, left: left }"
   >
     <li role="button" tabindex="0" @click.stop="updateTask">Modify Task</li>
-    <li role="button" tabindex="0" @click.stop="moveTaskToComplete" v-if="!task.complete">Mark as Complete</li>
-    <li role="button" tabindex="0" @click.stop="moveTaskToActive" v-if="!task.active">Move to Active</li>
-    <li role="button" tabindex="0" @click.stop="moveTaskToQueued" v-if="!task.queued">Move to Up Next</li>
-    <li role="button" tabindex="0" @click.stop="moveTaskToBacklog" v-if="task.active || task.queued">Move to Backlog</li>
+    <li role="button" tabindex="0" @click.stop="moveTaskToComplete" v-if="task.status !== 'complete'">Mark as Complete</li>
+    <li role="button" tabindex="0" @click.stop="moveTaskToActive" v-if="task.status !== 'active'">Move to Active</li>
+    <li role="button" tabindex="0" @click.stop="moveTaskToQueued" v-if="task.status !== 'queued'">Move to Up Next</li>
+    <li role="button" tabindex="0" @click.stop="moveTaskToBacklog" v-if="task.status !== 'backlog'">Move to Backlog</li>
     <li role="button" tabindex="0" @click.stop="deleteTask">Delete Task</li>
   </ul>
 </template>
@@ -45,16 +45,16 @@ export default {
   },
   methods: {
     moveTaskToActive (e) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'active', value: true });
+      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'active' });
     },
     moveTaskToQueued (e) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'queued', value: true });
+      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'queued' });
     },
     moveTaskToBacklog (e) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: this.task.active ? 'active' : 'queued', value: false });
+      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'backlog' });
     },
     moveTaskToComplete (e) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'complete', value: true });
+      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'complete' });
     },
     deleteTask (e) {
       if (confirm('Are you sure you want to delete this task?')) {

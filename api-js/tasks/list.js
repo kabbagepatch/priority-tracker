@@ -12,11 +12,13 @@ const getHeaders = (contentType) => (contentType ? {
   'Access-Control-Allow-Credentials': true,
 });
 
-const queryTasks = async (params, getComplete=false, userId=null) => {
+const queryTasks = async (params) => {
   try {
     const result = await dynamoDb.query(params).promise();
 
-    const tasks = result.Items.filter(t => (getComplete || !t.complete) && (!userId || t.userId === userId)).sort((a, b) => (b.order || b.createdAt) - (a.order || a.createdAt));
+    const tasks = result.Items
+      .sort((a, b) => (b.order || b.createdAt) - (a.order || a.createdAt))
+      .map(t => ({ ...t, status: t.taskstatus }));
 
     return {
       statusCode: 200,
@@ -41,7 +43,7 @@ module.exports.list = async (event) => {
     }
   }
 
-  const params = {
+  let params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
     KeyConditionExpression: "userId = :userId",
     ExpressionAttributeValues: {
@@ -49,69 +51,24 @@ module.exports.list = async (event) => {
     },
   };
 
-  return await queryTasks(params, event.queryStringParameters.all == 'true');
-}
-
-module.exports.listActive = async (event) => {
-  if (!event.queryStringParameters?.user) {
-    return {
-      statusCode: 401,
-      headers: getHeaders(),
-    }
+  const status = event.queryStringParameters?.status;
+  if (status) {
+    params = {
+      TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
+      IndexName: 'TaskStatusIndex',
+      KeyConditionExpression: "#userId = :userId and #status = :status",
+      ExpressionAttributeNames: {
+        '#userId': 'userId',
+        '#status': 'taskstatus'
+      },
+      ExpressionAttributeValues: {
+        ":status": status,
+        ":userId": event.queryStringParameters.user,
+      },
+    };
   }
 
-  const params = {
-    TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
-    KeyConditionExpression: "userId = :userId",
-    FilterExpression: "active = :active",
-    ExpressionAttributeValues: {
-      ":userId": event.queryStringParameters.user,
-      ":active": true,
-    },
-  };
-
-  return await queryTasks(params, event.queryStringParameters.all == 'true');
-}
-
-module.exports.listQueued = async (event) => {
-  if (!event.queryStringParameters?.user) {
-    return {
-      statusCode: 401,
-      headers: getHeaders(),
-    }
-  }
-
-  const params = {
-    TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
-    KeyConditionExpression: "userId = :userId",
-    FilterExpression: "queued = :queued",
-    ExpressionAttributeValues: {
-      ":userId": event.queryStringParameters.user,
-      ":queued": true,
-    },
-  };
-
-  return await queryTasks(params, event.queryStringParameters.all == 'true');
-}
-
-module.exports.listCategory = async (event) => {
-  if (!event.queryStringParameters?.user) {
-    return {
-      statusCode: 401,
-      headers: getHeaders(),
-    }
-  }
-
-  const params = {
-    TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
-    IndexName: 'CategoryTaskIndex',
-    KeyConditionExpression: "category = :category",
-    ExpressionAttributeValues: {
-      ":category": event.pathParameters.categoryId,
-    },
-  };
-
-  return await queryTasks(params, event.queryStringParameters.all == 'true', event.queryStringParameters.user);
+  return await queryTasks(params);
 }
 
 module.exports.listProject = async (event) => {
@@ -124,15 +81,17 @@ module.exports.listProject = async (event) => {
 
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
-    IndexName: 'ProjectTaskIndex',
-    KeyConditionExpression: "#project = :project",
+    IndexName: 'TaskProjectIndex',
+    KeyConditionExpression: "#userId = :userId and #project = :project",
     ExpressionAttributeNames: {
+      '#userId': 'userId',
       '#project': 'project'
     },
     ExpressionAttributeValues: {
+      ":userId": event.queryStringParameters.user,
       ":project": event.pathParameters.projectId,
     },
   };
 
-  return await queryTasks(params, event.queryStringParameters.all == 'true', event.queryStringParameters.user);
+  return await queryTasks(params);
 }

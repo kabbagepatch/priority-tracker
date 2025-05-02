@@ -2,11 +2,9 @@ service: priority-tracker-api-js
 app: priority-tracker
 org: kavisherlock
 
-frameworkVersion: '2'
-
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs18.x
   lambdaHashingVersion: 20201221
   useDotenv: true
   environment:
@@ -27,8 +25,6 @@ provider:
         - "Fn::GetAtt": [PrioritisedProjectsTable, Arn]
         - "Fn::GetAtt": [ProjectsTable, Arn]
         - "Fn::GetAtt": [TasksTable, Arn]
-        - "Fn::GetAtt": [HabitsTable, Arn]
-        - "Fn::GetAtt": [HabitMarksTable, Arn]
     - Effect: Allow
       Action:
         - dynamodb:Query
@@ -40,11 +36,9 @@ functions:
   - ${file(projects/priorities/functions.yml)}
   - ${file(projects/functions.yml)}
   - ${file(tasks/functions.yml)}
-  - ${file(habits/functions.yml)}
 
 resources:
   - ${file(categories/database.yml)}
   - ${file(projects/priorities/database.yml)}
   - ${file(projects/database.yml)}
   - ${file(tasks/database.yml)}
-  - ${file(habits/database.yml)}

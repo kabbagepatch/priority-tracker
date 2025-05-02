@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     moveTaskToActive (id) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id, status: 'active', value: true });
+      this.$store.dispatch('tasks/updateTaskStatus', { id, status: 'active' });
     },
   }
 }

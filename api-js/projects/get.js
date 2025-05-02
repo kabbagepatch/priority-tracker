@@ -13,6 +13,13 @@ const getHeaders = (contentType) => (contentType ? {
 });
 
 module.exports.get = async (event) => {
+  if (!event.queryStringParameters?.user) {
+    return {
+      statusCode: 401,
+      headers: getHeaders(),
+    }
+  }
+
   const params = {
     TableName: `${process.env.DYNAMODB_TABLE}-Projects`,
     Key: {

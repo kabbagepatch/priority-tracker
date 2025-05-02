@@ -14,7 +14,7 @@ Resources:
           AttributeName: project
           AttributeType: S
         -
-          AttributeName: category
+          AttributeName: taskstatus
           AttributeType: S
       KeySchema:
         -
@@ -27,19 +27,23 @@ Resources:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
       GlobalSecondaryIndexes:
-        - IndexName: CategoryTaskIndex
+        - IndexName: TaskStatusIndex
           KeySchema:
-            - AttributeName: category
+            - AttributeName: userId
               KeyType: HASH
+            - AttributeName: taskstatus
+              KeyType: RANGE
           Projection:
             ProjectionType: ALL
           ProvisionedThroughput:
             ReadCapacityUnits: 1
             WriteCapacityUnits: 1
-        - IndexName: ProjectTaskIndex
+        - IndexName: TaskProjectIndex
           KeySchema:
-            - AttributeName: project
+            - AttributeName: userId
               KeyType: HASH
+            - AttributeName: project
+              KeyType: RANGE
           Projection:
             ProjectionType: ALL
           ProvisionedThroughput:

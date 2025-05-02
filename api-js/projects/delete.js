@@ -13,6 +13,13 @@ const getHeaders = (contentType) => (contentType ? {
 });
 
 module.exports.delete = async (event) => {
+  if (!event.queryStringParameters?.user) {
+    return {
+      statusCode: 401,
+      headers: getHeaders(),
+    }
+  }
+
   const getTasksParams = {
     TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
     IndexName: 'ProjectTaskIndex',

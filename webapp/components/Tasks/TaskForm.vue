@@ -62,10 +62,7 @@ export default {
   data() {
     let curTask = {};
     if (this.selectedTask && this.selectedTask.name) {
-      curTask = {
-        ...this.selectedTask,
-        status: this.selectedTask.active ? 'active' : (this.selectedTask.queued ? 'queued' : 'backlog'),
-      };
+      curTask = this.selectedTask;
     } else {
       curTask = {
         name: '',
@@ -136,14 +133,6 @@ export default {
     updateTask () {
       if (this.cannotSubmit) return;
       this.$store.dispatch('tasks/updateTask', { ...this.curTask, onCallComplete: this.onCancelClick });
-      const prevStatus = this.selectedTask.active ? 'active' : (this.selectedTask.queued ? 'queued' : 'backlog');
-      if (prevStatus !== this.curTask.status) {
-        if (this.curTask.status === 'backlog') {
-          this.$store.dispatch('tasks/updateTaskStatus', { id: this.curTask.id, status: prevStatus, value: false, onCallComplete: this.onCancelClick });
-        } else {
-          this.$store.dispatch('tasks/updateTaskStatus', { id: this.curTask.id, status: this.curTask.status, value: true, onCallComplete: this.onCancelClick });
-        }
-      }
     },
     removeTask () {
       if (confirm('Are you sure you want to delete this task?'))

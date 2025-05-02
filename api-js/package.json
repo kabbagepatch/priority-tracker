@@ -4,7 +4,9 @@
   "author": "Kavish",
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.1692.0",
     "date-fns": "^2.28.0",
+    "serverless-middleware": "^3.4.0",
     "uuid": "^2.0.3"
   }
 }

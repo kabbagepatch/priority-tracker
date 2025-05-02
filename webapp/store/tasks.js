@@ -8,7 +8,7 @@ export const getters = {
   backlogTasks: state => {
     const backlogTasks = {};
     Object.keys(state.projectTasksData).forEach(projectId => {
-      backlogTasks[projectId] = state.projectTasksData[projectId].filter(task => !task.active && !task.queued);
+      backlogTasks[projectId] = state.projectTasksData[projectId].filter(task => task.status === 'backlog');
     });
 
     return backlogTasks;
@@ -31,12 +31,12 @@ export const mutations = {
       }
     }
 
-    if (state.activeTasks && data.task.active) {
+    if (state.activeTasks && data.task.status === 'active') {
       const activeTasks = state.activeTasks.concat([data.task]);
       state.activeTasks = activeTasks;
     }
 
-    if (state.queuedTasks && data.task.queued) {
+    if (state.queuedTasks && data.task.status === 'queued') {
       const queuedTasks = state.queuedTasks.concat([data.task]);
       state.queuedTasks = queuedTasks;
     }
@@ -88,7 +88,7 @@ export const mutations = {
     let activeTaskIndex = -1;
     if (activeTasks) {
       activeTaskIndex = activeTasks.findIndex(t => t.id === updatedTask.id)
-      if (updatedTask.active) {
+      if (updatedTask.status === 'active') {
         if (activeTaskIndex === -1) {
           state.activeTasks = activeTasks.concat([updatedTask]);
         } else {
@@ -96,7 +96,7 @@ export const mutations = {
           state.activeTasks = activeTasks;
         }
       }
-      if (!updatedTask.active && activeTaskIndex !== -1) {
+      if (updatedTask.status !== 'active' && activeTaskIndex !== -1) {
         activeTasks.splice(activeTaskIndex, 1);
         state.activeTasks = activeTasks
       }
@@ -105,7 +105,7 @@ export const mutations = {
     const queuedTasks = [].concat(state.queuedTasks);
     if (queuedTasks) {
       const queuedTaskIndex = queuedTasks.findIndex(t => t.id === updatedTask.id)
-      if (updatedTask.queued) {
+      if (updatedTask.status === 'queued') {
         if (queuedTaskIndex === -1) {
           state.queuedTasks = [updatedTask].concat(queuedTasks);
         } else {
@@ -113,7 +113,7 @@ export const mutations = {
           state.queuedTasks = queuedTasks;
         }
       }
-      if (!updatedTask.queued && queuedTaskIndex !== -1) {
+      if (updatedTask.status !== 'queued' && queuedTaskIndex !== -1) {
         queuedTasks.splice(queuedTaskIndex, 1);
         state.queuedTasks = queuedTasks
       }
@@ -136,70 +136,73 @@ export const actions = {
         {
           headers: { 'Content-Type': 'application/json' }
         }).then((res) => {
-        commit('setProjectTaskData', { projectId: 'none', tasks: res.data })
-      })
+        commit('setProjectTaskData', { projectId: 'none', tasks: res.data });
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   },
   async getActiveTasks ({ commit, rootState }) {
-    console.log({ username: rootState.auth.user.username });
     try {
-      await this.$axios.get(`${baseUrl}/tasks/active?user=${rootState.auth.user.username}`,
+      await this.$axios.get(`${baseUrl}/tasks?user=${rootState.auth.user.username}&status=active`,
         {
           headers: { 'Content-Type': 'application/json' }
         }).then((res) => {
-        commit('setActiveTasks', res.data)
-      })
+        commit('setActiveTasks', res.data);
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   },
   async getQueuedTasks ({ commit, rootState }) {
     try {
-      await this.$axios.get(`${baseUrl}/tasks/queued?user=${rootState.auth.user.username}`,
+      await this.$axios.get(`${baseUrl}/tasks?user=${rootState.auth.user.username}&status=queued`,
         {
           headers: { 'Content-Type': 'application/json' }
         }).then((res) => {
-        commit('setQueuedTasks', res.data)
-      })
+        commit('setQueuedTasks', res.data);
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   },
   async getProjectTasks ({ commit, rootState }, data) {
     try {
-      await this.$axios.get(`${baseUrl}/projects/${data.id}/tasks?user=${rootState.auth.user.username}&all=${data.getCompleted}`,
+      await this.$axios.get(`${baseUrl}/projects/${data.id}/tasks?user=${rootState.auth.user.username}`,
         {
           headers: { 'Content-Type': 'application/json' }
         }).then((res) => {
-        commit('setProjectTaskData', { projectId: data.id, tasks: res.data })
-      })
+        let tasks = res.data;
+        if (data.statuses) {
+          tasks = tasks.filter(t => data.statuses.includes(t.status));
+        }
+        commit('setProjectTaskData', { projectId: data.id, tasks });
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   },
   async addTask ({ commit, rootState }, data) {
     try {
       await this.$axios.post(`${baseUrl}/tasks?user=${rootState.auth.user.username}`,
-        { ...data, [data.status]: true },
+        data,
         {
           headers: { 'Content-Type': 'application/json' }
         }).then((res) => {
-        commit('addTaskToProject', { projectId: data.project, task: res.data })
-      })
+        commit('addTaskToProject', { projectId: data.project, task: res.data });
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   },
   async removeTask ({ commit, rootState }, data) {
     try {
       await this.$axios.delete(`${baseUrl}/tasks/${data.id}?user=${rootState.auth.user.username}`,
         { headers: { 'Content-Type': 'application/json' } }
-      )
-      commit('removeTask', data)
+      );
+      commit('removeTask', data);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   },
   async updateTask ({ commit, rootState }, data) {
@@ -207,23 +210,23 @@ export const actions = {
       const res = await this.$axios.put(`${baseUrl}/tasks/${data.id}?user=${rootState.auth.user.username}`,
         data,
         { headers: { 'Content-Type': 'application/json' } }
-      )
+      );
       commit('updateTask', res.data);
       if (data.onCallComplete) data.onCallComplete();
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   },
-  async updateTaskStatus ({ commit, rootState }, { id, status, value, onCallComplete }) {
+  async updateTaskStatus ({ commit, rootState }, { id, status, onCallComplete }) {
     try {
-      const res = await this.$axios.put(`${baseUrl}/tasks/${id}/${status}?user=${rootState.auth.user.username}`,
-        { status: value },
+      const res = await this.$axios.put(`${baseUrl}/tasks/${id}/status?user=${rootState.auth.user.username}`,
+        { status },
         { headers: { 'Content-Type': 'application/json' } }
-      )
-      commit('updateTask', res.data)
+      );
+      commit('updateTask', res.data);
       if (onCallComplete) onCallComplete();
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   },
 }

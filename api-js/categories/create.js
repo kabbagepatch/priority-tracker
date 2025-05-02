@@ -14,6 +14,13 @@ const getHeaders = (contentType) => (contentType ? {
 });
 
 module.exports.create = async (event) => {
+  if (!event.queryStringParameters?.user) {
+    return {
+      statusCode: 401,
+      headers: getHeaders(),
+    }
+  }
+
   const timestamp  = new Date().getTime();
   const data = JSON.parse(event.body);
 

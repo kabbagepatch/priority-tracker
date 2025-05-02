@@ -13,6 +13,13 @@ const getHeaders = (contentType) => (contentType ? {
 });
 
 module.exports.add = async (event) => {
+  if (!event.queryStringParameters?.user) {
+    return {
+      statusCode: 401,
+      headers: getHeaders(),
+    }
+  }
+
   const timestamp  = new Date().getTime();
 
   const getProjectParams = {
