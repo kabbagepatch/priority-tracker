@@ -51,7 +51,7 @@
                   <button
                     class="secondary icon-only"
                     aria-label="Update Project"
-                    @click="updateProject(project.id)"
+                    @click="onUpdateProject(project.id)"
                   >
                     <v-icon name="edit"/>
                   </button>
@@ -163,7 +163,7 @@ export default {
         category: ''
       }
     },
-    updateProject (id) {
+    onUpdateProject (id) {
       this.curProject = { ...this.projectData[id] };
       this.formState = 'Update';
       window.scrollTo(0, 0);

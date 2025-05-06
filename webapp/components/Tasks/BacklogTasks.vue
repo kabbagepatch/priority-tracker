@@ -16,7 +16,6 @@
           {{ categoriesData[backlogProjects[projectId].category].name }}
         </div>
       </div>
-      <div v-if="selectedProjects[projectId] && (backlogTasks[projectId] === undefined || backlogTasks[projectId].length === 0)">Loading...</div>
       <collapsible :collapse="!selectedProjects[projectId] || backlogTasks[projectId] === undefined || backlogTasks[projectId].length === 0">
         <div v-if="backlogProjects[projectId].description" class="project-description" v-html="linkifyHtml(backlogProjects[projectId].description)" />
         <div class="task-list">
