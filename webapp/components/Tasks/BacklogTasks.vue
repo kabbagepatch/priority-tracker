@@ -22,8 +22,6 @@
         <div class="task-list">
           <task-list
             :tasks="backlogTasks[projectId]"
-            moveButtonText="Move To Up Next"
-            :onMoveButtonClick="id => moveTaskToQueued(id)"
           />
         </div>
       </collapsible>
@@ -51,8 +49,8 @@ import Collapsible from '../Collapsible.vue';
 export default {
   components: {
     TaskList,
-    Collapsible
-},
+    Collapsible,
+  },
 
   data() {
     return {
@@ -66,8 +64,7 @@ export default {
       categoriesData: state => state.categories.categoriesData,
       prioritiesData: state => state.projects.prioritiesData,
       projectTasksData: state => state.tasks.projectTasksData,
-      activeTasks: state => state.tasks.activeTasks,
-      queuedTasks: state => state.tasks.queuedTasks,
+      workingTasksData: state => state.tasks.workingTasksData,
     }),
     ...mapGetters('tasks', ['backlogTasks']),
     independentTasks() {
@@ -101,13 +98,12 @@ export default {
       this.$store.dispatch('projects/submitProject', { id, complete: true });
       this.selectedProjects = { ...this.selectedProjects, [id]: false }
     },
-    moveTaskToQueued (id) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id, status: 'queued' });
-    },
     noMoreTasks(projectId) {
-      const activeTasksInProject = this.activeTasks.filter(task => task.project === projectId).length > 0;
-      const queuedTasksInProject = this.queuedTasks.filter(task => task.project === projectId).length > 0;
-      return this.selectedProjects[projectId] && this.backlogTasks[projectId] && this.backlogTasks[projectId].length === 0 && !activeTasksInProject && !queuedTasksInProject
+      let workingTasksInProject = 0;
+      Object.keys(this.workingTasksData).forEach(status => {
+        workingTasksInProject += this.workingTasksData[status].filter(task => task.project === projectId).length;
+      });
+      return this.selectedProjects[projectId] && this.backlogTasks[projectId] && this.backlogTasks[projectId].length === 0 && workingTasksInProject === 0
     },
   },
 }

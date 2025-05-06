@@ -27,7 +27,7 @@
     </select>
     <fieldset class="status">
       <legend>Status</legend>
-      <div v-for="option in ['active', 'queued', 'backlog']" :key="option">
+      <div v-for="option in ['active', 'queued', 'paused', 'backlog']" :key="option">
         <input
           :id="option"
           type="radio"
@@ -132,7 +132,7 @@ export default {
     },
     updateTask () {
       if (this.cannotSubmit) return;
-      this.$store.dispatch('tasks/updateTask', { ...this.curTask, onCallComplete: this.onCancelClick });
+      this.$store.dispatch('tasks/updateTask', { ...this.curTask, onCallComplete: this.onCancelClick, prevStatus: this.selectedTask.status });
     },
     removeTask () {
       if (confirm('Are you sure you want to delete this task?'))

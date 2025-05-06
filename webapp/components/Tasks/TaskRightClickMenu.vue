@@ -6,12 +6,13 @@
     @blur="closeMenu" 
     :style="{ top: top, left: left }"
   >
-    <li role="button" tabindex="0" @click.stop="updateTask">Modify Task</li>
-    <li role="button" tabindex="0" @click.stop="moveTaskToComplete" v-if="task.status !== 'complete'">Mark as Complete</li>
     <li role="button" tabindex="0" @click.stop="moveTaskToActive" v-if="task.status !== 'active'">Move to Active</li>
     <li role="button" tabindex="0" @click.stop="moveTaskToQueued" v-if="task.status !== 'queued'">Move to Up Next</li>
+    <li role="button" tabindex="0" @click.stop="moveTaskToPaused" v-if="task.status !== 'paused'">Move to Paused</li>
     <li role="button" tabindex="0" @click.stop="moveTaskToBacklog" v-if="task.status !== 'backlog'">Move to Backlog</li>
-    <li role="button" tabindex="0" @click.stop="deleteTask">Delete Task</li>
+    <li role="button" tabindex="0" @click.stop="moveTaskToComplete" v-if="task.status !== 'complete'">Mark as Complete</li>
+    <li role="button" tabindex="0" @click.stop="updateTask">Modify Task</li>
+    <li role="button" tabindex="0" @click.stop="deleteTask" id="delete-option">Delete Task</li>
   </ul>
 </template>
 
@@ -45,16 +46,19 @@ export default {
   },
   methods: {
     moveTaskToActive (e) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'active' });
+      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, prevStatus: this.task.status, status: 'active' });
     },
     moveTaskToQueued (e) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'queued' });
+      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, prevStatus: this.task.status, status: 'queued' });
+    },
+    moveTaskToPaused (e) {
+      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, prevStatus: this.task.status, status: 'paused' });
     },
     moveTaskToBacklog (e) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'backlog' });
+      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, prevStatus: this.task.status, status: 'backlog' });
     },
     moveTaskToComplete (e) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'complete' });
+      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, prevStatus: this.task.status, status: 'complete' });
     },
     deleteTask (e) {
       if (confirm('Are you sure you want to delete this task?')) {
@@ -93,5 +97,9 @@ export default {
   background: var(--primary-color);
   color: var(--secondary-color);
   cursor: pointer;
+}
+
+#delete-option {
+  color: var(--danger-color);
 }
 </style>

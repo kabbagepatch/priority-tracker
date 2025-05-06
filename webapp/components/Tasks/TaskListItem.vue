@@ -100,7 +100,7 @@ export default {
 
   data() {
     return {
-      taskComplete : this.task.complete,
+      taskComplete : this.task.status === 'complete',
       showTaskForm: false,
       delayedShowTaskForm: false,
       viewRightClickMenu: false,

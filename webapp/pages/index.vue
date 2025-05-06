@@ -1,12 +1,22 @@
 <template>
   <main>
-    <active-tasks
+    <working-tasks
       v-if="!$nuxt.$route.hash || $nuxt.$route.hash.includes('active')"
+      title="Active"
+      status="active"
       :showAddButton="!$nuxt.$route.hash || $nuxt.$route.hash.includes('active')"
     />
     <br v-if="!$nuxt.$route.hash" />
-    <queued-tasks
+    <working-tasks
       v-if="!$nuxt.$route.hash || $nuxt.$route.hash.includes('next')"
+      title="Up Next"
+      status="queued"
+    />
+    <br v-if="!$nuxt.$route.hash" />
+    <working-tasks
+      v-if="!$nuxt.$route.hash || $nuxt.$route.hash.includes('paused')"
+      title="Paused"
+      status="paused"
     />
     <br v-if="!$nuxt.$route.hash" />
     <div
@@ -19,16 +29,14 @@
 </template>
 
 <script>
-import ActiveTasks from '@/components/Tasks/ActiveTasks.vue';
-import QueuedTasks from '@/components/Tasks/QueuedTasks.vue';
+import WorkingTasks from '@/components/Tasks/WorkingTasks.vue';
 import BacklogTasks from '@/components/Tasks/BacklogTasks.vue';
 import AddTaskButton from '@/components/Tasks/AddTaskButton.vue';
 
 export default {
   components: {
+    WorkingTasks,
     AddTaskButton,
-    ActiveTasks,
-    QueuedTasks,
     BacklogTasks,
   },
 

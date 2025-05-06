@@ -103,7 +103,7 @@ module.exports.updateStatus = async (event) => {
       body: 'Task update failed. No status passed in',
     };
   }
-  if (['complete', 'active', 'queued', 'backlog'].indexOf(data.status) === -1) {
+  if (['complete', 'active', 'queued', 'paused', 'backlog'].indexOf(data.status) === -1) {
     return {
       statusCode: 400,
       headers: getHeaders('text/plain'),

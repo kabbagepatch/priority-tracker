@@ -4,6 +4,7 @@
     <nuxt-link class="sidebar-item" to="/">Tasks</nuxt-link>
     <nuxt-link class="sidebar-subitem" to="/#active">Active</nuxt-link>
     <nuxt-link class="sidebar-subitem" to="/#next">Up Next</nuxt-link>
+    <nuxt-link class="sidebar-subitem" to="/#paused">Paused</nuxt-link>
     <nuxt-link class="sidebar-subitem" to="/#backlog">Backlog</nuxt-link>
     <hr class="sidebar-separator" />
     <nuxt-link class="sidebar-item" to="/projects">Projects</nuxt-link>

@@ -1,7 +1,7 @@
 <template>
   <client-only>
     <div class="task-list-container">
-      <h2 v-if="title">
+      <h2 v-if="title" @click="toggleCollapse">
         <span>{{ title }}</span>
         <span
           v-if="maxTasks !== null" :class="maxTasks < tasks.length ? 'too-many-tasks' : 'good-tasks'"
@@ -9,20 +9,22 @@
           ({{ tasks.length }}/{{ maxTasks }})
         </span>
       </h2>
-      <div class="task-list">
-        <draggable v-model="tasksDisplayed" v-bind="dragOptions" @start="drag=true" @end="onDragEnd" handle=".handle">
-          <transition-group type="transition" :name="!drag ? 'flip-list' : null">
-            <div v-for="task in tasksDisplayed" :key="task.id">
-              <task-list-item
-                :task="task"
-                :moveButtonText="moveButtonText"
-                :onMoveButtonClick="() => onMoveButtonClick(task.id)"
-                :toggleTaskFormOuter="() => toggleTaskForm()"
-              />
-            </div>
-          </transition-group>
-        </draggable>
-      </div>
+      <collapsible :collapse="collapsed">
+        <div class="task-list">
+          <draggable v-model="tasksDisplayed" v-bind="dragOptions" @start="drag=true" @end="onDragEnd" handle=".handle">
+            <transition-group type="transition" :name="!drag ? 'flip-list' : null">
+              <div v-for="task in tasksDisplayed" :key="task.id">
+                <task-list-item
+                  :task="task"
+                  :moveButtonText="moveButtonText"
+                  :onMoveButtonClick="() => onMoveButtonClick(task.id)"
+                  :toggleTaskFormOuter="() => toggleTaskForm()"
+                />
+              </div>
+            </transition-group>
+          </draggable>
+        </div>
+      </collapsible>
     </div>
   </client-only>
 </template>
@@ -31,15 +33,18 @@
 import Draggable from 'vuedraggable'
 import TaskForm from './TaskForm.vue';
 import TaskListItem from './TaskListItem.vue';
+import Collapsible from '../Collapsible.vue';
 
 export default {
   components: {
     Draggable,
     TaskForm,
     TaskListItem,
+    Collapsible,
   },
   data () {
     return {
+      collapsed: false,
       selectedTask: undefined,
       taskFormVisible: false,
       drag: false,
@@ -119,7 +124,10 @@ export default {
     },
     toggleTaskForm () {
       this.taskFormVisible = !this.taskFormVisible;
-    }
+    },
+    toggleCollapse() {
+      this.collapsed = !this.collapsed;
+    },
   },
 }
 </script>
@@ -132,11 +140,17 @@ h2 {
   border-radius: 15px;
   justify-content: space-between;
   font-weight: 900 !important;
+  cursor: pointer;
   box-shadow: var(--black-transparent) 1.95px 1.95px 2.6px, var(--dark-blue-transparenter) 0px 0px 1px 2px;
 }
 
+h2:hover {
+  transition: box-shadow ease 0.25s;
+  box-shadow: var(--black-transparent) 2.95px 2.95px 3.6px, var(--dark-blue-transparent) 0px 0px 2px 3px;
+}
+
 .task-list {
-  padding-left: 0;
+  padding: 0 2px;
   margin: 15px 0;
 }
 

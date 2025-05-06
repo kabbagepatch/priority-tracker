@@ -1,14 +1,15 @@
+const STATUS_TYPES = ['active', 'queued', 'paused'];
+
 export const state = () => ({
+  workingTasksData: Object.fromEntries(STATUS_TYPES.map(key => [key, []])),
   projectTasksData: {},
-  activeTasks: [],
-  queuedTasks: [],
 })
 
 export const getters = {
   backlogTasks: state => {
     const backlogTasks = {};
     Object.keys(state.projectTasksData).forEach(projectId => {
-      backlogTasks[projectId] = state.projectTasksData[projectId].filter(task => task.status === 'backlog');
+      backlogTasks[projectId] = state.projectTasksData[projectId].filter(task => !STATUS_TYPES.includes(task.status));
     });
 
     return backlogTasks;
@@ -16,115 +17,109 @@ export const getters = {
 }
 
 export const mutations = {
+  setWorkingTasks: (state, data) => {
+    state.workingTasksData[data.status] = data.tasks;
+  },
   setProjectTaskData: (state, data) => {
     state.projectTasksData = {
       ...state.projectTasksData,
       [data.projectId]: data.tasks,
-    }
+    };
   },
   addTaskToProject: (state, data) => {
     if (state.projectTasksData[data.projectId]) {
-      const projectTasks = [data.task].concat(state.projectTasksData[data.projectId || 'none']);
       state.projectTasksData = {
         ...state.projectTasksData,
-        [data.projectId]: projectTasks
-      }
+        [data.projectId]: [data.task].concat(state.projectTasksData[data.projectId || 'none'])
+      };
     }
 
-    if (state.activeTasks && data.task.status === 'active') {
-      const activeTasks = state.activeTasks.concat([data.task]);
-      state.activeTasks = activeTasks;
-    }
-
-    if (state.queuedTasks && data.task.status === 'queued') {
-      const queuedTasks = state.queuedTasks.concat([data.task]);
-      state.queuedTasks = queuedTasks;
+    if (state.workingTasksData[data.task.status] && STATUS_TYPES.includes(data.task.status)) {
+      state.workingTasksData = {
+        ...state.workingTasksData,
+        [data.task.status]: state.workingTasksData[data.task.status].concat([data.task])
+      };
     }
   },
   removeTask: (state, data) => {
     const projectTasks = state.projectTasksData[data.project];
     if (projectTasks) {
-      projectTasks.splice(projectTasks.findIndex(t => t.id === data.id), 1);
       state.projectTasksData = {
         ...state.projectTasksData,
-        [data.project]: projectTasks
-      }
+        [data.project]: projectTasks.filter(t => t.id !== data.id)
+      };
     }
 
-    const activeTasks = [].concat(state.activeTasks);
-    if (activeTasks) {
-      const activeTaskIndex = activeTasks.findIndex(t => t.id === data.id)
-      if (activeTaskIndex !== -1) {
-        activeTasks.splice(activeTaskIndex, 1)
-        state.activeTasks = activeTasks;
-      }
-    }
-
-    const queuedTasks = [].concat(state.queuedTasks);
-    if (queuedTasks) {
-      const queuedTaskIndex = queuedTasks.findIndex(t => t.id === data.id)
-      if (queuedTaskIndex !== -1) {
-        queuedTasks.splice(queuedTaskIndex, 1)
-        state.queuedTasks = queuedTasks;
-      }
+    const workingTasks = state.workingTasksData[data.status];
+    if (workingTasks) {
+      state.workingTasksData = {
+        ...state.workingTasksData,
+        [data.status]: workingTasks.filter(t => t.id !== data.id)
+      };
     }
   },
-  updateTask: (state, updatedTask) => {
-    if (state.projectTasksData[updatedTask.project]) {
-      const projectTasks = [].concat(state.projectTasksData[updatedTask.project]);
-      if (projectTasks) {
-        const taskIndex = projectTasks.findIndex(t => t.id === updatedTask.id)
-        if (taskIndex !== -1) {
+  updateTask: (state, data) => {
+    const { updatedTask, prevTask } = data;
+    if (updatedTask.project !== prevTask.project) {
+      const newProjectTaskData = {};
+      if (state.projectTasksData[updatedTask.project]) {
+        newProjectTaskData[updatedTask.project] = [updatedTask].concat(state.projectTasksData[updatedTask.project])
+      }
+      if (state.projectTasksData[prevTask.project]) {
+        newProjectTaskData[prevTask.project] = state.projectTasksData[prevTask.project].filter(t => t.id !== prevTask.id)
+      }
+      if (Object.keys(newProjectTaskData).length > 0) {
+        state.projectTasksData = {
+          ...state.projectTasksData,
+          ...newProjectTaskData
+        };
+      }
+    } else {
+      if (state.projectTasksData[updatedTask.project]) {
+        const projectTasks = state.projectTasksData[updatedTask.project];
+        const taskIndex = projectTasks.findIndex(t => t.id === updatedTask.id);
+        if (taskIndex === -1) {
+          projectTasks = [updatedTask].concat(projectTasks);
+        } else {
           projectTasks.splice(taskIndex, 1, updatedTask);
-          state.projectTasksData = {
-            ...state.projectTasksData,
-            [updatedTask.project]: projectTasks,
-          }
         }
+        state.projectTasksData = {
+          ...state.projectTasksData,
+          [updatedTask.project]: projectTasks,
+        };
       }
     }
 
-    const activeTasks = [].concat(state.activeTasks);
-    let activeTaskIndex = -1;
-    if (activeTasks) {
-      activeTaskIndex = activeTasks.findIndex(t => t.id === updatedTask.id)
-      if (updatedTask.status === 'active') {
-        if (activeTaskIndex === -1) {
-          state.activeTasks = activeTasks.concat([updatedTask]);
+    if (updatedTask.status !== prevTask.status) {
+      const newWorkingTasksData = {};
+      if (state.workingTasksData[updatedTask.status]) {
+        newWorkingTasksData[updatedTask.status] = [updatedTask].concat(state.workingTasksData[updatedTask.status])
+      }
+      if (state.workingTasksData[prevTask.status]) {
+        newWorkingTasksData[prevTask.status] = state.workingTasksData[prevTask.status].filter(t => t.id !== prevTask.id)
+      }
+      if (Object.keys(newWorkingTasksData).length > 0) {
+        state.workingTasksData = {
+          ...state.workingTasksData,
+          ...newWorkingTasksData
+        };
+      }
+    } else {
+      if (state.workingTasksData[updatedTask.status]) {
+        const workingTasks = state.workingTasksData[updatedTask.status];
+        const taskIndex = workingTasks.findIndex(t => t.id === updatedTask.id);
+        if (taskIndex === -1) {
+          workingTasks = [updatedTask].concat(workingTasks);
         } else {
-          activeTasks.splice(activeTaskIndex, 1, updatedTask)
-          state.activeTasks = activeTasks;
+          workingTasks.splice(taskIndex, 1, updatedTask);
         }
-      }
-      if (updatedTask.status !== 'active' && activeTaskIndex !== -1) {
-        activeTasks.splice(activeTaskIndex, 1);
-        state.activeTasks = activeTasks
-      }
-    }
-
-    const queuedTasks = [].concat(state.queuedTasks);
-    if (queuedTasks) {
-      const queuedTaskIndex = queuedTasks.findIndex(t => t.id === updatedTask.id)
-      if (updatedTask.status === 'queued') {
-        if (queuedTaskIndex === -1) {
-          state.queuedTasks = [updatedTask].concat(queuedTasks);
-        } else {
-          queuedTasks.splice(queuedTaskIndex, 1, updatedTask)
-          state.queuedTasks = queuedTasks;
-        }
-      }
-      if (updatedTask.status !== 'queued' && queuedTaskIndex !== -1) {
-        queuedTasks.splice(queuedTaskIndex, 1);
-        state.queuedTasks = queuedTasks
+        state.workingTasksData = {
+          ...state.workingTasksData,
+          [updatedTask.status]: workingTasks,
+        };
       }
     }
   },
-  setActiveTasks: (state, data) => {
-    state.activeTasks = data;
-  },
-  setQueuedTasks: (state, data) => {
-    state.queuedTasks = data;
-  }
 }
 
 const baseUrl = 'https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev';
@@ -142,25 +137,13 @@ export const actions = {
       console.error(error);
     }
   },
-  async getActiveTasks ({ commit, rootState }) {
+  async getTaskByStatus({ commit, rootState }, data) {
     try {
-      await this.$axios.get(`${baseUrl}/tasks?user=${rootState.auth.user.username}&status=active`,
+      await this.$axios.get(`${baseUrl}/tasks?user=${rootState.auth.user.username}&status=${data.status}`,
         {
           headers: { 'Content-Type': 'application/json' }
         }).then((res) => {
-        commit('setActiveTasks', res.data);
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  },
-  async getQueuedTasks ({ commit, rootState }) {
-    try {
-      await this.$axios.get(`${baseUrl}/tasks?user=${rootState.auth.user.username}&status=queued`,
-        {
-          headers: { 'Content-Type': 'application/json' }
-        }).then((res) => {
-        commit('setQueuedTasks', res.data);
+        commit('setWorkingTasks', { status: data.status, tasks: res.data });
       });
     } catch (error) {
       console.error(error);
@@ -205,26 +188,26 @@ export const actions = {
       console.error(error);
     }
   },
-  async updateTask ({ commit, rootState }, data) {
+  async updateTask ({ commit, rootState }, data) {    
     try {
       const res = await this.$axios.put(`${baseUrl}/tasks/${data.id}?user=${rootState.auth.user.username}`,
         data,
         { headers: { 'Content-Type': 'application/json' } }
       );
-      commit('updateTask', res.data);
+      commit('updateTask', { updatedTask: res.data, prevTask: { ...data, status: data.prevStatus } });
       if (data.onCallComplete) data.onCallComplete();
     } catch (error) {
       console.error(error);
     }
   },
-  async updateTaskStatus ({ commit, rootState }, { id, status, onCallComplete }) {
+  async updateTaskStatus ({ commit, rootState }, data) {
     try {
-      const res = await this.$axios.put(`${baseUrl}/tasks/${id}/status?user=${rootState.auth.user.username}`,
-        { status },
+      const res = await this.$axios.put(`${baseUrl}/tasks/${data.id}/status?user=${rootState.auth.user.username}`,
+        { status: data.status },
         { headers: { 'Content-Type': 'application/json' } }
       );
-      commit('updateTask', res.data);
-      if (onCallComplete) onCallComplete();
+      commit('updateTask', { updatedTask: res.data, prevTask: { ...res.data, status: data.prevStatus } });
+      if (data.onCallComplete) data.onCallComplete();
     } catch (error) {
       console.error(error);
     }
