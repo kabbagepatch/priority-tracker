@@ -61,7 +61,9 @@ export default {
       this.newCategory = {  name: '' }
     },
     removeCategory (categoryId) {
-      this.$store.dispatch('categories/removeCategory', categoryId)
+      if (confirm('Are you sure you want to delete this category?')) {
+        this.$store.dispatch('categories/removeCategory', categoryId);
+      }
     },
     onChangeColor (categoryId, color) {
       this.$store.dispatch('categories/updateCategory', { categoryId, color })

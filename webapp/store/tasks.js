@@ -194,7 +194,7 @@ export const actions = {
         data,
         { headers: { 'Content-Type': 'application/json' } }
       );
-      commit('updateTask', { updatedTask: res.data, prevTask: { ...data, status: data.prevStatus } });
+      commit('updateTask', { updatedTask: res.data, prevTask: { ...data, status: data.prevStatus || data.status } });
       if (data.onCallComplete) data.onCallComplete();
     } catch (error) {
       console.error(error);
@@ -206,7 +206,7 @@ export const actions = {
         { status: data.status },
         { headers: { 'Content-Type': 'application/json' } }
       );
-      commit('updateTask', { updatedTask: res.data, prevTask: { ...res.data, status: data.prevStatus } });
+      commit('updateTask', { updatedTask: res.data, prevTask: { ...res.data, status: data.prevStatus || data.status } });
       if (data.onCallComplete) data.onCallComplete();
     } catch (error) {
       console.error(error);

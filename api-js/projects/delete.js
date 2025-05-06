@@ -22,13 +22,15 @@ module.exports.delete = async (event) => {
 
   const getTasksParams = {
     TableName: `${process.env.DYNAMODB_TABLE}-Tasks`,
-    IndexName: 'ProjectTaskIndex',
-    KeyConditionExpression: "#project = :project",
+    IndexName: 'TaskProjectIndex',
+    KeyConditionExpression: "#userId = :userId and #project = :project",
     ExpressionAttributeNames: {
+      '#userId': 'userId',
       '#project': 'project'
     },
     ExpressionAttributeValues: {
-        ":project": event.pathParameters.projectId,
+      ":userId": event.queryStringParameters.user,
+      ":project": event.pathParameters.projectId,
     },
   };
 

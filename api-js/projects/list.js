@@ -32,11 +32,12 @@ module.exports.list = async (event) => {
 
   try {
     const result = await dynamoDb.query(params).promise();
+    const projects = result.Items.sort((a, b) => (b.order || b.createdAt) - (a.order || a.createdAt))
 
     return {
       statusCode: 200,
       headers: getHeaders(),
-      body: JSON.stringify(result.Items),
+      body: JSON.stringify(projects),
     }
   } catch (error) {
     console.error(error);
@@ -60,11 +61,12 @@ module.exports.listCategory = async (event) => {
 
   try {
     const result = await dynamoDb.query(params).promise();
+    const projects = result.Items.sort((a, b) => (b.order || b.createdAt) - (a.order || a.createdAt))
 
     return {
       statusCode: 200,
       headers: getHeaders(),
-      body: JSON.stringify(result.Items),
+      body: JSON.stringify(projects),
     }
   } catch (error) {
     console.error(error);

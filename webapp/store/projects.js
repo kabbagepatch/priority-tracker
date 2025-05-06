@@ -80,7 +80,7 @@ export const actions = {
       console.log(error)
     }
   },
-  async submitProject ({ commit, rootState }, data) {
+  async updateProject ({ commit, rootState }, data) {
     try {
       let response
       if (data.id) {

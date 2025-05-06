@@ -42,6 +42,7 @@ module.exports.create = async (event) => {
       id: uuid.v1(),
       name: data.name,
       nameLC: data.name.toLowerCase(),
+      description: data.description,
       link: data.link,
       taskstatus: data.status || 'backlog',
       category: data.category,

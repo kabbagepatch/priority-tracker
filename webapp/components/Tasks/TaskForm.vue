@@ -2,6 +2,8 @@
   <form class="task-form" @submit.prevent="selectedTask ? updateTask() : addTask()">
     <label :class="`label ${errors.name ? 'error' : ''}`" for="input">Title*</label>
     <input :class="errors.name ? 'error' : ''" type="text" v-model="curTask.name" @blur="onNameBlur" />
+    <label class="label" for="input">Description</label>
+    <input type="text" v-model="curTask.description" />
     <label class="label" for="input">Link</label>
     <input type="text" v-model="curTask.link" />
     <label class="label" for="select">Project</label>
@@ -66,6 +68,7 @@ export default {
     } else {
       curTask = {
         name: '',
+        description: '',
         link: '',
         category: '',
         project: '',
@@ -115,6 +118,7 @@ export default {
       if (this.addAnother) {
         this.curTask = {
           name: '',
+          description: '',
           link: '',
           category: this.curTask.category,
           project: this.curTask.project,
@@ -123,6 +127,7 @@ export default {
       } else {
         this.curTask = {
           name: '',
+          description: '',
           link: '',
           category: '',
           project: '',

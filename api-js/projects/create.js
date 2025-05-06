@@ -45,6 +45,7 @@ module.exports.create = async (event) => {
       description: data.description,
       category: data.category,
       complete: false,
+      order: timestamp,
       createdAt: timestamp,
       updatedAt: timestamp,
     },

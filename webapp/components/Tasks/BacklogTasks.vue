@@ -95,7 +95,7 @@ export default {
       });
     },
     completeProject (id) {
-      this.$store.dispatch('projects/submitProject', { id, complete: true });
+      this.$store.dispatch('projects/updateProject', { id, complete: true });
       this.selectedProjects = { ...this.selectedProjects, [id]: false }
     },
     noMoreTasks(projectId) {

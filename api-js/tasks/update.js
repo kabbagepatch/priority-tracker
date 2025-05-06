@@ -65,7 +65,7 @@ module.exports.update = async (event) => {
     ReturnValues: 'ALL_NEW',
   };
 
-  const allowedFields = ['name', 'link', 'category', 'project', 'order', 'status'];
+  const allowedFields = ['name', 'description', 'link', 'category', 'project', 'order', 'status'];
   allowedFields.forEach((field) => {
     if (data[field] !== undefined && data[field] !== null) {
       params.UpdateExpression += `#${field === 'status' ? 'taskstatus' : field} = :${field === 'status' ? 'taskstatus' : field},`;
