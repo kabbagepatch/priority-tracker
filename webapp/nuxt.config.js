@@ -18,12 +18,16 @@ export default {
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Mulish:wght@300&family=Poppins:wght@600&display=swap' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Homemade Apple' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Cairo' }
+    ],
+    script :[
+      { src: '/coloris.min.js', type: 'text/javascript', body: true }
     ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    `~/assets/main.css`
+    `~/assets/main.css`,
+    `~/assets/coloris.min.css`
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins

@@ -40,6 +40,7 @@ module.exports.create = async (event) => {
       name: data.name,
       nameLC: data.name.toLowerCase(),
       description: data.description,
+      color: data.color,
       createdAt: timestamp,
       updatedAt: timestamp,
     },

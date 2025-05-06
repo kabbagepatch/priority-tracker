@@ -164,11 +164,6 @@ h2 {
   box-shadow: var(--black-transparent) 2.95px 2.95px 3.6px, var(--dark-blue-transparent) 0px 0px 2px 3px;
 }
 
-.task-list {
-  margin-left: 20px;
-  margin-right: 3px;
-}
-
 @media only screen and (max-width: 600px) {
   .project-section {
     flex-direction: column;
@@ -179,10 +174,6 @@ h2 {
     font-size: 0.8em;
     font-weight: 600 !important;
     text-transform: uppercase;
-  }
-
-  .task-list {
-    margin-left: 20px;
   }
 }
 

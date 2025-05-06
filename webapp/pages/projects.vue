@@ -1,7 +1,6 @@
 <template>
   <div class="projects-container">
-    <h2>Projects</h2>
-    <div class="project-form-container">
+    <title-card title="Projects">
       <form class="project-form" @submit.prevent="submitProject">
         <label :class="`label ${errors.name ? 'error' : ''}`" for="input">Give your project a title</label>
         <input :class="errors.name ? 'error' : ''" type="text" v-model="curProject.name" @blur="onNameBlur" />
@@ -20,7 +19,7 @@
         </div>
       </form>
       <p>Go to <nuxt-link to="/priorities"><button class="continue">Priorities</button></nuxt-link> when you're done with adding projects</p>
-    </div>
+    </title-card>
     <div class="project-list">
       <card v-for="projectId in Object.keys(projectData).sort((a, b) => projectData[b].createdAt - projectData[a].createdAt)" :key="projectId">
         <div class="project-row">
@@ -28,8 +27,13 @@
             <h3 class="project-name">
               {{ projectData[projectId].name }}
             </h3>
-            <div v-if="categoriesData && categoriesData[projectData[projectId].category]" class="project-category">
-              {{ categoriesData[projectData[projectId].category].name }}
+            <div
+              v-if="categoriesData && categoriesData[projectData[projectId].category]"
+              class="project-category"
+            >
+              <category-pill :color="categoriesData[projectData[projectId].category].color">
+                {{ categoriesData[projectData[projectId].category].name }}
+              </category-pill>
             </div>
           </div>
           <div class="buttons">
@@ -65,11 +69,13 @@
 <script>
 import { mapState } from 'vuex'
 import linkifyHtml from 'linkify-html';
+import TitleCard from '../components/TitleCard.vue';
 import Card from '../components/Card.vue'
+import CategoryPill from '../components/CategoryPill.vue'
 
 export default {
   name: 'Projects',
-  components: { Card },
+  components: { TitleCard, Card, CategoryPill },
   data () {
     return {
       curProject: {
@@ -133,27 +139,12 @@ export default {
     },
     removeProject (id) {
       this.$store.dispatch('projects/removeProject', id)
-    }
+    },
   }
 }
 </script>
 
 <style scoped>
-h2 {
-  border-radius: 20px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  margin-bottom: -5px;
-}
-
-.project-form-container {
-  background: var(--white);
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  padding: 20px;
-  margin-bottom: 25px;
-}
-
 .project-form {
   display: flex;
   flex-direction: column;

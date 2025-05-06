@@ -25,11 +25,15 @@
             </a>
             <span class="task-name" v-else>{{ task.name }}</span>
           </h4>
-          <div v-if="prioritiesData[task.project]" class="subTitle">
-            {{ prioritiesData[task.project].name }}
+          <div v-if="prioritiesData[task.project]" class="subtitle" >
+            <category-pill :color="categoriesData[task.category]?.color">
+              {{ prioritiesData[task.project].name }}
+            </category-pill>
           </div>
-          <div v-else-if="categoriesData[task.category]" class="subTitle">
-            {{ categoriesData[task.category].name }}
+          <div v-else-if="categoriesData[task.category]" class="subtitle">
+            <category-pill :color="categoriesData[task.category]?.color">
+              {{ categoriesData[task.category].name }}
+            </category-pill>
           </div>
         </div>
       </div>
@@ -78,6 +82,7 @@ import { mapState } from 'vuex';
 import TaskForm from './TaskForm.vue';
 import TaskRightClickMenu from './TaskRightClickMenu.vue';
 import Collapsible from '../Collapsible.vue';
+import CategoryPill from '../CategoryPill.vue'
 
 export default {
   props: {
@@ -96,7 +101,7 @@ export default {
     },
   },
 
-  components: { TaskForm, TaskRightClickMenu, Collapsible },
+  components: { TaskForm, TaskRightClickMenu, Collapsible, CategoryPill },
 
   data() {
     return {
@@ -234,7 +239,7 @@ export default {
   min-width: 100px;
 }
 
-.subTitle {
+.subtitle {
   margin-top: 2px;
   font-size: 0.8em;
   font-weight: 600 !important;

@@ -1,10 +1,9 @@
 <template>
   <div class="priorities-container">
-    <h2>Priorities</h2>
-    <div class="info">
+    <title-card title="Priorities" contentPadding="10px 0">
       <p>Select up to five projects to mark as actively being worked on. You will only be adding tasks for these projects</p>
       <p>Go to <nuxt-link to="/"><button class="continue">Tasks</button></nuxt-link> when you're done with prioritising projects</p>
-    </div>
+    </title-card>
     <div class="project" v-for="projectId in Object.keys(prioritiesData).sort((a, b) => prioritiesData[b].updatedAt - prioritiesData[a].updatedAt)" :key="projectId">
       <card class="project-row">
         <div>
@@ -12,7 +11,9 @@
             {{ prioritiesData[projectId].name }}
           </h3>
           <div v-if="categoriesData && categoriesData[prioritiesData[projectId].category]" class="project-category">
-            {{ categoriesData[prioritiesData[projectId].category].name }}
+            <category-pill :color="categoriesData[projectData[projectId].category].color">
+              {{ categoriesData[projectData[projectId].category].name }}
+            </category-pill>
           </div>
         </div>
         <div>
@@ -30,7 +31,9 @@
             {{ unprioritisedProjects[projectId].name }}
           </h3>
           <div v-if="categoriesData && categoriesData[unprioritisedProjects[projectId].category]" class="project-category">
-            {{ categoriesData[unprioritisedProjects[projectId].category].name }}
+            <category-pill :color="categoriesData[projectData[projectId].category].color">
+              {{ categoriesData[projectData[projectId].category].name }}
+            </category-pill>
           </div>
         </div>
         <div>
@@ -48,10 +51,12 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
+import TitleCard from '../components/TitleCard.vue';
 import Card from '../components/Card.vue';
+import CategoryPill from '../components/CategoryPill.vue';
 
 export default {
-  components: { Card },
+  components: { TitleCard, CategoryPill },
   computed: {
     ...mapState({
       categoriesData: state => state.categories.categoriesData,
@@ -77,21 +82,6 @@ export default {
 </script>
 
 <style scoped>
-h2 {
-  border-radius: 20px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  margin-bottom: -5px;
-}
-
-.info {
-  background: var(--white);
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  padding: 10px 0;
-  margin-bottom: 10px;
-}
-
 p {
   padding-left: 20px;
 }

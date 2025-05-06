@@ -23,6 +23,9 @@ export const mutations = {
       state.categoriesData = categoriesData;
     }
   },
+  updateCategory: (state, categoryData) => {
+    state.categoriesData = Object.assign({}, state.categoriesData, { [categoryData.id]: categoryData });
+  },
 }
 
 const baseUrl = 'https://8666skqt4l.execute-api.us-east-1.amazonaws.com/dev';
@@ -59,6 +62,17 @@ export const actions = {
         { headers: { 'Content-Type': 'application/json' } }
       )
       commit('removeCategory', categoryId)
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  async updateCategory ({ commit, rootState }, data) {
+    try {
+      const res = await this.$axios.put(`${baseUrl}/categories/${data.categoryId}?user=${rootState.auth.user.username}`,
+        data,
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      commit('updateCategory', res.data)
     } catch (error) {
       console.log(error)
     }
