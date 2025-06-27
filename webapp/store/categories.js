@@ -51,17 +51,17 @@ export const actions = {
           headers: { 'Content-Type': 'application/json' }
         }).then((res) => {
         commit('addCategory', res.data)
-      })
+      });
     } catch (error) {
       console.log(error)
     }
   },
   async removeCategory ({ commit, rootState }, categoryId) {
     try {
+      commit('removeCategory', categoryId)
       await this.$axios.delete(`${baseUrl}/categories/${categoryId}?user=${rootState.auth.user.username}`,
         { headers: { 'Content-Type': 'application/json' } }
       )
-      commit('removeCategory', categoryId)
     } catch (error) {
       console.log(error)
     }

@@ -42,7 +42,7 @@
       </div>
     </fieldset>
     <div class="add-task">
-      <div class="checkbox">
+      <div v-if="!selectedTask" class="checkbox">
         Add Another
         <input type="checkbox" v-model="addAnother" />
       </div>
@@ -184,10 +184,15 @@ input.error {
 }
 
 .add-task {
-  margin-top: 25px;
+  margin-top: 15px;
 }
 
 button.delete {
   margin-right: 5px;
 }
+
+.checkbox {
+  margin-bottom: 10px;
+}
+
 </style>

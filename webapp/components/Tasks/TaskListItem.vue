@@ -48,6 +48,16 @@
           <v-icon name="angle-double-up"/>
         </button>
         <button
+          v-if="this.taskComplete"
+          aria-label="Unmark Task as Complete"
+          title="Unmark Task as Complete"
+          class="secondary icon-only complete"
+          @click="completeTask"
+        >
+          <v-icon name="times"/>
+        </button>
+        <button
+          v-else
           aria-label="Mark Task as Complete"
           title="Mark Task as Complete"
           class="secondary icon-only complete"
@@ -106,6 +116,7 @@ export default {
   data() {
     return {
       taskComplete : this.task.status === 'complete',
+      prevStatus: '',
       showTaskForm: false,
       delayedShowTaskForm: false,
       viewRightClickMenu: false,
@@ -136,8 +147,17 @@ export default {
     },
     completeTask(e) {
       e.stopPropagation();
-      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, status: 'complete', value: true });
-      this.taskComplete = true;
+      if (this.taskComplete) {
+        if (this.prevStatus) {
+          this.$store.dispatch('tasks/updateTaskStatus', { ...this.task, status: this.prevStatus });
+          this.prevStatus = '';
+          this.taskComplete = false;
+        }
+      } else {
+        this.prevStatus = this.task.status;
+        this.$store.dispatch('tasks/updateTaskStatus', { ...this.task, status: 'complete' });
+        this.taskComplete = true;
+      }
     },
     openRightClickMenu(e) {
       setTimeout(() => {

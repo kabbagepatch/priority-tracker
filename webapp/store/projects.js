@@ -49,7 +49,7 @@ export const mutations = {
     });
     state.prioritiesData = prioritiesData;
   },
-  updatePrioritiesData: (state, projectId) => {
+  addPriority: (state, projectId) => {
     const newPrioritiesData = Object.assign({}, state.prioritiesData, { [projectId]: state.projectData[projectId] });
     if (state.projectData[projectId].complete) {
       delete newPrioritiesData[projectId];
@@ -84,17 +84,26 @@ export const actions = {
     try {
       let response
       if (data.id) {
+        commit('updateProjectData', data)
         response = await this.$axios.put(`${baseUrl}/projects/${data.id}?user=${rootState.auth.user.username}`,
           data,
           { headers: { 'Content-Type': 'application/json' } }
-        )
+        );
       } else {
         response = await this.$axios.post(`${baseUrl}/projects?user=${rootState.auth.user.username}`,
           data,
           { headers: { 'Content-Type': 'application/json' } }
-        )
+        );
+        commit('updateProjectData', response.data)
       }
-      commit('updateProjectData', response.data)
+      if (data.addAsPriority) {
+        this.$axios.post(`${baseUrl}/projects/${response.data.id}/prioritise?user=${rootState.auth.user.username}`);
+        commit('addPriority', response.data.id);
+      }
+      if (data.complete) {    
+        this.$axios.post(`${baseUrl}/projects/${data.id}/deprioritise?user=${rootState.auth.user.username}`);
+        commit('removePriority', data.id);
+      }
     } catch (error) {
       console.log(error)
     }
@@ -104,7 +113,9 @@ export const actions = {
       await this.$axios.delete(`${baseUrl}/projects/${projectId}?user=${rootState.auth.user.username}`,
         { headers: { 'Content-Type': 'application/json' } }
       )
-      commit('removeProject', projectId)
+      commit('removeProject', projectId);
+      this.$axios.post(`${baseUrl}/projects/${projectId}/deprioritise?user=${rootState.auth.user.username}`);
+      commit('removePriority', projectId);
     } catch (error) {
       console.log(error)
     }
@@ -119,16 +130,16 @@ export const actions = {
   },
   async prioritiseProject ({ commit, rootState }, projectId) {
     try {
+      commit('addPriority', projectId)
       await this.$axios.post(`${baseUrl}/projects/${projectId}/prioritise?user=${rootState.auth.user.username}`);
-      commit('updatePrioritiesData', projectId)
     } catch (error) {
       console.log(error)
     }
   },
   async deprioritiseProject ({ commit, rootState }, projectId) {
     try {
-      await this.$axios.post(`${baseUrl}/projects/${projectId}/deprioritise?user=${rootState.auth.user.username}`);
       commit('removePriority', projectId)
+      await this.$axios.post(`${baseUrl}/projects/${projectId}/deprioritise?user=${rootState.auth.user.username}`);
     } catch (error) {
       console.log(error)
     }

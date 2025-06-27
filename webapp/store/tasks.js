@@ -180,21 +180,21 @@ export const actions = {
   },
   async removeTask ({ commit, rootState }, data) {
     try {
+      commit('removeTask', data);
       await this.$axios.delete(`${baseUrl}/tasks/${data.id}?user=${rootState.auth.user.username}`,
         { headers: { 'Content-Type': 'application/json' } }
       );
-      commit('removeTask', data);
     } catch (error) {
       console.error(error);
     }
   },
   async updateTask ({ commit, rootState }, data) {    
     try {
-      const res = await this.$axios.put(`${baseUrl}/tasks/${data.id}?user=${rootState.auth.user.username}`,
+      commit('updateTask', { updatedTask: { ...data, status: data.status }, prevTask: { ...data, status: data.prevStatus || data.status } });
+      const res = this.$axios.put(`${baseUrl}/tasks/${data.id}?user=${rootState.auth.user.username}`,
         data,
         { headers: { 'Content-Type': 'application/json' } }
       );
-      commit('updateTask', { updatedTask: res.data, prevTask: { ...data, status: data.prevStatus || data.status } });
       if (data.onCallComplete) data.onCallComplete();
     } catch (error) {
       console.error(error);
@@ -202,11 +202,11 @@ export const actions = {
   },
   async updateTaskStatus ({ commit, rootState }, data) {
     try {
-      const res = await this.$axios.put(`${baseUrl}/tasks/${data.id}/status?user=${rootState.auth.user.username}`,
+      commit('updateTask', { updatedTask: { ...data, status: data.status }, prevTask: { ...data, status: data.prevStatus || data.status } });
+      const res = this.$axios.put(`${baseUrl}/tasks/${data.id}/status?user=${rootState.auth.user.username}`,
         { status: data.status },
         { headers: { 'Content-Type': 'application/json' } }
       );
-      commit('updateTask', { updatedTask: res.data, prevTask: { ...res.data, status: data.prevStatus || data.status } });
       if (data.onCallComplete) data.onCallComplete();
     } catch (error) {
       console.error(error);

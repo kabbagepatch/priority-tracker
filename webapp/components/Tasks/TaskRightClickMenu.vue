@@ -46,19 +46,19 @@ export default {
   },
   methods: {
     moveTaskToActive (e) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, prevStatus: this.task.status, status: 'active' });
+      this.$store.dispatch('tasks/updateTaskStatus', { ...this.task, prevStatus: this.task.status, status: 'active' });
     },
     moveTaskToQueued (e) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, prevStatus: this.task.status, status: 'queued' });
+      this.$store.dispatch('tasks/updateTaskStatus', { ...this.task, prevStatus: this.task.status, status: 'queued' });
     },
     moveTaskToPaused (e) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, prevStatus: this.task.status, status: 'paused' });
+      this.$store.dispatch('tasks/updateTaskStatus', { ...this.task, prevStatus: this.task.status, status: 'paused' });
     },
     moveTaskToBacklog (e) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, prevStatus: this.task.status, status: 'backlog' });
+      this.$store.dispatch('tasks/updateTaskStatus', { ...this.task, prevStatus: this.task.status, status: 'backlog' });
     },
     moveTaskToComplete (e) {
-      this.$store.dispatch('tasks/updateTaskStatus', { id: this.task.id, prevStatus: this.task.status, status: 'complete' });
+      this.$store.dispatch('tasks/updateTaskStatus', { ...this.task, prevStatus: this.task.status, status: 'complete' });
     },
     deleteTask (e) {
       if (confirm('Are you sure you want to delete this task?')) {

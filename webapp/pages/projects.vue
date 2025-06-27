@@ -13,6 +13,10 @@
             {{ option.name }}
           </option>
         </select>
+        <div v-if="!disableAddAsPriority" class="checkbox">
+          <input type="checkbox" v-model="addAsPriority" />
+          Add As Priority
+        </div>
         <div class="add-project">
           <button :disabled="cannotSubmit" type="submit">{{ formState }}</button>
           <button class="secondary outlined" type="reset" @click="() => { formState = 'Add' }">Clear</button>
@@ -97,15 +101,20 @@ export default {
         category: false,
       },
       drag: false,
+      addAsPriority: false,
     }
   },
   computed: {
     ...mapState({
       categoriesData: state => state.categories.categoriesData,
       projectData: state => state.projects.projectData,
+      prioritiesData: state => state.projects.prioritiesData,
     }),
     cannotSubmit() {
       return !this.curProject.name || this.curProject.name.trim === '' || !this.curProject.category || this.curProject.category.trim === ''
+    },
+    disableAddAsPriority() {
+      return (this.prioritiesData && Object.keys(this.prioritiesData).length >= 5);
     },
     dragOptions() {
       return {
@@ -133,6 +142,7 @@ export default {
   mounted () {
     this.$store.dispatch('categories/getCategoryData');
     this.$store.dispatch('projects/getProjectData')
+    this.$store.dispatch('projects/getPrioritiesData')
   },
   methods: {
     linkifyHtml(a) {
@@ -146,7 +156,8 @@ export default {
     },
     updateProject () {
       if (this.cannotSubmit) return;
-      this.$store.dispatch('projects/updateProject', this.curProject);
+      this.$store.dispatch('projects/updateProject', { ... this.curProject, addAsPriority: this.addAsPriority });
+      this.addAsPriority = false;
       this.formState = 'Add'
       this.curProject = {
         name: '',
@@ -205,6 +216,12 @@ label.error {
 
 input.error {
   border: 1px solid var(--danger-color);
+}
+
+.checkbox {
+  margin-top: 10px;
+  font-size: 15px;
+  align-items: center;
 }
 
 p {

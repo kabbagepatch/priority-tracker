@@ -52,7 +52,6 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import TitleCard from '../components/TitleCard.vue';
-import Card from '../components/Card.vue';
 import CategoryPill from '../components/CategoryPill.vue';
 
 export default {
