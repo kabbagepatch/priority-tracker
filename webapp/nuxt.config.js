@@ -66,6 +66,9 @@ export default {
       short_name: 'Priority Tracker',
       background_color: '#0b0f24',
       theme_color: '#3878c2'
+    },
+    icon: {
+      fileName: 'task.png'
     }
   }
 }
