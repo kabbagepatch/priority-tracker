@@ -65,7 +65,7 @@ export default {
       name: 'Priority Tracker',
       short_name: 'Priority Tracker',
       background_color: '#0b0f24',
-      theme_color: '#8ecae6'
+      theme_color: '#3878c2'
     }
   }
 }
