@@ -43,6 +43,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     // '@nuxtjs/eslint-module'
+    '@nuxtjs/pwa',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -57,5 +58,14 @@ export default {
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     transpile: [/vue-awesome/]
+  },
+
+  pwa: {
+    manifest: {
+      name: 'Priority Tracker',
+      short_name: 'Priority Tracker',
+      background_color: '#0b0f24',
+      theme_color: '#8ecae6'
+    }
   }
 }
