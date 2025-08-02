@@ -76,7 +76,7 @@ export const mutations = {
       }
     } else {
       if (state.projectTasksData[updatedTask.project]) {
-        const projectTasks = state.projectTasksData[updatedTask.project];
+        let projectTasks = state.projectTasksData[updatedTask.project];
         const taskIndex = projectTasks.findIndex(t => t.id === updatedTask.id);
         if (taskIndex === -1) {
           projectTasks = [updatedTask].concat(projectTasks);
