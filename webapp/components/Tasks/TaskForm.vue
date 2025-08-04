@@ -1,5 +1,5 @@
 <template>
-  <form class="task-form" @submit.prevent="selectedTask ? updateTask() : addTask()">
+  <form :class="`task-form ${showFullForm ? 'full-form' : ''}`" @submit.prevent="selectedTask ? updateTask() : addTask()">
     <label :class="`label ${errors.name ? 'error' : ''}`" for="input">Title*</label>
     <input :class="errors.name ? 'error' : ''" type="text" v-model="curTask.name" @blur="onNameBlur" />
     <label class="label" for="input">Description</label>
@@ -58,8 +58,11 @@ import { mapState } from 'vuex';
 
 export default {
   props: {
+    projectId: String,
+    categoryId: String,
     selectedTask: Object,
     onCancelClick: Function,
+    showFullForm: Boolean,
   },
   data() {
     let curTask = {};
@@ -70,8 +73,8 @@ export default {
         name: '',
         description: '',
         link: '',
-        category: '',
-        project: '',
+        category: this.categoryId ?? '',
+        project: this.projectId ?? '',
         status: this.$nuxt.$route.hash === '#next' ? 'queued' : (this.$nuxt.$route.hash ? this.$nuxt.$route.hash.substr(1) : 'backlog'),
       };
     }
@@ -133,6 +136,7 @@ export default {
           project: '',
           status: 'backlog',
         };
+        this.onCancelClick();
       }
     },
     updateTask () {
@@ -160,6 +164,12 @@ export default {
   border-top: none;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+.full-form {
+  border: 1px solid var(--black-transparent);
+  border-radius: 15px;
+  margin: 10px 15px;
 }
 
 label {

@@ -17,7 +17,23 @@
         </div>
       </div>
       <collapsible :collapse="!selectedProjects[projectId] || backlogTasks[projectId] === undefined || backlogTasks[projectId].length === 0">
-        <div v-if="backlogProjects[projectId].description" class="project-description" v-html="linkifyHtml(backlogProjects[projectId].description)" />
+        <div class="project-description-container">
+          <div v-if="backlogProjects[projectId].description" class="project-description" v-html="linkifyHtml(backlogProjects[projectId].description)" />
+          <div v-else />
+          <div :style="{ width: '120px', 'margin-right': '10px' }">
+            <button ref="task-form-button" class="add-task-button secondary" @click="() => { toggleTaskForm(projectId) }">Add Task</button>
+          </div>
+        </div>
+        <div>
+          <collapsible :collapse="!showTaskForm[projectId]">
+            <task-form
+              :showFullForm="true"
+              :categoryId="backlogProjects[projectId].category"
+              :projectId="projectId"
+              :onCancelClick="() => { toggleTaskForm(projectId) }"
+            />
+          </collapsible>
+        </div>
         <div class="task-list">
           <task-list
             :tasks="backlogTasks[projectId]"
@@ -43,17 +59,20 @@
 import { mapState, mapGetters } from 'vuex';
 import linkifyHtml from 'linkify-html';
 import TaskList from './TaskList.vue';
+import TaskForm from './TaskForm.vue';
 import Collapsible from '../Collapsible.vue';
 
 export default {
   components: {
     TaskList,
+    TaskForm,
     Collapsible,
   },
 
   data() {
     return {
       selectedProjects: {},
+      showTaskForm: {},
       getCompleted: false,
     }
   },
@@ -104,6 +123,9 @@ export default {
       });
       return this.selectedProjects[projectId] && this.backlogTasks[projectId] && this.backlogTasks[projectId].length === 0 && workingTasksInProject === 0
     },
+    toggleTaskForm(projectId) {
+      this.showTaskForm = { ...this.showTaskForm, [projectId]: this.showTaskForm[projectId] ? false : true };
+    },
   },
 }
 </script>
@@ -151,6 +173,13 @@ h2 {
   font-weight: bold !important;
 }
 
+.project-description-container {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .project-description {
   color: var(--text-color);
   font-weight: bold !important;
@@ -182,5 +211,20 @@ h2 {
   justify-content: space-between;
   margin-top: 10px;
   padding-left: 20px;
+}
+
+.add-task-button {
+  width: 100%;
+  box-shadow: var(--black-transparent) 2.95px 2.95px 3.6px, var(--dark-blue-transparenter) 0px 0px 2px 3px;
+  font-size: 18px;
+  border-radius: 15px;
+  margin-top: 10px;
+}
+
+.add-task-button:hover, .add-task-button:focus {
+  color: black;
+  transition: background ease 0.25s, box-shadow ease 0.25s;
+  background: var(--secondary-color-light);
+  box-shadow: var(--black-transparent) 2.95px 2.95px 3.6px, var(--dark-blue-transparent) 0px 0px 2px 3px;
 }
 </style>
