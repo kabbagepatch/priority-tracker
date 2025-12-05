@@ -149,13 +149,13 @@ export default {
       e.stopPropagation();
       if (this.taskComplete) {
         if (this.prevStatus) {
-          this.$store.dispatch('tasks/updateTaskStatus', { ...this.task, status: this.prevStatus });
+          this.$store.dispatch('tasks/updateTaskStatus', { ...this.task, status: this.prevStatus, prevStatus: 'complete' });
           this.prevStatus = '';
           this.taskComplete = false;
         }
       } else {
         this.prevStatus = this.task.status;
-        this.$store.dispatch('tasks/updateTaskStatus', { ...this.task, status: 'complete' });
+        this.$store.dispatch('tasks/updateTaskStatus', { ...this.task, status: 'complete', prevStatus: this.task.status });
         this.taskComplete = true;
       }
     },

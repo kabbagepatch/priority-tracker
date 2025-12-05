@@ -184,6 +184,11 @@ input.error {
   border: 1px solid var(--danger-color);
 }
 
+select {
+  font-size: 14px;
+  padding-left: 5px;
+}
+
 .status {
   margin-top: 20px;
   display: flex;

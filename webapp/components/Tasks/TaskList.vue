@@ -4,9 +4,9 @@
       <h2 v-if="title" @click="toggleCollapse">
         <span>{{ title }}</span>
         <span
-          v-if="maxTasks !== null" :class="maxTasks < tasks.length ? 'too-many-tasks' : 'good-tasks'"
+          v-if="maxTasks !== null" :class="maxTasks < tasks.filter(t => t.status !== 'complete').length ? 'too-many-tasks' : 'good-tasks'"
         >
-          ({{ tasks.length }}/{{ maxTasks }})
+          ({{ tasks.filter(t => t.status !== 'complete').length }}/{{ maxTasks }})
         </span>
       </h2>
       <collapsible :collapse="collapsed">
@@ -106,6 +106,9 @@ export default {
       };
     },
   },
+  mounted() {
+    this.collapsed = localStorage.getItem(`${this.title}-collapse-status`) === 'true';
+  },
   methods: {
     onDragEnd (e) {
       this.drag = false
@@ -127,6 +130,7 @@ export default {
     },
     toggleCollapse() {
       this.collapsed = !this.collapsed;
+      localStorage.setItem(`${this.title}-collapse-status`, this.collapsed);
     },
   },
 }

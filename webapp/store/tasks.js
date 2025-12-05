@@ -89,14 +89,22 @@ export const mutations = {
         };
       }
     }
-
+    console.log({ updatedTask, prevTask });
     if (updatedTask.status !== prevTask.status) {
       const newWorkingTasksData = {};
       if (state.workingTasksData[updatedTask.status]) {
-        newWorkingTasksData[updatedTask.status] = [updatedTask].concat(state.workingTasksData[updatedTask.status])
+        if (prevTask.status === 'complete') {
+          newWorkingTasksData[updatedTask.status] = state.workingTasksData[updatedTask.status].map(t => t.id === updatedTask.id ? { ...t, status: updatedTask.status } : t);
+        } else {
+          newWorkingTasksData[updatedTask.status] = [updatedTask].concat(state.workingTasksData[updatedTask.status]);
+        }
       }
       if (state.workingTasksData[prevTask.status]) {
-        newWorkingTasksData[prevTask.status] = state.workingTasksData[prevTask.status].filter(t => t.id !== prevTask.id)
+        if (updatedTask.status === 'complete') {
+          newWorkingTasksData[prevTask.status] = state.workingTasksData[prevTask.status].map(t => t.id === prevTask.id ? { ...t, status: 'complete' } : t);
+        } else {
+          newWorkingTasksData[prevTask.status] = state.workingTasksData[prevTask.status].filter(t => t.id !== prevTask.id);
+        }
       }
       if (Object.keys(newWorkingTasksData).length > 0) {
         state.workingTasksData = {
@@ -201,6 +209,7 @@ export const actions = {
     }
   },
   async updateTaskStatus ({ commit, rootState }, data) {
+    console.log('updateTaskStatus', {data});
     try {
       commit('updateTask', { updatedTask: { ...data, status: data.status }, prevTask: { ...data, status: data.prevStatus || data.status } });
       const res = this.$axios.put(`${baseUrl}/tasks/${data.id}/status?user=${rootState.auth.user.username}`,
