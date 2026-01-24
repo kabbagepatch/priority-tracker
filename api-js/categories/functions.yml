@@ -1,5 +1,8 @@
 create-category:
   handler: categories/create.create
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: categories
@@ -8,6 +11,9 @@ create-category:
 
 get-categories:
   handler: categories/list.list
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: categories
@@ -16,6 +22,9 @@ get-categories:
 
 get-category:
   handler: categories/get.get
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: categories/{categoryId}
@@ -24,6 +33,9 @@ get-category:
 
 update-category:
   handler: categories/update.update
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: categories/{categoryId}
@@ -32,6 +44,9 @@ update-category:
 
 delete-category:
   handler: categories/delete.delete
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: categories/{categoryId}

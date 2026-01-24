@@ -1,5 +1,8 @@
 create-task:
   handler: tasks/create.create
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: tasks
@@ -8,6 +11,9 @@ create-task:
 
 get-tasks:
   handler: tasks/list.list
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: tasks
@@ -16,6 +22,9 @@ get-tasks:
 
 get-project-tasks:
   handler: tasks/list.listProject
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: projects/{projectId}/tasks
@@ -24,6 +33,9 @@ get-project-tasks:
 
 get-task:
   handler: tasks/get.get
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: tasks/{id}
@@ -32,6 +44,9 @@ get-task:
 
 update-task:
   handler: tasks/update.update
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: tasks/{id}
@@ -40,6 +55,9 @@ update-task:
 
 update-task-status:
   handler: tasks/update.updateStatus
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: tasks/{id}/status
@@ -48,6 +66,9 @@ update-task-status:
 
 delete-task:
   handler: tasks/delete.delete
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: tasks/{id}

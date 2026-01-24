@@ -1,5 +1,8 @@
 create-project:
   handler: projects/create.create
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: projects
@@ -8,6 +11,9 @@ create-project:
 
 get-projects:
   handler: projects/list.list
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: projects
@@ -16,6 +22,9 @@ get-projects:
 
 get-category-projects:
   handler: projects/list.listCategory
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: categories/{categoryId}/projects
@@ -24,6 +33,9 @@ get-category-projects:
 
 get-project:
   handler: projects/get.get
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: projects/{projectId}
@@ -32,6 +44,9 @@ get-project:
 
 update-project:
   handler: projects/update.update
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: projects/{projectId}
@@ -40,6 +55,9 @@ update-project:
 
 delete-project:
   handler: projects/delete.delete
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: projects/{projectId}

@@ -278,4 +278,23 @@ export default {
 .task-name-link:hover {
   color: var(--primary-color-light);
 }
+
+@media (max-width: 600px) {
+  .task {
+    margin-top: 15px;
+    padding: 10px 15px;
+  }
+
+  .task-name {
+    font-size: 0.9em;
+  }
+
+  .subtitle {
+    font-size: 0.6em;
+  }
+
+  .buttons {
+    min-width: 50px;
+  }
+}
 </style>

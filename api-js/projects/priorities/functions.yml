@@ -1,5 +1,8 @@
 add-priority:
   handler: projects/priorities/add.add
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: projects/{projectId}/prioritise
@@ -8,6 +11,9 @@ add-priority:
 
 remove-priority:
   handler: projects/priorities/remove.remove
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: projects/{projectId}/deprioritise
@@ -16,6 +22,9 @@ remove-priority:
 
 get-priorities:
   handler: projects/priorities/list.list
+  timeout: 5             # seconds
+  memorySize: 256        # MB
+  reservedConcurrency: 5
   events:
     - http:
         path: priorities
