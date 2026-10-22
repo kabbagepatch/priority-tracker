@@ -210,7 +210,12 @@ h2 {
   width: 100%;
   justify-content: space-between;
   margin-top: 10px;
-  padding-left: 20px;
+  padding: 0 10px;
+}
+
+.complete-notice button {
+  width: 40px;
+  height: 40px;
 }
 
 .add-task-button {

@@ -267,7 +267,8 @@ export default {
 }
 
 .task-name {
-  font-weight: 400;
+  display: inline-block;
+  line-height: 1.5;
 }
 
 .task-name-link {
@@ -291,10 +292,6 @@ export default {
 
   .subtitle {
     font-size: 0.6em;
-  }
-
-  .buttons {
-    min-width: 50px;
   }
 }
 </style>
