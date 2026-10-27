@@ -19,11 +19,11 @@
       <div class="task-with-handle">
         <div class="handle-container"><v-icon name="grip-vertical" width="10" height="16" class="handle" /></div>
         <div class="task-info">
-          <h4 :class="taskComplete ? 'complete-task' : ''">
-            <a class="task-name task-name-link" v-if="task.link" :href="task.link" target="_blank" @click="(e) => e.stopPropagation()">
+          <h4>
+            <a :class="['task-name', 'task-name-link', taskComplete ? 'complete-task' : '']" v-if="task.link" :href="task.link" target="_blank" @click="(e) => e.stopPropagation()">
               {{ task.name }}
             </a>
-            <span class="task-name" v-else>{{ task.name }}</span>
+            <span :class="['task-name', taskComplete ? 'complete-task' : '']" v-else>{{ task.name }}</span>
           </h4>
           <div v-if="prioritiesData[task.project]" class="subtitle" >
             <category-pill :color="categoriesData[task.category]?.color">

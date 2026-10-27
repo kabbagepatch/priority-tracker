@@ -89,7 +89,7 @@ export const mutations = {
         };
       }
     }
-    console.log({ updatedTask, prevTask });
+
     if (updatedTask.status !== prevTask.status) {
       const newWorkingTasksData = {};
       if (state.workingTasksData[updatedTask.status]) {
@@ -209,7 +209,6 @@ export const actions = {
     }
   },
   async updateTaskStatus ({ commit, rootState }, data) {
-    console.log('updateTaskStatus', {data});
     try {
       commit('updateTask', { updatedTask: { ...data, status: data.status }, prevTask: { ...data, status: data.prevStatus || data.status } });
       const res = this.$axios.put(`${baseUrl}/tasks/${data.id}/status?user=${rootState.auth.user.username}`,
